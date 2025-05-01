@@ -1,65 +1,81 @@
-<nav class="nav-fixed">
-    <div class="h-20 bg-[#3E3E53] shadow-2xl" aria-label="{{ translations.translate('nav.aria_label') }}">
-        <div class="container mx-auto h-full px-0 flex items-center justify-center space-x-40 portrait:hidden">
-            <a href="{{ language == 'fr' ? '/' : '/en' }}" class="interactive text-2xl font-bold {% if current_path == '/' or current_path == '/en' %}text-[#658c79]{% else %}hover:text-[#658c79] transition-colors{% endif %}">
-                {{ translations.translate('nav.projects') }}
-            </a>
-            <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="interactive text-2xl font-bold {% if current_path == '/contact' or current_path == '/contact-en' %}text-[#658c79]{% else %}hover:text-[#658c79] transition-colors{% endif %}">
-                {{ translations.translate('nav.contact') }}
-            </a>
-            
-            {% if request.isAuthenticated() %}
-                <a href="/admin" class="interactive text-2xl font-bold {% if current_path starts with '/admin' %}text-[#658c79]{% else %}hover:text-[#658c79] transition-colors{% endif %}">
-                    {{ translations.translate('nav.admin') }}
+<nav class="main-header">
+    <div class="nav-container" aria-label="{{ translations.translate('nav.aria_label') }}">
+        {# Desktop Navigation #}
+        <div class="container nav-content desktop-nav">
+            <div class="nav-links">
+                <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
+                    {{ translations.translate('nav.projects') }}
                 </a>
-                <a href="/logout" class="interactive text-2xl font-bold hover:text-[#658c79] transition-colors">
-                    {{ translations.translate('nav.logout') }}
+                <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                    {{ translations.translate('nav.contact') }}
                 </a>
-            {% endif %}
+                
+                {% if request.isAuthenticated() %}
+                    <a href="/admin" class="nav-link interactive {% if current_path starts with '/admin' %}active{% endif %}">
+                        {{ translations.translate('nav.admin') }}
+                    </a>
+                    <a href="/logout" class="nav-link interactive">
+                        {{ translations.translate('nav.logout') }}
+                    </a>
+                {% endif %}
+            </div>
         </div>
         
-        {# Mobile navigation #}
-        <div class="container mx-auto h-full px-0 py-12 flex items-center justify-center space-x-10 landscape:hidden">
-            <a href="{{ language == 'fr' ? '/' : '/en' }}" class="interactive text-2xl font-bold {% if current_path == '/' or current_path == '/en' %}text-[#658c79]{% else %}hover:text-[#658c79] transition-colors{% endif %}">
-                {{ translations.translate('nav.projects') }}
-            </a>
-            <a href="#" class="interactive text-2xl font-bold opacity-0">
-                ha
-            </a>
-            <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="interactive text-2xl font-bold {% if current_path == '/contact' or current_path == '/contact-en' %}text-[#658c79]{% else %}hover:text-[#658c79] transition-colors{% endif %}">
-                {{ translations.translate('nav.contact') }}
-            </a>
+        {# Mobile Navigation #}
+        <div class="container nav-content mobile-nav">
+            <div class="nav-links">
+                <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
+                    {{ translations.translate('nav.projects') }}
+                </a>
+                <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                    {{ translations.translate('nav.contact') }}
+                </a>
+            </div>
         </div>
 
-        {# Underline for active nav item #}
-        {% if current_path == '/' or current_path == '/en' %}
-            <div class="fixed top-[calc(60px)] left-[calc(50%-10px-10rem)] w-[90px] h-1 bg-white portrait:hidden"></div>
-        {% elseif current_path == '/contact' or current_path == '/contact-en' %}
-            <div class="fixed top-[calc(60px)] left-[calc(63%-14px-10rem)] w-[93px] h-1 bg-white portrait:hidden"></div>
-        {% elseif current_path starts with '/admin' %}
-            <div class="fixed top-[calc(60px)] left-[calc(75%-10px-10rem)] w-[80px] h-1 bg-white portrait:hidden"></div>
-        {% endif %}
+        {# Underline for active nav item - handled by CSS #}
         
-        {# Language switcher - desktop - IMPROVED #}
-        <div class="fixed top-10 right-[3vw] transform -translate-y-1/2 flex space-x-2 hidden landscape:flex portrait:hidden">                
-            <a href="/language/switch/fr" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
-            <span class="text-2xl" aria-hidden="true">/</span>                
-            <a href="/language/switch/en" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>            
+        {# Language switcher #}
+        <div class="language-switcher interactive">                
+            <a href="/language/switch/fr" class="{% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">🇫🇷</a>                
+            <span class="separator" aria-hidden="true">/</span>                
+            <a href="/language/switch/en" class="{% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">🇬🇧</a>            
         </div>
         
-        {# Language switcher - mobile - IMPROVED #}
-        <div class="fixed bottom-2 right-[3vw] transform -translate-y-1/2 flex space-x-2 hidden portrait:flex landscape:hidden">                
-            <a href="/language/switch/fr" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
-            <span class="text-2xl" aria-hidden="true">/</span>                
-            <a href="/language/switch/en" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>             
-        </div>  
+        {# Mobile menu toggle (for admin pages) #}
+        {% if request.isAuthenticated() and current_path starts with '/admin' %}
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-label="{{ translations.translate('admin.open_menu') }}">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="/admin" class="{% if current_path == '/admin' %}active{% endif %}">
+                    {{ translations.translate('admin.dashboard') }}
+                </a>
+                <a href="/admin/projects" class="{% if current_path starts with '/admin/projects' or current_path starts with '/admin/project/' %}active{% endif %}">
+                    {{ translations.translate('admin.projects') }}
+                </a>
+                <a href="/admin/profile" class="{% if current_path == '/admin/profile' %}active{% endif %}">
+                    {{ translations.translate('admin.profile') }}
+                </a>
+                <div class="divider"></div>
+                <div class="user-info">
+                    {{ request.getUserFullName() }}
+                </div>
+                <a href="/">
+                    {{ translations.translate('admin.view_site') }}
+                </a>
+                <a href="/logout" class="danger">
+                    {{ translations.translate('admin.logout') }}
+                </a>
+            </div>
+        {% endif %}
 
         {# Logo #}
-        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 portrait:hidden">
-            <img src="/assets/img/AshaLogo.png" alt="Logo Asha" class="w-24 h-24 portrait:w-16 portrait:h-16">
-        </div>
-        <div class="absolute top-[calc(18px)] left-1/2 transform -translate-x-1/2 landscape:hidden">
-            <img src="/assets/img/AshaLogo.png" alt="Logo Asha" class="w-24 h-24 portrait:w-20 portrait:h-20">
+        <div class="logo-container">
+            <img src="/assets/img/AshaLogo.png" alt="Logo Asha">
         </div>
     </div>
 </nav>
