@@ -71,7 +71,6 @@
     padding: var(--spacing-xl) 0;
     background-color: var(--color-background); /* Ensure background is visible */
     margin-top: var(--spacing-xxl); /* Add space before footer */
-    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
 }
 
 /* Fix for footer on home page */
@@ -94,8 +93,13 @@
 }
 
 /* Make sure content doesn't overlap with footer */
-.spacer {
+.spacer_top {
     height: 25vh; /* Adjust height to prevent content/footer overlap */
+    min-height: 150px;
+}
+
+.spacer_bottom {
+    height: 28vh; /* Adjust height to prevent content/footer overlap */
     min-height: 150px;
 }
 
@@ -406,5 +410,317 @@
     
     .mobile-menu.visible {
       max-height: 500px;
+    }
+  }
+
+
+  /**
+ * Navigation & Language Switcher Fixes
+ * 
+ * This CSS provides comprehensive fixes for:
+ * 1. Unified navigation structure
+ * 2. Proper centering of elements
+ * 3. Language switcher positioning
+ * 4. Mobile layout improvements
+ * 5. Scrolling enhancements
+ */
+
+/* ===== UNIFIED NAVIGATION STRUCTURE ===== */
+
+/* Main header container - fixed position at top */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: var(--z-nav);
+  }
+  
+  /* Navigation container with background and shadow */
+  .nav-container {
+    height: 5rem;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Navigation content with proper alignment */
+  .nav-content {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 0 1rem;
+  }
+  
+  /* Left navigation group */
+  .nav-group-left {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+  
+  /* Right navigation group */
+  .nav-group-right {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+  
+  /* Individual navigation links */
+  .nav-link {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color var(--transition-medium);
+  }
+  
+  /* Active link indicator */
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+  }
+  
+  /* Logo container for perfect centering */
+  .logo-container {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    z-index: 20; /* Higher z-index to appear above navbar */
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Logo sizing and positioning */
+  .logo-container img {
+    width: 5.5rem;
+    height: 5.5rem;
+    object-fit: contain;
+  }
+  
+  /* ===== LANGUAGE SWITCHER ===== */
+  
+  /* Language switcher positioning and styling */
+  .language-switcher {
+    position: fixed;
+    top: 2.5rem;
+    right: 2rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: rgba(62, 62, 83, 0.85);
+    backdrop-filter: blur(4px);
+    padding: 0.5rem 0.75rem;
+    border-radius: 2rem;
+    z-index: 55;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Language link styling */
+  .lang-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-medium), transform var(--transition-fast);
+  }
+  
+  /* Language icon styling */
+  .lang-icon {
+    width: 24px;
+    height: 16px;
+    border-radius: 2px;
+    object-fit: cover;
+  }
+  
+  /* Inactive language styling */
+  .lang-link.inactive {
+    opacity: 0.5;
+  }
+  
+  /* Hover effect for language links */
+  .lang-link:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  
+  /* Separator styling */
+  .language-switcher .separator {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+  
+  /* ===== MOBILE MENU ===== */
+  
+  /* Mobile menu toggle button */
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    z-index: 30;
+  }
+  
+  /* Mobile menu styling */
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    padding: 1rem;
+    z-index: 40;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  /* Mobile menu links */
+  .mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-medium);
+  }
+  
+  .mobile-menu a:hover {
+    background-color: var(--color-surface-hover);
+  }
+  
+  .mobile-menu a.active {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  /* Mobile menu divider */
+  .mobile-menu .divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 0;
+  }
+  
+  /* User info in mobile menu */
+  .mobile-menu .user-info {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+  
+  /* Danger button */
+  .mobile-menu a.danger {
+    color: #ef4444;
+  }
+  
+  .mobile-menu a.danger:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+  
+  /* ===== RESPONSIVE ADJUSTMENTS ===== */
+  
+  /* Main content to account for fixed header */
+  .main-content {
+    padding-top: 6rem;
+    min-height: calc(100vh - 5rem);
+  }
+  
+  /* Adjust spacing for page content */
+  .spacer_bottom, .spacer_top {
+    height: 30vh; /* Increased for better scrolling */
+    min-height: 200px;
+  }
+  
+  /* Mobile layout changes */
+  @media (max-width: 768px) {
+    /* Show mobile menu toggle */
+    .mobile-menu-toggle {
+      display: block;
+    }
+    
+    /* Adjust navigation groups */
+    .nav-group-left {
+      gap: 1.5rem;
+    }
+    
+    .nav-group-right {
+      display: none; /* Hide right nav on mobile */
+    }
+    
+    /* Adjust logo size */
+    .logo-container img {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+    
+    /* Move language switcher to bottom */
+    .language-switcher {
+      top: auto;
+      bottom: 1rem;
+      right: 1rem;
+    }
+    
+    /* Adjust content spacing */
+    .main-content {
+      padding-top: 5rem;
+    }
+    
+    /* bigger spacer on mobile */
+    .spacer_bottom {
+      height: 45vh;
+      min-height: 150px;
+    }
+
+    .spacer_top {
+      height: 35vh;
+      min-height: 150px;
+    }
+  }
+  
+  /* Adjustments for very small screens */
+  @media (max-width: 480px) {
+    /* Further reduce navigation spacing */
+    .nav-group-left {
+      gap: 1rem;
+    }
+    
+    /* Smaller font size */
+    .nav-link {
+      font-size: 1rem;
+    }
+    
+    /* Even smaller logo */
+    .logo-container img {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+  
+  /* Fix for footer and scrolling */
+  .footer-home {
+    position: relative;
+    margin-top: 3rem;
+  }
+  
+  /* Only use fixed positioning on very tall screens */
+  @media (min-height: 900px) {
+    .footer-home {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }

@@ -5,13 +5,6 @@
  * across different device sizes. It follows a mobile-first approach
  * where we start with base styles for small screens and then add
  * styles for larger screens.
- * 
- * Breakpoints:
- * - Small (sm): 576px
- * - Medium (md): 768px
- * - Large (lg): 992px
- * - Extra Large (xl): 1200px
- */
 
 /* ===== MOBILE FIRST BASE STYLES ===== */
 /* These styles apply to all devices and are enhanced for larger screens */
@@ -140,7 +133,7 @@ html {
     
     /* Hero section in portrait mode */
     .hero-section {
-        padding-top: var(--spacing-xl);
+        padding-top: 7rem;
     }
     
     .hero-title {
@@ -298,98 +291,7 @@ html {
     }
 }
 
-/* ===== LARGE SCREENS (992px and up) ===== */
-@media (min-width: 992px) {
-    /* Restore footer grid */
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .footer-separator {
-        display: block;
-    }
-    
-    .footer-about {
-        display: block;
-    }
-    
-    /* Hero section adjustments */
-    .hero-title {
-        font-size: 3rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.75rem;
-    }
-    
-    /* Projects section */
-    .projects-title {
-        font-size: 3.5rem;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    /* More complex grid layouts */
-    .grid-cols-lg-3 {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .grid-cols-lg-4 {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    /* Full-width elements become more contained */
-    .content-wrapper {
-        max-width: 48rem;
-    }
-    
-    /* Navigation spacing */
-    .nav-links {
-        gap: 3rem;
-    }
-    
-    .nav-link {
-        font-size: 1.5rem;
-    }
-}
 
-/* ===== EXTRA LARGE SCREENS (1200px and up) ===== */
-@media (min-width: 1200px) {
-    .container {
-        max-width: var(--container-width);
-        padding-left: var(--spacing-xl);
-        padding-right: var(--spacing-xl);
-    }
-    
-    /* Hero section for large screens */
-    .hero-title {
-        font-size: 4rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 2rem;
-    }
-    
-    /* Content width adjustments */
-    .content-wrapper {
-        max-width: 64rem;
-    }
-    
-    /* Footer adjustments */
-    .footer-heading {
-        font-size: 1.75rem;
-    }
-    
-    .contact-link {
-        height: 4.5rem;
-    }
-    
-    .contact-link span {
-        font-size: 1.25rem;
-    }
-}
 
 /* ===== SPECIFIC RESPONSIVE FIXES ===== */
 
@@ -507,4 +409,37 @@ html {
     .contact-form .btn {
         width: 100%;
     }
+}
+
+.container {
+    max-width: var(--container-width);
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+}
+
+/* Hero section for large screens */
+.hero-title {
+    font-size: 4rem;
+}
+
+.hero-subtitle {
+    font-size: 2rem;
+}
+
+/* Content width adjustments */
+.content-wrapper {
+    max-width: 64rem;
+}
+
+/* Footer adjustments */
+.footer-heading {
+    font-size: 1.75rem;
+}
+
+.contact-link {
+    height: 4.5rem;
+}
+
+.contact-link span {
+    font-size: 1.25rem;
 }

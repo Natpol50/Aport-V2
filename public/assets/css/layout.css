@@ -456,10 +456,11 @@
     flex-direction: column;
     align-items: center;
     padding: var(--spacing-xxl) var(--spacing-md) var(--spacing-lg);
+    padding-top: 7rem;;
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: 8rem;
     text-align: center;
 }
 
