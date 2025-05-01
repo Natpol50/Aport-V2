@@ -21,6 +21,8 @@
 /* Import responsive styles (should be last) */
 @import 'responsive.css';
 
+/* Navigation and Footer Fixes */
+@import 'fixes1.css';
 
 /* Print styles */
 @media print {

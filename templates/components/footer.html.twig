@@ -1,55 +1,57 @@
-<footer id="contact-section" class="main-footer container {% if is_home_page is defined and is_home_page %}footer-home{% endif %}">
-    {% if is_home_page is defined and is_home_page %}
-        <div class="footer-grid">
-            {# About Section - Hidden on small screens and extreme portrait modes #}
-            <div class="footer-about">
-                <h2 class="footer-heading">
-                    {{ translations.translate('footer.about_title') }}
-                </h2>
-                <p>
-                    {{ personalInfo.about_text|raw }}
-                </p>
-            </div>
+<footer id="contact-section" class="main-footer {% if is_home_page is defined and is_home_page %}footer-home{% endif %}">
+    <div class="container">
+        {% if is_home_page is defined and is_home_page %}
+            <div class="footer-grid">
+                {# About Section #}
+                <div class="footer-about">
+                    <h2 class="footer-heading">
+                        {{ translations.translate('footer.about_title') }}
+                    </h2>
+                    <p>
+                        {{ personalInfo.about_text|raw }}
+                    </p>
+                </div>
 
-            {# Vertical Separator - Hidden on small screens #}
-            <div class="footer-separator"></div>
+                {# Vertical Separator #}
+                <div class="footer-separator"></div>
 
-            {# Contact Links #}
-            <div id="contact-links" class="interactive">
-                <h2 class="footer-heading">
-                    {{ translations.translate('footer.contact_title') }}
-                </h2>
-                <div class="contact-links">
-                    <a href="mailto:{{ personalInfo.email }}" target="_blank" class="interactive contact-link">
-                        <img src="/assets/img/mail.png" alt="" aria-hidden="true">
-                        <span>Mail Pro</span>
-                    </a>
-                    <a href="mailto:nathan.polette@viacesi.fr" target="_blank" class="interactive contact-link">
-                        <img src="/assets/img/mail.png" alt="" aria-hidden="true">
-                        <span>Mail Scolaire</span>
-                    </a>
-                    <a href="{{ personalInfo.github_url }}" target="_blank" class="interactive contact-link">
-                        <img src="/assets/img/github.png" alt="" aria-hidden="true">
-                        <span>Github</span>
-                    </a>
-                    <a href="{{ personalInfo.linkedin_url }}" target="_blank" class="interactive contact-link">
-                        <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
-                        <span>LinkedIn</span>
-                    </a>
-                    {% if personalInfo.discord_url %}
-                        <a href="{{ personalInfo.discord_url }}" target="_blank" class="interactive contact-link">
-                            <img src="/assets/img/discord.png" alt="" aria-hidden="true">
-                            <span>Discord</span>
+                {# Contact Links #}
+                <div id="contact-links" class="interactive">
+                    <h2 class="footer-heading">
+                        {{ translations.translate('footer.contact_title') }}
+                    </h2>
+                    <div class="contact-links">
+                        <a href="mailto:{{ personalInfo.email }}" target="_blank" class="interactive contact-link">
+                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                            <span>Mail Pro</span>
                         </a>
-                    {% endif %}
+                        <a href="mailto:nathan.polette@viacesi.fr" target="_blank" class="interactive contact-link">
+                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                            <span>Mail Scolaire</span>
+                        </a>
+                        <a href="{{ personalInfo.github_url }}" target="_blank" class="interactive contact-link">
+                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
+                            <span>Github</span>
+                        </a>
+                        <a href="{{ personalInfo.linkedin_url }}" target="_blank" class="interactive contact-link">
+                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
+                            <span>LinkedIn</span>
+                        </a>
+                        {% if personalInfo.discord_url %}
+                            <a href="{{ personalInfo.discord_url }}" target="_blank" class="interactive contact-link">
+                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
+                                <span>Discord</span>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
 
-    <div class="footer-copyright">
-        <p>
-            © {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}
-        </p>
+        <div class="footer-copyright">
+            <p>
+                © {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}
+            </p>
+        </div>
     </div>
 </footer>

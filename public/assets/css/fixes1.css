@@ -1,0 +1,410 @@
+/**
+ * Navigation and Footer Fixes
+ * 
+ * This CSS file contains fixes and improvements to some forgotten styles. Put here because i don't have the patiences to go through my files and find the right ones right now. FUCK WEB DEVELOPPEMENT.
+ */
+
+/* ===== MENU SPACING FIXES ===== */
+.nav-links {
+    display: flex;
+    gap: 3rem; /* Increased from 2.5rem for better spacing */
+    justify-content: center; /* Ensure central alignment */
+    align-items: center;
+}
+
+.nav-link {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    transition: color var(--transition-medium);
+    padding: 0.5rem 1rem; /* Add padding for larger click area */
+}
+
+/* Add visual indicator for active link without disrupting layout */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    width: 80%; /* Slightly shorter than the full width */
+    height: 2px;
+    background-color: var(--color-primary);
+}
+
+/* ===== LANGUAGE SWITCHER FIXES ===== */
+.language-switcher {
+    position: fixed;
+    top: 1.75rem; /* Adjust vertical position */
+    right: 2rem; /* Consistent right margin */
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Consistent spacing */
+    background-color: rgba(62, 62, 83, 0.8); /* Semi-transparent background */
+    padding: 0.5rem 0.75rem;
+    border-radius: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: var(--z-above); /* Ensure it's above other elements */
+}
+
+.language-switcher a {
+    font-size: 1.25rem;
+    transition: opacity var(--transition-medium), transform var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.language-switcher a:hover {
+    transform: scale(1.1);
+}
+
+.language-switcher .separator {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+/* ===== FOOTER FIXES ===== */
+.main-footer {
+    position: relative;
+    z-index: var(--z-base);
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-background); /* Ensure background is visible */
+    margin-top: var(--spacing-xxl); /* Add space before footer */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+}
+
+/* Fix for footer on home page */
+.footer-home {
+    position: relative; /* Change from absolute to relative for better behavior */
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: 3rem;
+}
+
+/* Only use fixed positioning on very tall screens */
+@media (min-height: 900px) {
+    .footer-home {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* Make sure content doesn't overlap with footer */
+.spacer {
+    height: 25vh; /* Adjust height to prevent content/footer overlap */
+    min-height: 150px;
+}
+
+/* Footer grid improvements */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xxl);
+    position: relative;
+    align-items: start; /* Keep content aligned at the top */
+}
+
+/* Better footer separation line */
+.footer-separator {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Improve footer responsiveness */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+    
+    .footer-separator {
+        display: none;
+    }
+    
+    .footer-about {
+        text-align: center;
+    }
+    
+    .footer-heading {
+        text-align: center;
+    }
+}
+
+/* Additional fix for responsive language switcher */
+@media (max-width: 576px) {
+    .language-switcher {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+        background-color: rgba(38, 39, 50, 0.9);
+        backdrop-filter: blur(4px);
+    }
+}
+
+/* Main header adjustments */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50; /* Lower z-index to allow logo to protrude */
+    background-color: transparent; /* Remove any background */
+}
+
+/* Nav container with solid background */
+.nav-container {
+    height: 5rem;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Logo container positioning for protrusion effect */
+.logo-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60; /* Higher than navbar to protrude */
+    height: 7rem; /* Taller than navbar height */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Logo sizing and positioning */
+.logo-container img {
+    width: 6rem;
+    height: 6rem;
+    position: relative;
+    top: 0; /* Push down slightly from top */
+}
+
+/* Navigation links spacing */
+.nav-links {
+    display: flex;
+    gap: 5rem; /* Wide spacing to accommodate logo */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Navigation link styling */
+.nav-link {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    transition: color var(--transition-medium);
+    padding: 0.5rem 1rem;
+}
+
+/* Active link indicator */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+}
+
+/* Language switcher positioning */
+.language-switcher {
+    position: fixed;
+    top: 2.5rem;
+    right: 2rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 55; /* Above navbar but below logo */
+}
+
+/* Content adjustments to account for protruding logo */
+.main-content {
+    padding-top: 6rem; /* Extra padding to clear protruding logo */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 2rem; /* Smaller gap on mobile */
+    }
+    
+    .logo-container img {
+        width: 5rem;
+        height: 5rem;
+    }
+    
+    .language-switcher {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+/**
+ * Centered Logo Navigation
+ * 
+ * This CSS creates a navigation layout with elements 
+ * perfectly distributed around a centered logo.
+ */
+
+/* Main header container */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+  }
+  
+  /* Navigation container */
+  .nav-container {
+    height: 5rem;
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Navigation content with distributed elements */
+  .nav-content {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Left navigation group */
+  .nav-group-left {
+    position: absolute;
+    left: 2rem;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+  }
+  
+  /* Right navigation group */
+  .nav-group-right {
+    position: absolute;
+    right: 2rem;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+  }
+  
+  /* Individual navigation links */
+  .nav-link {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color var(--transition-medium);
+  }
+  
+  /* Active link indicator */
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+  }
+  
+  /* Logo container for centered positioning */
+  .logo-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60; /* Higher z-index to appear above navbar */
+  }
+  
+  /* Logo sizing */
+  .logo-container img {
+    width: 6rem;
+    height: 6rem;
+  }
+  
+  /* Language switcher positioning */
+  .language-switcher {
+    position: fixed;
+    top: 2.5rem;
+    right: 1rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(62, 62, 83, 0.8);
+    padding: 0.25rem 0.5rem;
+    border-radius: 2rem;
+    z-index: 55;
+  }
+  
+  /* Main content adjustment for protruding logo */
+  .main-content {
+    padding-top: 6.5rem; /* Extra space to account for protruding logo */
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    /* Switch to mobile navigation */
+    .desktop-nav {
+      display: none;
+    }
+    
+    .mobile-nav {
+      display: flex;
+    }
+  
+    /* Adjust logo size on smaller screens */
+    .logo-container img {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+    
+    /* Reposition language switcher for mobile */
+    .language-switcher {
+      top: auto;
+      bottom: 1rem;
+      right: 1rem;
+    }
+    
+    /* Show mobile menu toggle */
+    .mobile-menu-toggle {
+      display: block;
+      position: absolute;
+      right: 1rem;
+      top: 1.5rem;
+    }
+    
+    /* Mobile menu styling */
+    .mobile-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--color-surface);
+      padding: 1rem;
+      z-index: 40;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .mobile-menu.visible {
+      max-height: 500px;
+    }
+  }

@@ -138,12 +138,6 @@ html {
         grid-template-columns: 1fr;
     }
     
-    .language-switcher {
-        bottom: 0.5rem;
-        top: auto;
-        right: 3vw;
-    }
-    
     /* Hero section in portrait mode */
     .hero-section {
         padding-top: var(--spacing-xl);

@@ -1,15 +1,20 @@
+
 <nav class="main-header">
     <div class="nav-container" aria-label="{{ translations.translate('nav.aria_label') }}">
-        {# Desktop Navigation #}
+        {# Desktop Navigation with logo in center #}
         <div class="container nav-content desktop-nav">
-            <div class="nav-links">
+            {# Left side navigation group #}
+            <div class="nav-group-left">
                 <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
                     {{ translations.translate('nav.projects') }}
                 </a>
                 <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
                     {{ translations.translate('nav.contact') }}
                 </a>
-                
+            </div>
+            
+            {# Right side navigation group #}
+            <div class="nav-group-right">
                 {% if request.isAuthenticated() %}
                     <a href="/admin" class="nav-link interactive {% if current_path starts with '/admin' %}active{% endif %}">
                         {{ translations.translate('nav.admin') }}
@@ -18,6 +23,13 @@
                         {{ translations.translate('nav.logout') }}
                     </a>
                 {% endif %}
+                
+                {# Language switcher can be placed here for desktop #}
+                <div class="language-switcher interactive desktop-lang">                
+                    <a href="/language/switch/fr" class="{% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">🇫🇷</a>                
+                    <span class="separator" aria-hidden="true">/</span>                
+                    <a href="/language/switch/en" class="{% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">🇬🇧</a>            
+                </div>
             </div>
         </div>
         
@@ -31,49 +43,48 @@
                     {{ translations.translate('nav.contact') }}
                 </a>
             </div>
-        </div>
-
-        {# Underline for active nav item - handled by CSS #}
-        
-        {# Language switcher #}
-        <div class="language-switcher interactive">                
-            <a href="/language/switch/fr" class="{% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">🇫🇷</a>                
-            <span class="separator" aria-hidden="true">/</span>                
-            <a href="/language/switch/en" class="{% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">🇬🇧</a>            
-        </div>
-        
-        {# Mobile menu toggle (for admin pages) #}
-        {% if request.isAuthenticated() and current_path starts with '/admin' %}
+            
+            {# Mobile menu toggle button #}
             <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-label="{{ translations.translate('admin.open_menu') }}">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            
-            <div id="mobile-menu" class="mobile-menu hidden">
-                <a href="/admin" class="{% if current_path == '/admin' %}active{% endif %}">
-                    {{ translations.translate('admin.dashboard') }}
-                </a>
-                <a href="/admin/projects" class="{% if current_path starts with '/admin/projects' or current_path starts with '/admin/project/' %}active{% endif %}">
-                    {{ translations.translate('admin.projects') }}
-                </a>
-                <a href="/admin/profile" class="{% if current_path == '/admin/profile' %}active{% endif %}">
-                    {{ translations.translate('admin.profile') }}
-                </a>
-                <div class="divider"></div>
-                <div class="user-info">
-                    {{ request.getUserFullName() }}
-                </div>
-                <a href="/">
-                    {{ translations.translate('admin.view_site') }}
-                </a>
-                <a href="/logout" class="danger">
-                    {{ translations.translate('admin.logout') }}
-                </a>
+        </div>
+        
+        {# Mobile menu (hidden by default) #}
+        {% if request.isAuthenticated() %}
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="/admin" class="{% if current_path == '/admin' %}active{% endif %}">
+                {{ translations.translate('admin.dashboard') }}
+            </a>
+            <a href="/admin/projects" class="{% if current_path starts with '/admin/projects' or current_path starts with '/admin/project/' %}active{% endif %}">
+                {{ translations.translate('admin.projects') }}
+            </a>
+            <a href="/admin/profile" class="{% if current_path == '/admin/profile' %}active{% endif %}">
+                {{ translations.translate('admin.profile') }}
+            </a>
+            <div class="divider"></div>
+            <div class="user-info">
+                {{ request.getUserFullName() }}
             </div>
+            <a href="/">
+                {{ translations.translate('admin.view_site') }}
+            </a>
+            <a href="/logout" class="danger">
+                {{ translations.translate('admin.logout') }}
+            </a>
+        </div>
         {% endif %}
-
-        {# Logo #}
+        
+        {# Language switcher for mobile (positioned via CSS) #}
+        <div class="language-switcher interactive mobile-lang">                
+            <a href="/language/switch/fr" class="{% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">🇫🇷</a>                
+            <span class="separator" aria-hidden="true">/</span>                
+            <a href="/language/switch/en" class="{% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">🇬🇧</a>            
+        </div>
+        
+        {# Centered logo (positioned above everything) #}
         <div class="logo-container">
             <img src="/assets/img/AshaLogo.png" alt="Logo Asha">
         </div>
