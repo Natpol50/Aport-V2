@@ -22,7 +22,7 @@ class TranslationService
     // Default translations as fallback when database fails
     private array $fallbackTranslations = [
         'en' => [
-            'site.title' => 'Polette Nathan - Portfolio',
+            'site.title' => 'Polette Nathan - Portfolioss',
             'meta.description' => 'Nathan Polette\'s personal portfolio - Computer Engineering Student',
             'nav.projects' => 'Projects',
             'nav.contact' => 'Contact',
@@ -101,7 +101,7 @@ class TranslationService
             'error.500_description' => '500 - Server error'
         ],
         'fr' => [
-            'site.title' => 'Polette Nathan - Portfolio',
+            'site.title' => 'Polette Nathan - Portfoliosss',
             'meta.description' => 'Portfolio personnel de Nathan Polette - Étudiant en ingénierie informatique',
             'nav.projects' => 'Projets',
             'nav.contact' => 'Contact',

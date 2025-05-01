@@ -487,6 +487,226 @@ SQL;
                 'en' => 'Are you sure you want to delete this item?',
                 'fr' => 'Êtes-vous sûr de vouloir supprimer cet élément?'
             ],
+            'admin.manage' => [
+                'en' => 'Manage projects',
+                'fr' => 'Gérer les projets'
+            ],
+            'admin.total_projects' => [
+                'en' => 'existing projects',
+                'fr' => 'projets existants'
+            ],
+            'admin.current_projects' => [
+                'en' => 'Current projects',
+                'fr' => 'Projets en cours'
+            ],
+            'admin.past_projects' => [
+                'en' => 'Past projects',
+                'fr' => 'Projets passés'
+            ],
+            'admin.quick_actions' => [
+                'en' => 'Quick actions',
+                'fr' => 'Actions rapides'
+            ],
+            'admin.no_projects' => [
+                'en' => 'No projects available.',
+                'fr' => 'Aucun projet disponible.'
+            ],
+            'admin.language_settings' => [
+                'en' => 'Language settings',
+                'fr' => 'Paramètres de langue'
+            ],
+            'admin.language_settings_desc' => [
+                'en' => 'So, you added that third language yet ? NO ? Well go fuck yourself',
+                'fr' => 'Alors, il est ou ce 3ème langage ? Tu as peur ?'
+            ],
+            'admin.view_french' => [
+                'en' => 'See the website in french',
+                'fr' => 'THE FUCK ? COMMENT T\'A TROUVE CA ???'
+            ],
+            'admin.view_english' => [
+                'en' => 'HOW THE ACTUAL FUCK MAN WTH ?!',
+                'fr' => 'Voir le site en anglais'
+            ],
+            'admin.personal_info' => [
+                'en' => 'Personal informations',
+                'fr' => 'Informations personnelles'
+            ],
+            'admin.personal_info_desc' => [
+                'en' => 'Forgot anything darling ?',
+                'fr' => 'Pourquoi tu t\'es fait chier à implémenter ça déjà ?'
+            ],
+            'admin.user_profile' => [
+                'en' => 'User Profile',
+                'fr' => 'Profil de l\'utilisateur'
+            ],
+            'admin.edit_profile' => [
+                'en' => 'Edit Profile',
+                'fr' => 'Modifier le profil'
+            ],
+            'admin.view_profile' => [
+                'en' => 'View Profile',
+                'fr' => 'Voir le profil'
+            ],
+            'admin.edit_personal_info' => [
+                'en' => 'Edit Personal Information',
+                'fr' => 'Modifier les informations personnelles'
+            ],
+            'admin.view_site' => [
+                'en' => 'View Site',
+                'fr' => 'Voir le site'
+            ],
+            'admin.logout' => [
+                'en' => 'Logout',
+                'fr' => 'Déconnexion'
+            ],
+            'error.server_error' => [
+                'en' => 'An unexpected error occurred. Please try again later.',
+                'fr' => 'Une erreur inattendue est survenue. Veuillez réessayer plus tard.'
+            ],
+            'error.not_found' => [
+                'en' => 'The requested page was not found.',
+                'fr' => 'La page demandée est introuvable.'
+            ],
+            'error.unauthorized' => [
+                'en' => 'You are not authorized to access this page.',
+                'fr' => 'Vous n\'êtes pas autorisé à accéder à cette page.'
+            ],
+            'error.login_required' => [
+                'en' => 'You must be logged in to access this page.',
+                'fr' => 'Vous devez être connecté pour accéder à cette page.'
+            ],
+            'error.access_denied' => [
+                'en' => 'Access denied.',
+                'fr' => 'Accès refusé.'
+            ],
+            'error.500_message' => [
+                'en' => 'An error occurred while processing your request. Nothing do be worried about... I hope.',
+                'fr' => 'Une erreur est survenue lors du traitement de votre demande, sûremement une erreur dans le code. SWwgc2UgdHJvdXZlIHF1ZSBmYWlyZSB1biBzaXRlIGVudGnDqHJlbWVudCByw6lhY3RpZiBwb3VyIHBhcyBncmFuZCBjaG9zZSwgYmFoICDDp2EgcmVuZCBsZSBwcm9qZXQgcGx1cyBjb21wbGV4ZSwgZMOpc29sw6kgcG91ciBjZXR0ZSBlcnJldXIu'
+            ],
+            'error.404_message' => [
+                'en' => 'The page you are looking for does not exist.',
+                'fr' => 'La page que vous recherchez n\'existe pas. Vous foutez quoi ici ?'
+            ],
+            'error.401_message' => [
+                'en' => 'You are not authorized to view this page.',
+                'fr' => 'Vous n\'êtes pas autorisé à voir cette page.'
+            ],
+            'error.403_message' => [
+                'en' => 'You do not have permission to access this page.',
+                'fr' => 'Vous n\'avez pas la permission d\'accéder à cette page.'
+            ],
+            'error.403_title' => [
+                'en' => '403 Forbidden',
+                'fr' => '403 Interdit'
+            ],
+            'error.go_back' => [
+                'en' => 'Go back to the previous page',
+                'fr' => 'Retourner à la page précédente'
+            ],
+            'error.back_to_home' => [
+                'en' => 'Back to home',
+                'fr' => 'Retour à l\'accueil'
+            ],
+            'contact.success' => [
+                'en' => 'Your message has been sent successfully.',
+                'fr' => 'Votre message a été envoyé avec succès.'
+            ],
+            'contact.error' => [
+                'en' => 'An error occurred while sending your message. Please try again later.',
+                'fr' => 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.'
+            ],
+            'contact.form_heading' => [
+                'en' => 'Contact Form',
+                'fr' => 'Formulaire de contact'
+            ],
+            'contact.your_email' => [
+                'en' => 'Your email',
+                'fr' => 'Votre email'
+            ],
+            'contact.message' => [
+                'en' => 'Your message',
+                'fr' => 'Votre message'
+            ],
+            'contact.subject' => [
+                'en' => 'Subject',
+                'fr' => 'Sujet'
+            ],
+            'contact.subject_placeholder' => [
+                'en' => 'Enter the subject of your message',
+                'fr' => 'Entrez le sujet de votre message'
+            ],
+            'contact.message_placeholder' => [
+                'en' => 'Enter your message here',
+                'fr' => 'Entrez votre message ici'
+            ],
+            'contact.email_placeholder' => [
+                'en' => 'Enter your email address',
+                'fr' => 'Entrez votre adresse email'
+            ],
+            'contact.required_fields' => [
+                'en' => 'This field is required',
+                'fr' => 'Ce champ est requis'
+            ],
+            'contact.info_heading' => [
+                'en' => 'Contact Information',
+                'fr' => 'Informations de contact'
+            ],
+            'contact.info_desc' => [
+                'en' => 'Feel free to reach out to me through the following channels:',
+                'fr' => 'N\'hésitez pas à me contacter par les canaux suivants :'
+            ],
+            'login.forgot_password' => [
+                'en' => 'Forgot your password?',
+                'fr' => 'Mot de passe oublié ?'
+            ],
+            'login.remember_me' => [
+                'en' => 'Remember me',
+                'fr' => 'Se souvenir de moi'
+            ],
+            'admin.filter_by_status' => [
+                'en' => 'Filter by status',
+                'fr' => 'Filtrer par statut'
+            ],
+            'admin.search' => [
+                'en' => 'Search',
+                'fr' => 'Rechercher'
+            ],
+            'admin.no_results' => [
+                'en' => 'No results found.',
+                'fr' => 'Aucun résultat trouvé.'
+            ],
+            'admin.get_started_by_creating' => [
+                'en' => 'Get started by creating your first project!',
+                'fr' => 'Commencez par créer votre premier projet !'
+            ],
+            'admin.search_placeholder' => [
+                'en' => 'Search projects...',
+                'fr' => 'Rechercher des projets...'
+            ],
+            'admin.all_types' => [
+                'en' => 'All types',
+                'fr' => 'Tous les types'
+            ],
+            'admin.all_statuses' => [
+                'en' => 'All statuses',
+                'fr' => 'Tous les statuts'
+            ],
+            'admin.status_current' => [
+                'en' => 'Current',
+                'fr' => 'En cours'
+            ],
+            'admin.status_past' => [
+                'en' => 'Past',
+                'fr' => 'Passé'
+            ],
+            'admin.status_canceled' => [
+                'en' => 'Canceled',
+                'fr' => 'Annulé'
+            ],
+            'admin.status_pending' => [
+                'en' => 'Pending',
+                'fr' => 'En attente'
+            ],
         ];
         
         $insertedCount = 0;
