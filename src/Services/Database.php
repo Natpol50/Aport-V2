@@ -11,14 +11,13 @@ use App\Exceptions\DatabaseException;
  * This class manages the database connection and provides
  * methods for executing SQL queries.
  */
+
+
 class Database
 {
     private ?\PDO $connection = null;
     private array $config;
     
-    /**
-     * Create a new Database instance
-     */
     public function __construct()
     {
         // Get database configuration

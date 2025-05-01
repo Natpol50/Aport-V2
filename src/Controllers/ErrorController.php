@@ -9,7 +9,7 @@ use App\Services\TranslationService;
  * ErrorController - Handles error pages
  * 
  * This controller is responsible for rendering error pages
- * such as a 404 Not Found and 500 Server Error.
+ * such as 404 Not Found, 403 Forbidden, 401 Unauthorized, and 500 Server Error.
  */
 class ErrorController extends BaseController
 {
@@ -39,13 +39,46 @@ class ErrorController extends BaseController
     }
     
     /**
+     * Display 401 Unauthorized page
+     * 
+     * @param RequestObject $request Current request information
+     * @param \Throwable|null $exception The exception that caused the error
+     * @return void
+     */
+    public function unauthenticated(RequestObject $request, ?\Throwable $exception = null): void
+    {
+        // Set HTTP status code
+        http_response_code(401);
+        
+        // Get language code
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
+        
+        // Log the exception
+        if ($exception) {
+            error_log($exception->getMessage());
+        }
+        
+        // Set message in session
+        $_SESSION['error'] = [
+            $translationService->translate('error.login_required')
+        ];
+        
+        // Redirect to login page
+        header('Location: /login');
+        exit;
+    }
+    
+    /**
      * Display 500 Server Error page
      * 
      * @param RequestObject $request Current request information
-     * @param \Exception|null $exception The exception that caused the error
+     * @param \Throwable|null $exception The exception that caused the error
      * @return void
      */
-    public function serverError(RequestObject $request, ?\Exception $exception = null): void
+    public function serverError(RequestObject $request, ?\Throwable $exception = null): void
     {
         // Set HTTP status code
         http_response_code(500);
@@ -70,7 +103,12 @@ class ErrorController extends BaseController
                 'code' => $exception->getCode(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
-                'trace' => $exception->getTraceAsString()
+                'trace' => $exception->getTraceAsString(),
+                'previous' => $exception->getPrevious() ? [
+                    'message' => $exception->getPrevious()->getMessage(),
+                    'file' => $exception->getPrevious()->getFile(),
+                    'line' => $exception->getPrevious()->getLine(),
+                ] : null,
             ];
         }
         
@@ -80,6 +118,69 @@ class ErrorController extends BaseController
             'translations' => $translationService,
             'language' => $langCode,
             'exception' => $exceptionDetails
+        ]);
+    }
+    
+    /**
+     * Display fatal error page
+     * 
+     * @param RequestObject $request Current request information
+     * @param array|null $error PHP error array from error_get_last()
+     * @return void
+     */
+    public function fatalError(RequestObject $request, ?array $error = null): void
+    {
+        // Set HTTP status code
+        http_response_code(500);
+        
+        // Get language code
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
+        
+        // Format error details if available
+        $errorDetails = null;
+        if ($_ENV['APP_DEBUG'] === 'true' && $error) {
+            $errorDetails = [
+                'message' => $error['message'] ?? 'Unknown error',
+                'file' => $error['file'] ?? 'Unknown file',
+                'line' => $error['line'] ?? 0,
+                'type' => $this->getErrorType($error['type'] ?? 0),
+            ];
+        }
+        
+        // Render fatal error page
+        echo $this->render('errors/fatal', [
+            'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode,
+            'error' => $errorDetails
+        ]);
+    }
+    
+    /**
+     * Display forbidden page (403)
+     * 
+     * @param RequestObject $request Current request information
+     * @return void
+     */
+    public function forbidden(RequestObject $request): void
+    {
+        // Set HTTP status code
+        http_response_code(403);
+        
+        // Get language code
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
+        
+        // Render 403 page
+        echo $this->render('errors/403', [
+            'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode
         ]);
     }
     
@@ -112,27 +213,31 @@ class ErrorController extends BaseController
     }
     
     /**
-     * Display forbidden page (403)
+     * Get human-readable error type
      * 
-     * @param RequestObject $request Current request information
-     * @return void
+     * @param int $type PHP error type constant
+     * @return string Human-readable error type
      */
-    public function forbidden(RequestObject $request): void
+    private function getErrorType(int $type): string
     {
-        // Set HTTP status code
-        http_response_code(403);
+        $types = [
+            E_ERROR => 'Fatal Error',
+            E_WARNING => 'Warning',
+            E_PARSE => 'Parse Error',
+            E_NOTICE => 'Notice',
+            E_CORE_ERROR => 'Core Error',
+            E_CORE_WARNING => 'Core Warning',
+            E_COMPILE_ERROR => 'Compile Error',
+            E_COMPILE_WARNING => 'Compile Warning',
+            E_USER_ERROR => 'User Error',
+            E_USER_WARNING => 'User Warning',
+            E_USER_NOTICE => 'User Notice',
+            E_STRICT => 'Strict Standards',
+            E_RECOVERABLE_ERROR => 'Recoverable Error',
+            E_DEPRECATED => 'Deprecated',
+            E_USER_DEPRECATED => 'User Deprecated'
+        ];
         
-        // Get language code
-        $langCode = $request->getLanguageCode();
-        
-        // Initialize translation service
-        $translationService = new TranslationService($langCode);
-        
-        // Render 403 page
-        echo $this->render('errors/403', [
-            'request' => $request,
-            'translations' => $translationService,
-            'language' => $langCode
-        ]);
+        return $types[$type] ?? 'Unknown Error';
     }
 }

@@ -31,13 +31,19 @@ class HomeController extends BaseController
      * Display the home page
      * 
      * @param RequestObject $request Current request information
+     * @param string|null $lang Language code (optional, for URL routing)
      * @return void
      */
-    public function index(RequestObject $request): void
+    public function index(RequestObject $request, ?string $lang = null): void
     {
-        // Set language to French for this page
-        $langCode = 'fr';
-        $_SESSION['language'] = $langCode;
+        // If language is specified in the URL, set it in the request
+        if ($lang && in_array($lang, ['en', 'fr'])) {
+            $request->setLanguageCode($lang);
+            $_SESSION['language'] = $lang;
+        }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
         
         // Initialize translation service
         $translationService = new TranslationService($langCode);
@@ -58,42 +64,8 @@ class HomeController extends BaseController
             'pastProjects' => $pastProjects,
             'personalInfo' => $personalInfo,
             'translations' => $translationService,
-            'language' => $langCode
-        ]);
-    }
-    
-    /**
-     * Display the English home page
-     * 
-     * @param RequestObject $request Current request information
-     * @return void
-     */
-    public function indexEn(RequestObject $request): void
-    {
-        // Set language to English for this page
-        $langCode = 'en';
-        $_SESSION['language'] = $langCode;
-        
-        // Initialize translation service
-        $translationService = new TranslationService($langCode);
-        
-        // Get current projects
-        $currentProjects = $this->projectModel->getAllProjects($langCode, 'current');
-        
-        // Get past projects
-        $pastProjects = $this->projectModel->getAllProjects($langCode, 'past');
-        
-        // Get personal info
-        $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
-        
-        // Render the English home page
-        echo $this->render('home/index_en', [
-            'request' => $request,
-            'currentProjects' => $currentProjects,
-            'pastProjects' => $pastProjects,
-            'personalInfo' => $personalInfo,
-            'translations' => $translationService,
-            'language' => $langCode
+            'language' => $langCode,
+            'is_home_page' => true
         ]);
     }
     
@@ -101,13 +73,19 @@ class HomeController extends BaseController
      * Display the contact page
      * 
      * @param RequestObject $request Current request information
+     * @param string|null $lang Language code (optional, for URL routing)
      * @return void
      */
-    public function contact(RequestObject $request): void
+    public function contact(RequestObject $request, ?string $lang = null): void
     {
-        // Set language to French for this page
-        $langCode = 'fr';
-        $_SESSION['language'] = $langCode;
+        // If language is specified in the URL, set it in the request
+        if ($lang && in_array($lang, ['en', 'fr'])) {
+            $request->setLanguageCode($lang);
+            $_SESSION['language'] = $lang;
+        }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
         
         // Initialize translation service
         $translationService = new TranslationService($langCode);
@@ -117,33 +95,6 @@ class HomeController extends BaseController
         
         // Render the contact page
         echo $this->render('home/contact', [
-            'request' => $request,
-            'personalInfo' => $personalInfo,
-            'translations' => $translationService,
-            'language' => $langCode
-        ]);
-    }
-    
-    /**
-     * Display the English contact page
-     * 
-     * @param RequestObject $request Current request information
-     * @return void
-     */
-    public function contactEn(RequestObject $request): void
-    {
-        // Set language to English for this page
-        $langCode = 'en';
-        $_SESSION['language'] = $langCode;
-        
-        // Initialize translation service
-        $translationService = new TranslationService($langCode);
-        
-        // Get personal info for contact details
-        $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
-        
-        // Render the English contact page
-        echo $this->render('home/contact_en', [
             'request' => $request,
             'personalInfo' => $personalInfo,
             'translations' => $translationService,
@@ -190,10 +141,7 @@ class HomeController extends BaseController
         
         // If there are errors, redisplay the form with error messages
         if (!empty($errors)) {
-            // Determine which template to use based on language
-            $template = ($langCode === 'en') ? 'home/contact_en' : 'home/contact';
-            
-            echo $this->render($template, [
+            echo $this->render('home/contact', [
                 'request' => $request,
                 'personalInfo' => $personalInfo,
                 'translations' => $translationService,
@@ -216,9 +164,9 @@ class HomeController extends BaseController
             $translationService->translate('contact.success')
         ];
         
-        // Redirect back to the appropriate contact page
-        $redirectUrl = ($langCode === 'en') ? '/contact-en' : '/contact';
-        header("Location: $redirectUrl");
+        // Redirect back to the contact page
+        $contactUrl = ($langCode === 'en') ? '/en/contact' : '/contact';
+        header("Location: $contactUrl");
         exit;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Services\Database;
 use App\Services\TokenService;
+use App\Services\CacheService;
 use App\Models\UserModel;
 use App\Core\RequestObject;
 use App\Exceptions\AuthenticationException;
@@ -16,6 +17,7 @@ class AuthController extends BaseController
 {
     private UserModel $userModel;
     private TokenService $tokenService;
+    private CacheService $cacheService;
     
     /**
      * Create a new AuthController instance
@@ -27,11 +29,15 @@ class AuthController extends BaseController
         
         $this->userModel = new UserModel($database);
         
+        // Initialize cache service
+        $this->cacheService = new CacheService();
+        
         // Create config for token service
         $configManager = \App\Config\ConfigManager::getInstance();
-        $tokenConfig = $configManager->getConfigFor(new TokenService());
+        $tokenConfig = $configManager->getConfigFor($this);
         
-        $this->tokenService = new TokenService($tokenConfig);
+        // Create token service with config and cache service
+        $this->tokenService = new TokenService($tokenConfig, $this->cacheService);
     }
     
     /**

@@ -16,15 +16,18 @@ use Firebase\JWT\Key;
 class TokenService
 {
     private ConfigInterface $config;
+    private ?CacheService $cacheService = null;
     
     /**
      * Create a new TokenService instance
      * 
      * @param ConfigInterface $config Configuration access object
+     * @param CacheService|null $cacheService Optional cache service for token blacklisting
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, ?CacheService $cacheService = null)
     {
         $this->config = $config;
+        $this->cacheService = $cacheService;
     }
     
     /**
@@ -149,7 +152,7 @@ class TokenService
         }
     }
     
-    /**
+         /**
      * Set the token cookie
      * 
      * @param string $token JWT token
@@ -166,7 +169,7 @@ class TokenService
                 'expires' => $expiry,
                 'path' => '/',
                 'domain' => '',
-                'secure' => $_SERVER['HTTPS'] ?? false,
+                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]
@@ -190,7 +193,7 @@ class TokenService
                 'expires' => $expiry,
                 'path' => '/',
                 'domain' => '',
-                'secure' => $_SERVER['HTTPS'] ?? false,
+                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]
@@ -212,7 +215,7 @@ class TokenService
                 'expires' => time() - 3600,
                 'path' => '/',
                 'domain' => '',
-                'secure' => $_SERVER['HTTPS'] ?? false,
+                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]
@@ -226,7 +229,7 @@ class TokenService
                 'expires' => time() - 3600,
                 'path' => '/',
                 'domain' => '',
-                'secure' => $_SERVER['HTTPS'] ?? false,
+                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]
@@ -235,6 +238,32 @@ class TokenService
         // Also clear the session
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
+        }
+    }
+    
+    /**
+     * Attempt to refresh authentication using a refresh token
+     * 
+     * @param string $refreshToken Refresh token
+     * @return bool True if refresh was successful
+     * @throws AuthenticationException If refresh token is invalid
+     */
+    public function refreshFromToken(string $refreshToken): bool
+    {
+        try {
+            $payload = $this->decodeJWT($refreshToken);
+            
+            // Verify this is a refresh token
+            if (!isset($payload->type) || $payload->type !== 'refresh') {
+                throw new AuthenticationException('Invalid refresh token type');
+            }
+            
+            // Create new access token
+            $this->createJWT($payload->user_id, $payload->acctype ?? 1);
+            
+            return true;
+        } catch (\Exception $e) {
+            throw new AuthenticationException('Invalid refresh token: ' . $e->getMessage(), 0, $e);
         }
     }
 }
