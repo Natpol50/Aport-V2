@@ -18,6 +18,8 @@ use App\Services\LogService;
  * This class is responsible for setting up the environment,
  * registering routes, initializing middleware, and handling 
  * the request/response cycle.
+ * 
+ * Updated to remove unnecessary registration routes and simplify authentication.
  */
 class Application
 {
@@ -162,8 +164,10 @@ class Application
         return new ConfigObject($jwtConfigArray);
     }
     
-         /**
+    /**
      * Register application routes
+     * 
+     * Registration routes have been removed to simplify the auth system.
      */
     private function registerRoutes(): void
     {
@@ -176,12 +180,12 @@ class Application
         $this->router->get('/contact-en', 'HomeController@contactEn');
         $this->router->post('/contact/submit', 'HomeController@submitContact');
         
-        // Auth routes
+        // Auth routes (simplified - registration removed)
         $this->router->get('/login', 'AuthController@loginForm');
         $this->router->post('/login', 'AuthController@login');
         $this->router->get('/logout', 'AuthController@logout');
-        $this->router->get('/register', 'AuthController@registerForm');
-        $this->router->post('/register', 'AuthController@register');
+        
+        // Password reset routes (kept for admin use)
         $this->router->get('/forgot-password', 'AuthController@forgotPasswordForm');
         $this->router->post('/forgot-password', 'AuthController@forgotPassword');
         $this->router->post('/reset-code', 'AuthController@verifyResetCode');
@@ -206,6 +210,9 @@ class Application
         $this->router->post('/admin/project/delete/{id}', 'AdminController@deleteProject');
         $this->router->get('/admin/personal-info', 'AdminController@personalInfo');
         $this->router->post('/admin/personal-info/update', 'AdminController@updatePersonalInfo');
+        
+        // Language routes
+        $this->router->get('/language/switch/{lang}', 'LanguageController@switchLanguage');
         
         // Error routes
         $this->router->get('/404', 'ErrorController@notFound');
@@ -262,7 +269,7 @@ class Application
         // Always allow these routes during maintenance
         $exemptRoutes = [
             '/maintenance',  // Maintenance page itself
-            '/login/admin',  // Admin login (to disable maintenance)
+            '/login',        // Admin login (to disable maintenance)
             '/admin/toggle-maintenance', // Toggle maintenance mode
         ];
         

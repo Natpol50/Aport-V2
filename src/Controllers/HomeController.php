@@ -12,6 +12,8 @@ use App\Services\TranslationService;
  * 
  * This controller is responsible for rendering the main public-facing
  * pages of the website, including the home page and contact page.
+ * 
+ * Improved with better language handling for English routes.
  */
 class HomeController extends BaseController
 {
@@ -28,23 +30,46 @@ class HomeController extends BaseController
     }
     
     /**
-     * Display the home page
+     * Display the home page (French version is default)
      * 
      * @param RequestObject $request Current request information
-     * @param string|null $lang Language code (optional, for URL routing)
      * @return void
      */
-    public function index(RequestObject $request, ?string $lang = null): void
+    public function index(RequestObject $request): void
     {
-        // If language is specified in the URL, set it in the request
-        if ($lang && in_array($lang, ['en', 'fr'])) {
-            $request->setLanguageCode($lang);
-            $_SESSION['language'] = $lang;
-        }
+        // Set language to French
+        $request->setLanguageCode('fr');
+        $_SESSION['language'] = 'fr';
         
-        // Get language code from request
-        $langCode = $request->getLanguageCode();
+        // Render the home page with French content
+        $this->renderHomePage($request, 'fr');
+    }
+    
+    /**
+     * Display the English home page
+     * 
+     * @param RequestObject $request Current request information
+     * @return void
+     */
+    public function indexEn(RequestObject $request): void
+    {
+        // Set language to English
+        $request->setLanguageCode('en');
+        $_SESSION['language'] = 'en';
         
+        // Render the home page with English content
+        $this->renderHomePage($request, 'en');
+    }
+    
+    /**
+     * Common method to render the home page with specified language
+     * 
+     * @param RequestObject $request Current request information
+     * @param string $langCode Language code
+     * @return void
+     */
+    private function renderHomePage(RequestObject $request, string $langCode): void
+    {
         // Initialize translation service
         $translationService = new TranslationService($langCode);
         
@@ -70,23 +95,46 @@ class HomeController extends BaseController
     }
     
     /**
-     * Display the contact page
+     * Display the French contact page
      * 
      * @param RequestObject $request Current request information
-     * @param string|null $lang Language code (optional, for URL routing)
      * @return void
      */
-    public function contact(RequestObject $request, ?string $lang = null): void
+    public function contact(RequestObject $request): void
     {
-        // If language is specified in the URL, set it in the request
-        if ($lang && in_array($lang, ['en', 'fr'])) {
-            $request->setLanguageCode($lang);
-            $_SESSION['language'] = $lang;
-        }
+        // Set language to French
+        $request->setLanguageCode('fr');
+        $_SESSION['language'] = 'fr';
         
-        // Get language code from request
-        $langCode = $request->getLanguageCode();
+        // Render the contact page with French content
+        $this->renderContactPage($request, 'fr');
+    }
+    
+    /**
+     * Display the English contact page
+     * 
+     * @param RequestObject $request Current request information
+     * @return void
+     */
+    public function contactEn(RequestObject $request): void
+    {
+        // Set language to English
+        $request->setLanguageCode('en');
+        $_SESSION['language'] = 'en';
         
+        // Render the contact page with English content
+        $this->renderContactPage($request, 'en');
+    }
+    
+    /**
+     * Common method to render the contact page with specified language
+     * 
+     * @param RequestObject $request Current request information
+     * @param string $langCode Language code
+     * @return void
+     */
+    private function renderContactPage(RequestObject $request, string $langCode): void
+    {
         // Initialize translation service
         $translationService = new TranslationService($langCode);
         
@@ -164,8 +212,8 @@ class HomeController extends BaseController
             $translationService->translate('contact.success')
         ];
         
-        // Redirect back to the contact page
-        $contactUrl = ($langCode === 'en') ? '/en/contact' : '/contact';
+        // Redirect back to the contact page based on language
+        $contactUrl = ($langCode === 'en') ? '/contact-en' : '/contact';
         header("Location: $contactUrl");
         exit;
     }

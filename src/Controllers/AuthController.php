@@ -9,9 +9,13 @@ use App\Services\CacheService;
 use App\Models\UserModel;
 use App\Core\RequestObject;
 use App\Exceptions\AuthenticationException;
+use App\Services\TranslationService;
 
 /**
  * AuthController - Handles authentication actions
+ * 
+ * This class has been simplified to remove registration functionality
+ * and focus only on login, logout, and password reset for the admin user.
  */
 class AuthController extends BaseController
 {
@@ -48,17 +52,25 @@ class AuthController extends BaseController
      */
     public function loginForm(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         // Render login form with empty arrays for messages
         echo $this->render('auth/login', [
             'error' => [],
             'success' => [],
             'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode,
             'formData' => [] // Empty form data
         ]);
     }
@@ -71,11 +83,17 @@ class AuthController extends BaseController
      */
     public function login(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         // Get login credentials
         $email = $_POST['email'] ?? '';
@@ -96,17 +114,19 @@ class AuthController extends BaseController
             $user = $this->userModel->verifyCredentials($email, $password);
             
             if (!$user) {
-                // Add error message to array
-                $errorMessages[] = 'Email ou mot de passe incorrect.';
+                // Add error message
+                $errorMessages[] = $translationService->translate('login.error.invalid_credentials');
                 
                 // Render the login form with error and preserved form data
                 echo $this->render('auth/login', [
                     'error' => $errorMessages,
                     'success' => $successMessages,
                     'request' => $request,
+                    'translations' => $translationService,
+                    'language' => $langCode,
                     'formData' => $formData
                 ]);
-                exit; // Important to prevent further execution
+                exit;
             }
             
             // Create JWT token
@@ -117,21 +137,23 @@ class AuthController extends BaseController
                 $this->tokenService->createRefreshToken($user->userId);
             }
             
-            // Redirect to home page
-            header('Location: /');
+            // Redirect to admin dashboard
+            header('Location: /admin');
             exit;
         } catch (AuthenticationException $e) {
             // Log the error
             error_log('Authentication error: ' . $e->getMessage());
             
             // Add error to array
-            $errorMessages[] = 'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
+            $errorMessages[] = $translationService->translate('login.error.auth_error');
             
             // Render the login form with error and preserved form data
             echo $this->render('auth/login', [
                 'error' => $errorMessages,
                 'success' => $successMessages,
                 'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode,
                 'formData' => $formData
             ]);
             exit;
@@ -146,168 +168,30 @@ class AuthController extends BaseController
      */
     public function logout(RequestObject $request): void
     {
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
+        
         // Clear JWT token cookie
         $this->tokenService->logout();
         
         // Set up success message for login form
-        $successMessages = ['Vous avez été déconnecté avec succès.'];
+        $successMessages = [$translationService->translate('login.logout_success')];
         
         // Render login form with success message
         echo $this->render('auth/login', [
             'error' => [],
             'success' => $successMessages,
             'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode,
             'formData' => []
         ]);
         exit;
     }
 
-    /**
-     * Display registration form
-     * 
-     * @param RequestObject $request Current request information
-     * @return void
-     */
-    public function registerForm(RequestObject $request): void
-    {
-        // If user is already authenticated, redirect to home
-        if ($request->isAuthenticated()) {
-            header('Location: /');
-            exit;
-        }
-        
-        // Render registration form with empty arrays
-        echo $this->render('auth/register', [
-            'error' => [],
-            'success' => [],
-            'request' => $request,
-            'formData' => []
-        ]);
-    }
-    
-    /**
-     * Process registration attempt
-     * 
-     * @param RequestObject $request Current request information
-     * @return void
-     */
-    public function register(RequestObject $request): void
-    {
-        // If user is already authenticated, redirect to home
-        if ($request->isAuthenticated()) {
-            header('Location: /');
-            exit;
-        }
-        
-        // Get registration data
-        $civilite = $_POST['civilite'] ?? '';
-        $lastName = $_POST['lastName'] ?? '';
-        $firstName = $_POST['firstName'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $phone = $_POST['phone'] ?? '';
-        $userType = $_POST['userType'] ?? 'etudiant'; // Default to student
-        $password = $_POST['password'] ?? '';
-        $confirmPassword = $_POST['confirmPassword'] ?? '';
-        
-        // Save form data to repopulate the form if there's an error
-        $formData = [
-            'civilite' => $civilite,
-            'lastName' => $lastName,
-            'firstName' => $firstName,
-            'email' => $email,
-            'phone' => $phone,
-            'userType' => $userType
-        ];
-        
-        $errorMessages = [];
-        $successMessages = [];
-        
-        // Validate password match
-        if ($password !== $confirmPassword) {
-            $errorMessages[] = 'Les mots de passe ne correspondent pas.';
-            
-            echo $this->render('auth/register', [
-                'error' => $errorMessages,
-                'success' => $successMessages,
-                'request' => $request,
-                'formData' => $formData
-            ]);
-            exit;
-        }
-        
-        try {
-            // Check if email already exists
-            $existingUser = $this->userModel->getUserByEmail($email);
-            if ($existingUser) {
-                $errorMessages[] = 'Cet email est déjà utilisé.';
-                
-                echo $this->render('auth/register', [
-                    'error' => $errorMessages,
-                    'success' => $successMessages,
-                    'request' => $request,
-                    'formData' => $formData
-                ]);
-                exit;
-            }
-            
-            // TODO : ALL USERS ROLEID authorized by everyone
-            // Determine role ID based on user type
-            $roleId = 5; // Default to basic user (5)
-            if ($userType === 'tuteur') {
-                $roleId = 3; // Pilote de promotion (3)
-            } else if ($userType === 'basic') {
-                $roleId = 5; // Admin user (5)
-            } else if ($userType === 'etudiant') {
-                $roleId = 4; // Student (4)
-            }
-            
-            // Determine gender based on civilite
-            $gender = 'N'; // Default to Not specified
-            if ($civilite === 'Monsieur') {
-                $gender = 'M';
-            } else if ($civilite === 'Madame') {
-                $gender = 'F';
-            }
-            
-            // Create user data array
-            $userData = [
-                'userName' => $lastName,
-                'userFirstName' => $firstName,
-                'userEmail' => $email,
-                'userPassword' => $password,
-                'userPhone' => $phone,
-                'userGender' => $gender,
-                'userRoleId' => $roleId,
-            ];
-            
-            // Create user
-            $newUser = $this->userModel->createUser($userData);
-            
-            // Create JWT token for auto-login
-            $token = $this->tokenService->createJWT($newUser->userId);
-            
-            // Redirect to home page with success message
-            $_SESSION['success'] = ['Compte créé avec succès. Vous êtes maintenant connecté.'];
-            header('Location: /');
-            exit;
-        } catch (\Exception $e) {
-            // Log the error
-            error_log('Registration error: ' . $e->getMessage());
-            
-            // Add error message to array
-            $errorMessages[] = 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.';
-            
-            // Render registration form with error and preserved form data
-            echo $this->render('auth/register', [
-                'error' => $errorMessages,
-                'success' => $successMessages,
-                'request' => $request,
-                'formData' => $formData
-            ]);
-            exit;
-        }
-    }
-    
     /**
      * Display forgot password form
      * 
@@ -316,17 +200,25 @@ class AuthController extends BaseController
      */
     public function forgotPasswordForm(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         // Render forgot password form with empty arrays
         echo $this->render('auth/forgot-password', [
             'error' => [],
             'success' => [],
             'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode,
             'formData' => []
         ]);
     }
@@ -339,11 +231,17 @@ class AuthController extends BaseController
      */
     public function forgotPassword(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         $email = $_POST['email'] ?? '';
         
@@ -358,18 +256,19 @@ class AuthController extends BaseController
         
         // Validate email exists
         $user = $this->userModel->getUserByEmail($email);
+        
         // For security, don't indicate whether email exists or not
-        $successMessages[] = 'Si un compte existe avec cet email, un code de réinitialisation sera envoyé.';
+        $successMessages[] = $translationService->translate('forgot_password.email_sent');
 
         if (!$user) {
-            
-            
-            // Render forgot password form with success message
+            // Still show success message even if user doesn't exist (security)
             echo $this->render('auth/reset-code', [
                 'success' => $successMessages,
                 'error' => $errorMessages,
                 'request' => $request,
-                'formData' => $formData
+                'translations' => $translationService,
+                'language' => $langCode,
+                'email' => $email
             ]);
         } else {
             try {
@@ -379,21 +278,26 @@ class AuthController extends BaseController
                 // Redirect to the code verification page
                 echo $this->render('auth/reset-code', [
                     'error' => $errorMessages,
+                    'success' => $successMessages,
                     'email' => $email,
-                    'request' => $request
+                    'request' => $request,
+                    'translations' => $translationService,
+                    'language' => $langCode
                 ]);
             } catch (\Exception $e) {
                 // Log the error
                 error_log('Forgot password error: ' . $e->getMessage());
                 
                 // Add error message
-                $errorMessages[] = 'Une erreur est survenue. Veuillez réessayer.';
+                $errorMessages[] = $translationService->translate('forgot_password.error');
                 
                 // Render forgot password form with error message
                 echo $this->render('auth/forgot-password', [
                     'success' => $successMessages,
                     'error' => $errorMessages,
                     'request' => $request,
+                    'translations' => $translationService,
+                    'language' => $langCode,
                     'formData' => $formData
                 ]);
             }
@@ -408,11 +312,17 @@ class AuthController extends BaseController
      */
     public function verifyResetCode(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         $email = $_POST['email'] ?? '';
         $resetCode = $_POST['resetCode'] ?? '';
@@ -423,13 +333,15 @@ class AuthController extends BaseController
         
         // For demo purposes, check if code is 123456
         if ($resetCode !== '123456') {
-            $errorMessages[] = 'Code de réinitialisation invalide. Veuillez réessayer.';
+            $errorMessages[] = $translationService->translate('reset_code.invalid');
             
             // Send back to code verification page
             echo $this->render('auth/reset-code', [
                 'error' => $errorMessages,
                 'email' => $email,
-                'request' => $request
+                'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode
             ]);
             exit;
         }
@@ -443,7 +355,9 @@ class AuthController extends BaseController
             'email' => $email,
             'error' => $errorMessages,
             'success' => $successMessages,
-            'request' => $request
+            'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode
         ]);
     }
     
@@ -455,11 +369,17 @@ class AuthController extends BaseController
      */
     public function resetPasswordForm(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         $token = $_GET['token'] ?? '';
         $email = $_GET['email'] ?? '';
@@ -470,13 +390,15 @@ class AuthController extends BaseController
         
         // Validate token (would require implementation)
         if (empty($token) || empty($email)) {
-            $errorMessages[] = 'Lien de réinitialisation invalide ou expiré.';
+            $errorMessages[] = $translationService->translate('reset_password.invalid_link');
             
             // Render forgot password form with error
             echo $this->render('auth/forgot-password', [
                 'error' => $errorMessages,
                 'success' => $successMessages,
                 'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode,
                 'formData' => []
             ]);
             exit;
@@ -488,7 +410,9 @@ class AuthController extends BaseController
             'email' => $email,
             'error' => $errorMessages,
             'success' => $successMessages,
-            'request' => $request
+            'request' => $request,
+            'translations' => $translationService,
+            'language' => $langCode
         ]);
     }
     
@@ -500,11 +424,17 @@ class AuthController extends BaseController
      */
     public function resetPassword(RequestObject $request): void
     {
-        // If user is already authenticated, redirect to home
+        // If user is already authenticated, redirect to admin dashboard
         if ($request->isAuthenticated()) {
-            header('Location: /');
+            header('Location: /admin');
             exit;
         }
+        
+        // Get language code from request
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
         
         // Get form data
         $token = $_POST['token'] ?? '';
@@ -518,13 +448,15 @@ class AuthController extends BaseController
         
         // Validate token and email
         if (empty($token) || empty($email)) {
-            $errorMessages[] = 'Données de réinitialisation invalides. (A FINIR D\'IMPLEMENTER)';
+            $errorMessages[] = $translationService->translate('reset_password.invalid_data');
             
             // Render forgot password form with error
             echo $this->render('auth/forgot-password', [
                 'error' => $errorMessages,
                 'success' => [],
                 'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode,
                 'formData' => []
             ]);
             exit;
@@ -532,62 +464,67 @@ class AuthController extends BaseController
         
         // Validate passwords match
         if ($password !== $confirmPassword) {
-            $errorMessages[] = 'Les mots de passe ne correspondent pas.';
+            $errorMessages[] = $translationService->translate('reset_password.passwords_mismatch');
             
             echo $this->render('auth/reset-password', [
                 'token' => $token,
                 'email' => $email,
                 'error' => $errorMessages,
                 'success' => $successMessages,
-                'request' => $request
+                'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode
             ]);
             exit;
         }
         
         // Validate password length
         if (strlen($password) < 8) {
-            $errorMessages[] = 'Le mot de passe doit contenir au moins 8 caractères.';
+            $errorMessages[] = $translationService->translate('reset_password.password_too_short');
             
             echo $this->render('auth/reset-password', [
                 'token' => $token,
                 'email' => $email,
                 'error' => $errorMessages,
                 'success' => $successMessages,
-                'request' => $request
+                'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode
             ]);
             exit;
         }
         
         try {
-            // In a real application, we would verify the token and update the user's password
-            // For demo purposes, we'll just show a success message
-            
             // Get user by email
             $user = $this->userModel->getUserByEmail($email);
             
             if (!$user) {
-                $errorMessages[] = 'Utilisateur non trouvé.';
+                $errorMessages[] = $translationService->translate('reset_password.user_not_found');
                 
                 echo $this->render('auth/forgot-password', [
                     'error' => $errorMessages,
                     'success' => [],
                     'request' => $request,
+                    'translations' => $translationService,
+                    'language' => $langCode,
                     'formData' => []
                 ]);
                 exit;
             }
             
             // In a real application, update the user's password here
-            // For demo, just show success message
+            // $this->userModel->updateUser($user->userId, ['userPassword' => $password]);
             
             // Set success message for login form
-            $successMessages[] = 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.';
+            $successMessages[] = $translationService->translate('reset_password.success');
             
             // Render login form with success message
             echo $this->render('auth/login', [
                 'error' => [],
                 'success' => $successMessages,
                 'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode,
                 'formData' => ['email' => $email]
             ]);
             exit;
@@ -596,7 +533,7 @@ class AuthController extends BaseController
             error_log('Password reset error: ' . $e->getMessage());
             
             // Add error message
-            $errorMessages[] = 'Une erreur est survenue lors de la réinitialisation du mot de passe. Veuillez réessayer.';
+            $errorMessages[] = $translationService->translate('reset_password.error');
             
             // Return to reset password form
             echo $this->render('auth/reset-password', [
@@ -604,11 +541,11 @@ class AuthController extends BaseController
                 'email' => $email,
                 'error' => $errorMessages,
                 'success' => [],
-                'request' => $request
+                'request' => $request,
+                'translations' => $translationService,
+                'language' => $langCode
             ]);
             exit;
         }
     }
-    
-
 }

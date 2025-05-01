@@ -229,9 +229,9 @@ INSERT INTO languages (code, name) VALUES
 ('en', 'English'), 
 ('fr', 'Français');
 
--- Insert default user (password: Admin@123)
+-- Insert default user (password: testpassword)
 INSERT INTO users (username, email, password_hash, first_name, last_name) 
-VALUES ('admin', 'nathan.polette@gmail.com', '$2y$10$q4i2RHJrIFtRY3QZxv5NpuroAQGy3XqHCVbxOEN6JZi3ZpM7z.lMK', 'Nathan', 'Polette');
+VALUES ('admin', 'nathan.polette@gmail.com', '$2y$10$IMEt8icZQkvMgYodD9UDI.KdWixuJLh5y0zude7ZTKmIzY8fuqA3G', 'Nathan', 'Polette');
 SQL;
             
             file_put_contents($schemaFile, $schema);
@@ -510,4 +510,4 @@ echo "GO ON, IT SHOULD WORK:\n";
 echo "http://localhost/\n\n";
 echo "Admin credentials:\n";
 echo "Email: nathan.polette@gmail.com\n";
-echo "Password: Admin@123\n\n";
+echo "Password: testpassword\n\n";

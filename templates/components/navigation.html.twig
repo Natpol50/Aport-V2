@@ -40,18 +40,18 @@
             <div class="fixed top-[calc(60px)] left-[calc(75%-10px-10rem)] w-[80px] h-1 bg-white portrait:hidden"></div>
         {% endif %}
         
-        {# Language switcher - desktop #}
+        {# Language switcher - desktop - IMPROVED #}
         <div class="fixed top-10 right-[3vw] transform -translate-y-1/2 flex space-x-2 hidden landscape:flex portrait:hidden">                
-            <a href="{{ language == 'en' ? current_path|replace({'/en': '/', '/contact-en': '/contact'}) : current_path }}" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
+            <a href="/language/switch/fr" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
             <span class="text-2xl" aria-hidden="true">/</span>                
-            <a href="{{ language == 'fr' ? current_path|replace({'/': '/en', '/contact': '/contact-en'}) : current_path }}" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>            
+            <a href="/language/switch/en" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>            
         </div>
         
-        {# Language switcher - mobile #}
+        {# Language switcher - mobile - IMPROVED #}
         <div class="fixed bottom-2 right-[3vw] transform -translate-y-1/2 flex space-x-2 hidden portrait:flex landscape:hidden">                
-            <a href="{{ language == 'en' ? current_path|replace({'/en': '/', '/contact-en': '/contact'}) : current_path }}" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
+            <a href="/language/switch/fr" class="interactive text-3xl {{ language == 'fr' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="Version française" lang="fr">🇫🇷</a>                
             <span class="text-2xl" aria-hidden="true">/</span>                
-            <a href="{{ language == 'fr' ? current_path|replace({'/': '/en', '/contact': '/contact-en'}) : current_path }}" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>             
+            <a href="/language/switch/en" class="interactive text-3xl {{ language == 'en' ? '' : 'opacity-50 hover:opacity-100 transition-opacity' }}" aria-label="English version" lang="en">🇬🇧</a>             
         </div>  
 
         {# Logo #}

@@ -5,12 +5,13 @@ namespace App\Controllers;
 use App\Core\RequestObject;
 use App\Middleware\LanguageMiddleware;
 use App\Services\CacheService;
+use App\Services\TranslationService;
 
 /**
  * LanguageController - Handles language switching
  * 
- * This controller is responsible for switching between languages
- * and redirecting back to the previous page.
+ * This controller manages language switching functionality with improved
+ * URL handling to prevent internal errors.
  */
 class LanguageController extends BaseController
 {
@@ -35,6 +36,12 @@ class LanguageController extends BaseController
      */
     public function switchLanguage(RequestObject $request, string $lang): void
     {
+        // Get language code for translations
+        $langCode = $request->getLanguageCode();
+        
+        // Initialize translation service
+        $translationService = new TranslationService($langCode);
+        
         // Validate language
         if (!in_array($lang, $this->supportedLanguages)) {
             $lang = $this->languageMiddleware->getDefaultLanguage();
@@ -46,19 +53,45 @@ class LanguageController extends BaseController
         // Get referer (previous page)
         $referer = $_SERVER['HTTP_REFERER'] ?? '/';
         
-        // Extract the URL path
+        // Determine redirect URL based on the target language
+        // Special handling for home page and common routes
+        if ($lang === 'en') {
+            // When switching to English
+            $currentPath = parse_url($referer, PHP_URL_PATH);
+            
+            if ($currentPath === '/' || $currentPath === '/fr') {
+                // Home page in French to home page in English
+                $redirectUrl = '/en';
+            } else if ($currentPath === '/contact') {
+                // Contact page in French to contact page in English
+                $redirectUrl = '/contact-en';
+            } else {
+                // Default handling for other pages
+                $redirectUrl = '/en';
+            }
+        } else {
+            // When switching to French
+            $currentPath = parse_url($referer, PHP_URL_PATH);
+            
+            if ($currentPath === '/en' || $currentPath === '/') {
+                // Home page in English to home page in French
+                $redirectUrl = '/';
+            } else if ($currentPath === '/contact-en') {
+                // Contact page in English to contact page in French
+                $redirectUrl = '/contact';
+            } else {
+                // Default handling for other pages
+                $redirectUrl = '/';
+            }
+        }
+        
+        // Add query parameters if they exist in the referer
         $parsedUrl = parse_url($referer);
-        $path = $parsedUrl['path'] ?? '/';
-        
-        // Get the corresponding URL for the selected language
-        $redirectUrl = $this->languageMiddleware->getLanguageUrl($path, $lang);
-        
-        // Add query parameters if they exist
         if (isset($parsedUrl['query'])) {
             $redirectUrl .= '?' . $parsedUrl['query'];
         }
         
-        // Redirect to the same page in the new language
+        // Redirect to the appropriate page in the new language
         header("Location: $redirectUrl");
         exit;
     }
