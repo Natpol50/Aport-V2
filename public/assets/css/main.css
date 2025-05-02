@@ -26,6 +26,8 @@
 /* Responsive styles (should always be last) */
 @import 'responsive.css';
 
+@import 'fixes1.css';
+
 /**
  * Print styles
  * Adjusted styling for printed pages

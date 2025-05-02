@@ -1,0 +1,12 @@
+{# Language switcher with flag images #}
+<div class="language-switcher interactive">
+    <a href="/language/switch/fr" class="lang-link {% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">
+        <img src="/assets/img/flag-fr.png" alt="Français" class="lang-icon" width="24" height="16">
+        <span class="sr-only">FR</span>
+    </a>
+    <span class="separator" aria-hidden="true">/</span>
+    <a href="/language/switch/en" class="lang-link {% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">
+        <img src="/assets/img/flag-gb.png" alt="English" class="lang-icon" width="24" height="16">
+        <span class="sr-only">EN</span>
+    </a>
+</div>

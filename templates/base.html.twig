@@ -1,151 +1,73 @@
-# Base Template Structure (`base.html.twig`)
+{# Add this in the <head> section after the main CSS #}
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/visual-fixes.css">
+{% block stylesheets %}{% endblock %}
 
-```html
-<!DOCTYPE html>
-<html lang="{{ language|default('fr') }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}{{ translations.translate('meta.description') }}{% endblock %}">
-    <title>{% block title %}{{ translations.translate('site.title') }}{% endblock %}</title>
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-    {% block stylesheets %}{% endblock %}
-</head>
+{# Replace the language switcher in the nav-container with our updated version #}
+{# Include our updated language switcher component #}
+{% include 'components/language-switcher.html.twig' %}
 
-<body>
-    <!-- Fixed Page Structure with 3 Layers -->
-    <div class="page-container">
-        <!-- 1. Fixed Header/Navigation (Always Visible) -->
-        <header class="site-header">
-            <div class="nav-container">
-                <!-- Logo -->
-                <div class="logo-container">
-                    <img src="/assets/img/logo.png" alt="Logo">
+{# Update the footer section to work better on small screens #}
+{% block footer %}
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            {# About Section - Will be hidden on mobile #}
+            <div class="footer-about">
+                <h2 class="footer-heading">
+                    {{ translations.translate('footer.about_title') }}
+                </h2>
+                <div class="about-content">
+                    {{ personalInfo.about_text|raw }}
                 </div>
-                
-                <!-- Navigation Links (Left) -->
-                <div class="nav-group-left">
-                    <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
-                        {{ translations.translate('nav.projects') }}
+            </div>
+            
+            {# Contact Cards Section #}
+            <div class="footer-contact">
+                <h2 class="footer-heading">
+                    {{ translations.translate('footer.contact_title') }}
+                </h2>
+                <div class="contact-cards">
+                    {# Email Card #}
+                    <a href="mailto:{{ personalInfo.email }}" class="contact-card interactive" target="_blank">
+                        <div class="card-content">
+                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                            <span>{{ personalInfo.email }}</span>
+                        </div>
                     </a>
-                    <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
-                        {{ translations.translate('nav.contact') }}
+                    
+                    {# GitHub Card #}
+                    <a href="{{ personalInfo.github_url }}" class="contact-card interactive" target="_blank" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
+                            <span>GitHub</span>
+                        </div>
                     </a>
-                </div>
-                
-                <!-- Navigation Links (Right) -->
-                <div class="nav-group-right">
-                    {% if request.isAuthenticated() %}
-                        <a href="/admin" class="nav-link {% if current_path starts with '/admin' %}active{% endif %}">
-                            {{ translations.translate('nav.admin') }}
-                        </a>
-                        <a href="/logout" class="nav-link">
-                            {{ translations.translate('nav.logout') }}
+                    
+                    {# LinkedIn Card #}
+                    <a href="{{ personalInfo.linkedin_url }}" class="contact-card interactive" target="_blank" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
+                            <span>LinkedIn</span>
+                        </div>
+                    </a>
+                    
+                    {% if personalInfo.discord_url %}
+                        {# Discord Card #}
+                        <a href="{{ personalInfo.discord_url }}" class="contact-card interactive" target="_blank" rel="noopener">
+                            <div class="card-content">
+                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
+                                <span>Discord</span>
+                            </div>
                         </a>
                     {% endif %}
                 </div>
-                
-                <!-- Language Switcher -->
-                <div class="language-switcher">
-                    <a href="/language/switch/fr" class="lang-link {% if language != 'fr' %}inactive{% endif %}">FR</a>
-                    <span class="separator">/</span>
-                    <a href="/language/switch/en" class="lang-link {% if language != 'en' %}inactive{% endif %}">EN</a>
-                </div>
             </div>
-        </header>
-
-        <!-- 2. Fixed Hero Section (Background, Static) -->
-        <div class="hero-static">
-            {% block hero %}
-                <div class="hero-section">
-                    <div class="hero-content">
-                        <h1 class="hero-title">Nathan Polette</h1>
-                        <p class="hero-subtitle">{{ translations.translate('home.subtitle') }}</p>
-                        <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="contact-button">
-                            {{ translations.translate('home.contact_button') }}
-                        </a>
-                    </div>
-                </div>
-            {% endblock %}
         </div>
-
-        <!-- 3. Scrollable Content Section (Middle Layer) -->
-        <div class="scrollable-content">
-            <!-- Spacer matching hero height -->
-            <div class="spacer-top"></div>
-            
-            <!-- Main content area -->
-            <main class="main-content">
-                {% block content %}{% endblock %}
-            </main>
-            
-            <!-- Spacer matching footer height -->
-            <div class="spacer-bottom"></div>
-        </div>
-
-        <!-- 4. Fixed Footer Section (Background, Static) -->
-        <div class="footer-static">
-            {% block footer %}
-                <footer class="site-footer">
-                    <div class="container">
-                        <div class="footer-grid">
-                            <!-- About Section -->
-                            <div class="footer-about">
-                                <h2 class="footer-heading">
-                                    {{ translations.translate('footer.about_title') }}
-                                </h2>
-                                <div class="about-content">
-                                    {{ personalInfo.about_text|raw }}
-                                </div>
-                            </div>
-                            
-                            <!-- Contact Cards Section -->
-                            <div class="footer-contact">
-                                <h2 class="footer-heading">
-                                    {{ translations.translate('footer.contact_title') }}
-                                </h2>
-                                <div class="contact-cards">
-                                    <!-- Email Card -->
-                                    <div class="contact-card trapezoid">
-                                        <div class="card-content">
-                                            <img src="/assets/img/email-icon.svg" alt="" aria-hidden="true">
-                                            <span>{{ personalInfo.email }}</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- GitHub Card -->
-                                    <div class="contact-card trapezoid">
-                                        <div class="card-content">
-                                            <img src="/assets/img/github-icon.svg" alt="" aria-hidden="true">
-                                            <span>GitHub</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- LinkedIn Card -->
-                                    <div class="contact-card trapezoid">
-                                        <div class="card-content">
-                                            <img src="/assets/img/linkedin-icon.svg" alt="" aria-hidden="true">
-                                            <span>LinkedIn</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="footer-copyright">
-                            <p>© {{ current_year }} Nathan Polette</p>
-                        </div>
-                    </div>
-                </footer>
-            {% endblock %}
+        
+        <div class="footer-copyright">
+            <p>© {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}</p>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="/assets/js/main.js"></script>
-    {% block javascripts %}{% endblock %}
-</body>
-</html>
-```
+</footer>
+{% endblock %}
