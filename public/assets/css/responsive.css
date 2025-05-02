@@ -45,15 +45,6 @@ html {
 .footer-grid {
     grid-template-columns: 1fr;
 }
-
-.footer-separator {
-    display: none;
-}
-
-.footer-about {
-    display: none; /* Hide about text on small screens */
-}
-
 .contact-link {
     height: 3rem;
 }
