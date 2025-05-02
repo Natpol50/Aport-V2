@@ -1,427 +1,519 @@
 /**
- * components.css - Reusable UI components
- * 
- * This file contains:
- * - Buttons
- * - Cards
- * - Forms
- * - Badges
- * - Project cards
- * - Alerts
- * - Modal dialogs
- * - Loaders
+ * components.css - Trapezoid styling and UI components
+ *
+ * This file defines the aggressive visual styling using trapezoid shapes
+ * instead of traditional rectangular boxes. The trapezoid effect is achieved
+ * using a combination of:
+ * 1. CSS transforms (skew, rotate, perspective)
+ * 2. Clip-path for complex shapes
+ * 3. Pseudo-elements for additional angles and effects
  */
 
-/* ===== BUTTONS ===== */
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    font-weight: var(--font-weight-bold);
-    border-radius: var(--border-radius);
+/* ===== COLORS & VARIABLES ===== */
+:root {
+    --color-primary: #658C79;
+    --color-primary-dark: #597a6a;
+    --color-background: #262732;
+    --color-surface: #3e3e53;
+    --color-surface-light: 4a4a63;
+    --color-content-bg: #f3f3f3;
+    --color-text: #ffffff;
+    --color-text-dark: #212121;
+    --color-accent: #658C79;
+    --trapezoid-angle-sm: 3deg;
+    --trapezoid-angle-md: 5deg;
+    --trapezoid-angle-lg: 8deg;
+    --shadow-subtle: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.15);
+    --shadow-strong: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* ===== HERO SECTION STYLING ===== */
+  .hero-section {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Background gradient with diagonal lines */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(135deg, rgba(62, 120, 178, 0.1) 0%, transparent 40%),
+      linear-gradient(45deg, rgba(255, 77, 77, 0.1) 0%, transparent 40%),
+      var(--color-background);
+    z-index: 0;
+  }
+  
+  /* Diagonal stripes overlay */
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.03) 10px,
+      rgba(255, 255, 255, 0.03) 20px
+    );
+    z-index: 1;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    cursor: pointer;
-    transition: background-color var(--transition-medium), transform 0.2s ease;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
   }
   
-  .btn:active {
-    transform: translateY(1px);
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
   }
   
-  .btn-primary {
-    background-color: var(--color-primary);
-    color: white;
+  /* Accent line under hero title */
+  .hero-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--color-accent);
+    transform: skewX(-15deg);
   }
   
-  .btn-primary:hover {
-    background-color: var(--color-primary-dark);
-  }
-  
-  .btn-secondary {
-    background-color: var(--color-surface);
-    color: white;
-  }
-  
-  .btn-secondary:hover {
-    background-color: var(--color-surface-hover);
-  }
-  
-  .btn-danger {
-    background-color: #b91c1c;
-    color: white;
-  }
-  
-  .btn-danger:hover {
-    background-color: #991b1b;
-  }
-  
-  .btn-lg {
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-  }
-  
-  .btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-  }
-  
-  .btn-icon {
-    display: inline-flex;
-    align-items: center;
-  }
-  
-  .btn-icon svg,
-  .btn-icon img {
-    margin-right: 0.5rem;
-  }
-  
-  .btn-block {
-    display: block;
-    width: 100%;
-  }
-  
-  /* Contact button */
-  .contact-button {
-    width: 12rem;
-    height: 4rem;
-    background-color: var(--color-primary);
+  /* Language switcher */
+  .language-switcher {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: background-color var(--transition-medium);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
   }
   
-  .contact-button:hover {
-    background-color: var(--color-primary-dark);
+  .lang-link {
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
   }
   
-  .contact-button span {
-    font-size: 1.25rem;
-    color: white;
+  .lang-link.inactive {
+    opacity: 0.5;
   }
   
-  /* ===== CARDS ===== */
-  .card {
-    background-color: var(--color-surface);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+  .lang-link:hover {
+    opacity: 1;
   }
   
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  .separator {
+    color: var(--color-text);
+    opacity: 0.5;
+    margin: 0 0.25rem;
   }
   
-  .card-title {
-    font-size: 1.25rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-sm);
+  /* ===== MAIN CONTENT SECTION ===== */
+  .main-content {
+    background-color: var(--color-content-bg);
+    color: var(--color-text-dark);
+    padding: 3rem 1rem;
+    position: relative;
   }
   
-  .card-body {
-    margin-bottom: var(--spacing-md);
+  /* Content container */
+  .content-container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    position: relative;
   }
   
-  .card-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: var(--spacing-sm);
-    margin-top: var(--spacing-md);
+  /* Section headings with trapezoid background */
+  .section-heading {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    color: var(--color-text);
+  }
+  
+  .section-heading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-primary);
+    z-index: -1;
+    transform: skewX(-15deg);
   }
   
   /* ===== PROJECT CARDS ===== */
   .project-card {
-    background-color: #f5f5f5;
-    border-radius: var(--border-radius);
-    padding: var(--spacing-xl);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: box-shadow var(--transition-medium);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 2rem;
+    position: relative;
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+    /* Transform for trapezoid effect */
+    transform: perspective(1000px) rotateY(var(--trapezoid-angle-sm));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   .project-card:hover {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: perspective(1000px) rotateY(var(--trapezoid-angle-md));
+    box-shadow: var(--shadow-strong);
   }
   
   .project-card-grid {
     display: grid;
     grid-template-columns: 1fr 3fr;
-    gap: var(--spacing-xl);
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
   
   .project-info {
-    display: flex;
-    flex-direction: column;
+    position: relative;
+  }
+  
+  /* Project type badge */
+  .project-type {
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+    padding: 0.25rem 1rem;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.875rem;
+    /* Skew for trapezoid shape */
+    transform: skewX(-15deg);
   }
   
   .project-title {
     font-size: 1.5rem;
-    font-weight: var(--font-weight-black);
-    color: #262732;
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .project-subtitle {
-    font-style: italic;
-    color: #444;
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .project-date {
-    font-size: 1.125rem;
-    font-style: italic;
-    color: #262732;
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .project-links {
-    margin-top: auto;
-  }
-  
-  .project-link {
-    display: block;
-    font-size: 0.875rem;
-    font-style: italic;
-    color: #0f0f0f;
-    margin-bottom: var(--spacing-xs);
-    transition: color var(--transition-medium);
-  }
-  
-  .project-link:hover {
-    text-decoration: underline;
-    color: var(--color-primary);
-  }
-  
-  .project-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .project-description {
-    font-size: 1.125rem;
-    margin-bottom: var(--spacing-lg);
-    color: #262732;
-  }
-  
-  .project-skills {
-    font-size: 1.125rem;
-    font-style: italic;
-    color: #262732;
-    margin-top: auto;
-  }
-  
-  .project-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
-  }
-  
-  /* ===== BADGES ===== */
-  .badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    border-radius: 9999px;
-    text-transform: uppercase;
-  }
-  
-  .badge-primary {
-    background-color: var(--color-primary);
-    color: white;
-  }
-  
-  .badge-secondary {
-    background-color: var(--color-surface);
-    color: white;
-  }
-  
-  .badge-success {
-    background-color: var(--color-success);
-    color: white;
-  }
-  
-  .badge-danger {
-    background-color: var(--color-error);
-    color: white;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-dark);
   }
   
   .project-status {
     display: inline-block;
     padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
     font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    border-radius: 9999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
   }
   
   .status-current {
-    background-color: rgba(16, 185, 129, 0.2);
-    color: #065f46;
+    background-color: rgba(16, 185, 129, 0.1);
+    color: rgb(16, 185, 129);
   }
   
   .status-past {
-    background-color: rgba(59, 130, 246, 0.2);
-    color: #1e40af;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: rgb(59, 130, 246);
   }
   
   .status-canceled {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: #b91c1c;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: rgb(239, 68, 68);
   }
   
-  /* ===== FORMS ===== */
-  .form-group {
-    margin-bottom: var(--spacing-lg);
+  .project-description {
+    line-height: 1.6;
+    margin-bottom: 1rem;
   }
   
-  .form-label {
-    display: block;
+  .project-skills {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  /* ===== FOOTER STYLING ===== */
+  .site-footer {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    padding: 3rem 1rem 1rem;
+  }
+  
+  .footer-heading {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Accent line under footer headings */
+  .footer-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 50%;
+    height: 3px;
+    background-color: var(--color-accent);
+    transform: skewX(-15deg);
+  }
+  
+  .about-content {
+    line-height: 1.6;
+    max-width: 500px;
+  }
+  
+  .footer-copyright {
+    text-align: center;
+    padding-top: 2rem;
     font-size: 0.875rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-sm);
+    opacity: 0.7;
   }
   
-  .form-control {
+  /* ===== BUTTONS & INPUT ELEMENTS ===== */
+  .button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    border: none;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* Primary button with trapezoid shape */
+  .button-primary {
+    background-color: var(--color-primary);
+    color: white;
+    transform: skewX(-15deg);
+  }
+  
+  .button-primary:hover {
+    background-color: var(--color-primary-light);
+    transform: skewX(-15deg) translateY(-3px);
+    box-shadow: 0 8px 15px rgba(62, 120, 178, 0.3);
+  }
+  
+  /* Accent button with different color */
+  .button-accent {
+    background-color: var(--color-accent);
+    color: white;
+    transform: skewX(-15deg);
+  }
+  
+  .button-accent:hover {
+    background-color: var(--color-accent-light);
+    transform: skewX(-15deg) translateY(-3px);
+    box-shadow: 0 8px 15px rgba(255, 77, 77, 0.3);
+  }
+  
+  /* Button with icon */
+  .button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .button-icon img,
+  .button-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  /* ===== FORM ELEMENTS ===== */
+  .input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .input-control {
     width: 100%;
     padding: 0.75rem;
     background-color: var(--color-background);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--border-radius);
+    border: 2px solid var(--color-surface);
     color: var(--color-text);
-    transition: border-color var(--transition-medium), box-shadow var(--transition-medium);
+    transition: all 0.3s ease;
   }
   
-  .form-control:focus {
+  .input-control:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(101, 140, 121, 0.3);
+    transform: skewX(-2deg);
   }
   
-  .form-control.error {
-    border-color: var(--color-error);
+  /* Textarea with trapezoid transformation on focus */
+  textarea.input-control:focus {
+    transform: skewX(-2deg);
   }
   
-  .form-error {
-    color: var(--color-error);
-    font-size: 0.875rem;
-    margin-top: var(--spacing-xs);
-  }
-  
-  .form-text {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    margin-top: var(--spacing-xs);
-  }
-  
-  textarea.form-control {
-    min-height: 6rem;
-    resize: vertical;
-  }
-  
-  .form-check {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .form-check-input {
-    height: 1rem;
-    width: 1rem;
-    margin-right: var(--spacing-sm);
-  }
-  
-  .form-check-label {
-    font-size: 0.875rem;
-  }
-  
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-xl);
-  }
-  
-  /* ===== ALERTS ===== */
+  /* ===== ALERT BOXES ===== */
   .alert {
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-md);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
     position: relative;
+    border-left: 4px solid transparent;
+  }
+  
+  .alert::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: currentColor;
+    opacity: 0.1;
+    z-index: -1;
   }
   
   .alert-primary {
-    background-color: rgba(101, 140, 121, 0.1);
-    border: 1px solid var(--color-primary);
     color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .alert-accent {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
   
   .alert-success {
-    background-color: rgba(16, 185, 129, 0.1);
-    border: 1px solid var(--color-success);
     color: var(--color-success);
+    border-color: var(--color-success);
   }
   
-  .alert-danger {
-    background-color: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--color-error);
+  .alert-warning {
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+  }
+  
+  .alert-error {
     color: var(--color-error);
+    border-color: var(--color-error);
   }
   
-  .alert-close {
-    position: absolute;
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
+  /* ===== MODAL DIALOGS ===== */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-container {
+    background-color: var(--color-surface);
+    max-width: 500px;
+    width: 90%;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    transform: translateY(20px) skewX(-5deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .modal-backdrop.active .modal-container {
+    transform: translateY(0) skewX(-5deg);
+  }
+  
+  .modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .modal-title {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .modal-close {
     background: none;
     border: none;
-    font-size: 1.25rem;
+    color: var(--color-text);
+    font-size: 1.5rem;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity var(--transition-fast);
+    transition: color 0.3s ease;
   }
   
-  .alert-close:hover {
-    opacity: 1;
+  .modal-close:hover {
+    color: var(--color-accent);
   }
   
-  /* Flash messages */
-  .flash-message {
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    border-radius: var(--border-radius);
-    position: relative;
-    opacity: 1;
-    transition: opacity var(--transition-medium);
+  .modal-body {
+    padding: 1.5rem;
   }
   
-  .flash-success {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--color-success);
-    border: 1px solid var(--color-success);
+  .modal-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
   }
   
-  .flash-error {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: var(--color-error);
-    border: 1px solid var(--color-error);
-  }
-  
-  /* ===== LOADERS ===== */
-  .loader {
+  /* ===== LOADING INDICATORS ===== */
+  .loading-indicator {
     display: inline-block;
     width: 2rem;
     height: 2rem;
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     border-top-color: var(--color-primary);
-    animation: spin 1s ease-in-out infinite;
+    animation: spin 1s linear infinite;
   }
   
   @keyframes spin {
@@ -430,95 +522,196 @@
     }
   }
   
-  .loader-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-xl);
-  }
-  
-  /* ===== TRIANGULAR SECTIONS ===== */
-  .triangle-section {
-    position: relative;
-    height: 120px;
-    width: 100%;
+  /* Trapezoid-shaped progress bar */
+  .progress-bar {
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
     overflow: hidden;
+    position: relative;
+    margin: 1rem 0;
+    /* Trapezoid shape using clip-path */
+    clip-path: polygon(0 0, 100% 2px, 100% 100%, 0 calc(100% - 2px));
   }
   
-  .triangle-section svg {
-    width: 100%;
+  .progress-bar-fill {
     height: 100%;
-    display: block;
-  }
-  
-  /* ===== PROJECTS SECTION ===== */
-  .projects-section {
-    background-color: #f5f5f5;
-    padding: var(--spacing-xxl) 0;
-    color: #262732;
-  }
-  
-  .projects-title {
-    font-size: 3.5rem;
-    font-weight: var(--font-weight-black);
-    color: #262732;
-    margin-bottom: var(--spacing-xxl);
-  }
-  
-  .section-title {
-    font-size: 2rem;
-    font-weight: var(--font-weight-black);
-    color: #262732;
-    margin-bottom: var(--spacing-xl);
-  }
-  
-  .projects-empty {
-    font-size: 1.25rem;
-    font-style: italic;
-    color: #262732;
-  }
-  
-  /* ===== PORTRAIT WARNING ===== */
-  .portrait-warning {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: var(--z-highest);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-md);
-  }
-  
-  .portrait-warning-container {
-    background-color: var(--color-surface);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius);
-    max-width: 28rem;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .portrait-warning-title {
-    font-size: 1.5rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .portrait-warning-message {
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  .portrait-warning-button {
     background-color: var(--color-primary);
-    padding: 0.75rem 2rem;
-    border-radius: var(--border-radius);
-    font-weight: var(--font-weight-bold);
-    color: white;
-    transition: background-color var(--transition-medium);
+    transition: width 0.3s ease;
+    position: relative;
   }
   
-  .portrait-warning-button:hover {
-    background-color: var(--color-primary-dark);
+  /* Pulsing effect on progress bar */
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3));
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  /* ===== RESPONSIVE ADJUSTMENTS ===== */
+  @media (max-width: 768px) {
+    .project-card-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .button {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .section-heading {
+      font-size: 2rem;
+    }
+    
+    .modal-container {
+      width: 95%;
+    }
+  } 80%;
+    height: 5px;
+    background-color: var(--color-accent);
+    /* Skew the underline for aggressive styling */
+    transform: skewX(-20deg);
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+  
+  /* ===== CONTACT BUTTON ===== */
+  .contact-button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    position: relative;
+    /* Create trapezoid shape by skewing */
+    transform: skewX(-15deg);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .contact-button:hover {
+    transform: skewX(-15deg) translateY(-5px);
+    background-color: #ff6b6b;
+  }
+  
+  .contact-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -5px;
+    height: 100%;
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    transform: skewX(15deg);
+  }
+  
+  /* ===== TRAPEZOID CARDS ===== */
+  .contact-card {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    position: relative;
+    transition: all 0.3s ease;
+    border: none;
+    overflow: visible;
+    margin: 1rem 0;
+    height: 120px;
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Create the trapezoid shape with a skewed pseudo-element */
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-surface);
+    z-index: -1;
+    transform: skewX(-15deg);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .contact-card:hover::before {
+    transform: skewX(-20deg);
+    background-color: var(--color-surface-light);
+  }
+  
+  /* Edge accent */
+  .contact-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -5px;
+    width: 10px;
+    height: 100%;
+    background-color: var(--color-accent);
+    transform: skewX(15deg);
+  }
+  
+  .card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1.5rem;
+    height: 100%;
+  }
+  
+  .card-content img {
+    width: 40px;
+    height: 40px;
+    margin-right: 1rem;
+  }
+  
+  .card-content span {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  /* ===== NAVIGATION STYLING ===== */
+  .nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: var(--color-accent);
+  }
+  
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    width: 80%;
   }

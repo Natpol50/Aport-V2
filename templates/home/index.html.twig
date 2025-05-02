@@ -2,93 +2,196 @@
 
 {% block title %}{{ translations.translate('site.title') }}{% endblock %}
 
-{% set is_home_page = true %}
+{% block meta_description %}{{ translations.translate('meta.description') }}{% endblock %}
 
 {% block hero %}
-    <div class="hero-section">
-        <div class="hero-content interactive">
-            <h1 class="hero-title">Polette Nathan</h1>
-            <p class="hero-subtitle">{{ translations.translate('home.subtitle') }}</p>
-            <button id="contact-button" class="interactive contact-button" onclick="window.location.href='{{ language == 'fr' ? '/contact' : '/contact-en' }}'">
-                <span>{{ translations.translate('home.contact_button') }}</span>
-            </button>
-        </div>
-        
-        {# Scroll indicator #}
-        <div class="scroll-indicator interactive">⇣</div>
+<div class="hero-section bg-diagonal-stripes">
+    <div class="hero-content">
+        <h1 class="hero-title">Nathan Polette</h1>
+        <p class="hero-subtitle">{{ translations.translate('home.subtitle') }}</p>
+        <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="contact-button">
+            <span>{{ translations.translate('home.contact_button') }}</span>
+        </a>
     </div>
+    
+    <div class="scroll-indicator">
+        {{ translations.translate('home.scroll_down') }}
+        <div class="arrow"></div>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    {# Projects content #}
-    <div id="projets" class="relative">
-        {# Top triangle transition #}
-        <div class="triangle-section">
-            <svg preserveAspectRatio="none" viewBox="0 0 1920 120">
-                <defs>
-                    <filter id="topShadow" x="0" y="0" width="100%" height="200%">
-                        <feDropShadow dx="0" dy="-4" stdDeviation="3" flood-opacity="0.3"/>
-                    </filter>
-                </defs>
-                <path d="M0 120 L1920 80 L1920 120 L0 120 Z" fill="#3E3E53"/>
-                <path d="M0 120 L1920 40 L1920 80 L0 120 Z" fill="#D7D7D7"/>
-                <path d="M0 120 L1920 0 L1920 40 L0 120 Z" fill="#658C79" filter="url(#topShadow)"/>
-            </svg>
-        </div>
-
-        {# Projects section #}
-        <div class="projects-section">
-            <div class="container">
-                <h2 class="projects-title fade-in">{{ translations.translate('home.projects_title') }}</h2>
-                
-                {# Current Projects #}
-                <section class="content-section fade-in">
-                    <h3 class="section-title">{{ translations.translate('home.current_projects') }}</h3>
-
-                    {% if currentProjects|length > 0 %}
-                        {% for project in currentProjects %}
-                            {% include 'components/project-card.html.twig' with {
-                                'project': project,
-                                'language': language,
-                                'translations': translations
-                            } %}
-                        {% endfor %}
-                    {% else %}
-                        <p class="projects-empty">{{ translations.translate('home.no_current_projects') }}</p>
-                    {% endif %}
-                </section>
-                
-                {# Past Projects #}
-                <section class="content-section fade-in">
-                    <h3 class="section-title">{{ translations.translate('home.past_projects') }}</h3>
-
-                    {% if pastProjects|length > 0 %}
-                        {% for project in pastProjects %}
-                            {% include 'components/project-card.html.twig' with {
-                                'project': project,
-                                'language': language,
-                                'translations': translations
-                            } %}
-                        {% endfor %}
-                    {% else %}
-                        <p class="projects-empty">{{ translations.translate('home.no_past_projects') }}</p>
-                    {% endif %}
-                </section>
+    {# Projects section #}
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-heading">{{ translations.translate('home.current_projects') }}</h2>
+            
+            <div class="projects-container">
+                {% if currentProjects|length > 0 %}
+                    {% for project in currentProjects %}
+                        <article class="project-card">
+                            <div class="project-card-grid">
+                                <div class="project-info">
+                                    <div class="project-type">{{ project.type|upper }}</div>
+                                    <h3 class="project-title">{{ project.title }}</h3>
+                                    <div class="project-status status-{{ project.status }}">
+                                        {{ translations.translate('admin.status_' ~ project.status) }}
+                                    </div>
+                                    
+                                    <p class="project-date">
+                                        {% if project.status == 'current' %}
+                                            {{ translations.translate('admin.since') }} {{ project.start_date|date('M Y') }}
+                                        {% else %}
+                                            {{ project.start_date|date('M Y') }}
+                                            {% if project.end_date %}
+                                                - {{ project.end_date|date('M Y') }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <div class="project-content">
+                                    <p class="project-description">{{ project.description|nl2br }}</p>
+                                    <p class="project-skills">{{ project.skills }}</p>
+                                    
+                                    <div class="project-links">
+                                        {% if project.github_url %}
+                                            <a href="{{ project.github_url }}" class="project-link" target="_blank" rel="noopener">
+                                                <span>GitHub</span>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if project.website_url %}
+                                            <a href="{{ project.website_url }}" class="project-link" target="_blank" rel="noopener">
+                                                <span>Website</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-projects">{{ translations.translate('home.no_current_projects') }}</p>
+                {% endif %}
             </div>
         </div>
+    </section>
+    
+    {# Diagonal divider #}
+    <div class="diagonal-divider"></div>
+    
+    {# Past projects section #}
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-heading">{{ translations.translate('home.past_projects') }}</h2>
+            
+            <div class="projects-container">
+                {% if pastProjects|length > 0 %}
+                    {% for project in pastProjects %}
+                        <article class="project-card">
+                            <div class="project-card-grid">
+                                <div class="project-info">
+                                    <div class="project-type">{{ project.type|upper }}</div>
+                                    <h3 class="project-title">{{ project.title }}</h3>
+                                    <div class="project-status status-{{ project.status }}">
+                                        {{ translations.translate('admin.status_' ~ project.status) }}
+                                    </div>
+                                    
+                                    <p class="project-date">
+                                        {{ project.start_date|date('M Y') }}
+                                        {% if project.end_date %}
+                                            - {{ project.end_date|date('M Y') }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <div class="project-content">
+                                    <p class="project-description">{{ project.description|nl2br }}</p>
+                                    <p class="project-skills">{{ project.skills }}</p>
+                                    
+                                    <div class="project-links">
+                                        {% if project.github_url %}
+                                            <a href="{{ project.github_url }}" class="project-link" target="_blank" rel="noopener">
+                                                <span>GitHub</span>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if project.website_url %}
+                                            <a href="{{ project.website_url }}" class="project-link" target="_blank" rel="noopener">
+                                                <span>Website</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-projects">{{ translations.translate('home.no_past_projects') }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
 
-        {# Bottom triangle transition #}
-        <div class="triangle-section">
-            <svg preserveAspectRatio="none" viewBox="0 0 1920 120">
-                <defs>
-                    <filter id="bottomShadow" x="0" y="-20%" width="100%" height="140%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.3"/>
-                    </filter>
-                </defs>
-                <path d="M0 0 L1920 100 L1920 0 L0 0 Z" fill="#658C79" filter="url(#bottomShadow)"/>
-                <path d="M0 0 L1920 40 L1920 80 L0 0 Z" fill="#D7D7D7"/>
-                <path d="M0 0 L1920 0 L1920 40 L0 0 Z" fill="#3E3E53"/>
-            </svg>
+{% block footer %}
+<footer class="site-footer bg-diagonal-stripes">
+    <div class="container">
+        <div class="footer-grid">
+            {# About Section #}
+            <div class="footer-about">
+                <h2 class="footer-heading">{{ translations.translate('footer.about_title') }}</h2>
+                <div class="about-content">
+                    {{ personalInfo.about_text|raw }}
+                </div>
+            </div>
+            
+            {# Contact Cards Section #}
+            <div class="footer-contact">
+                <h2 class="footer-heading">{{ translations.translate('footer.contact_title') }}</h2>
+                <div class="contact-cards">
+                    {# Email Card #}
+                    <a href="mailto:{{ personalInfo.email }}" class="contact-card trapezoid">
+                        <div class="card-content">
+                            <img src="/assets/img/mail-icon.svg" alt="" aria-hidden="true">
+                            <span>{{ personalInfo.email }}</span>
+                        </div>
+                    </a>
+                    
+                    {# GitHub Card #}
+                    <a href="{{ personalInfo.github_url }}" target="_blank" class="contact-card trapezoid" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/github-icon.svg" alt="" aria-hidden="true">
+                            <span>GitHub</span>
+                        </div>
+                    </a>
+                    
+                    {# LinkedIn Card #}
+                    <a href="{{ personalInfo.linkedin_url }}" target="_blank" class="contact-card trapezoid" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/linkedin-icon.svg" alt="" aria-hidden="true">
+                            <span>LinkedIn</span>
+                        </div>
+                    </a>
+                    
+                    {% if personalInfo.discord_url %}
+                        {# Discord Card #}
+                        <a href="{{ personalInfo.discord_url }}" target="_blank" class="contact-card trapezoid" rel="noopener">
+                            <div class="card-content">
+                                <img src="/assets/img/discord-icon.svg" alt="" aria-hidden="true">
+                                <span>Discord</span>
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>© {{ current_year }} Nathan Polette. {{ translations.translate('footer.rights_reserved') }}</p>
         </div>
     </div>
+</footer>
 {% endblock %}

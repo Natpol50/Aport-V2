@@ -1,305 +1,215 @@
 /**
- * layout.css - Layout components and structure
+ * layout.css - Core layout structure for fixed sections and scrolling
+ *
+ * This file defines the mathematical and structural foundation for the three-layer design:
+ * 1. Fixed header (navigation)
+ * 2. Fixed hero and footer sections (static background)
+ * 3. Scrollable middle content
  * 
- * This file contains:
- * - Container definitions
- * - Grid systems
- * - Flex layout utilities
- * - Main page structure
- * - Positioning classes
+ * The layout uses CSS positioning with z-index management to create depth
+ * and proper stacking of elements.
  */
 
-/* ===== CONTAINERS ===== */
-.container {
-    width: 100%;
-    max-width: var(--container-width);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+/* ===== VARIABLES ===== */
+:root {
+    /* Fixed section heights (dynamically calculated by JS) */
+    --hero-height: 100vh;
+    --footer-height: 400px;
+    --header-height: 5rem;
+    
+    /* Z-index layers */
+    --z-base: 1;        /* Background elements */
+    --z-content: 10;    /* Scrollable content */
+    --z-header: 100;    /* Navigation header */
+    --z-overlay: 1000;  /* Modals, popups */
+    
+    /* Container width */
+    --container-width: 1280px;
+    
+    /* Angles for trapezoid shapes */
+    --trapezoid-angle: 5deg;
   }
   
-  .content-wrapper {
-    max-width: 48rem; /* 768px */
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
-  }
-  
-  /* ===== GRID SYSTEM ===== */
-  .grid {
-    display: grid;
-    gap: var(--spacing-md);
-  }
-  
-  .grid-cols-1 {
-    grid-template-columns: 1fr;
-  }
-  
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .grid-cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .grid-cols-4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  /* Column spans */
-  .col-span-1 {
-    grid-column: span 1;
-  }
-  
-  .col-span-2 {
-    grid-column: span 2;
-  }
-  
-  .col-span-3 {
-    grid-column: span 3;
-  }
-  
-  .col-span-full {
-    grid-column: 1 / -1;
-  }
-  
-  /* Gaps */
-  .gap-xs {
-    gap: var(--spacing-xs);
-  }
-  
-  .gap-sm {
-    gap: var(--spacing-sm);
-  }
-  
-  .gap-md {
-    gap: var(--spacing-md);
-  }
-  
-  .gap-lg {
-    gap: var(--spacing-lg);
-  }
-  
-  .gap-xl {
-    gap: var(--spacing-xl);
-  }
-  
-  /* ===== FLEX LAYOUTS ===== */
-  .flex {
-    display: flex;
-  }
-  
-  .flex-col {
-    flex-direction: column;
-  }
-  
-  .flex-row {
-    flex-direction: row;
-  }
-  
-  .flex-wrap {
-    flex-wrap: wrap;
-  }
-  
-  .items-center {
-    align-items: center;
-  }
-  
-  .items-start {
-    align-items: flex-start;
-  }
-  
-  .items-end {
-    align-items: flex-end;
-  }
-  
-  .items-stretch {
-    align-items: stretch;
-  }
-  
-  .justify-center {
-    justify-content: center;
-  }
-  
-  .justify-between {
-    justify-content: space-between;
-  }
-  
-  .justify-around {
-    justify-content: space-around;
-  }
-  
-  .justify-start {
-    justify-content: flex-start;
-  }
-  
-  .justify-end {
-    justify-content: flex-end;
-  }
-  
-  /* Space between items */
-  .space-x > * + * {
-    margin-left: var(--spacing-md);
-  }
-  
-  .space-y > * + * {
-    margin-top: var(--spacing-md);
-  }
-  
-  .space-x-sm > * + * {
-    margin-left: var(--spacing-sm);
-  }
-  
-  .space-y-sm > * + * {
-    margin-top: var(--spacing-sm);
-  }
-  
-  .space-x-lg > * + * {
-    margin-left: var(--spacing-lg);
-  }
-  
-  .space-y-lg > * + * {
-    margin-top: var(--spacing-lg);
-  }
-  
-  /* ===== PAGE STRUCTURE ===== */
-  /* The three-layer structure for scrolling effect:
-   * 1. Static background (hero, footer)
-   * 2. Scrollable middle content
-   * 3. Fixed elements (navigation)
-   */
-  
-  /* Main page wrapper */
-  .page-wrapper {
+  /* ===== PAGE CONTAINER ===== */
+  .page-container {
     position: relative;
+    width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
   }
   
-  /* Static background layer */
-  .static-layer {
-    position: relative;
-    z-index: var(--z-base);
-    width: 100%;
-  }
-  
-  /* Scrollable content layer */
-  .scroll-layer {
-    position: relative;
-    z-index: var(--z-above);
-    width: 100%;
-  }
-  
-  /* Fixed elements layer */
-  .fixed-layer {
+  /* ===== FIXED HEADER ===== */
+  .site-header {
     position: fixed;
-    z-index: var(--z-nav);
+    top: 0;
+    left: 0;
     width: 100%;
+    height: var(--header-height);
+    z-index: var(--z-header);
+    background-color: var(--color-surface);
   }
   
-  /* Main content area */
-  .main-content {
-    padding-top: var(--header-height);
-    position: relative;
-    z-index: var(--z-above);
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 2rem;
   }
   
-  /* Content sections */
-  .content-section {
-    padding: var(--spacing-xl) 0;
+  .nav-group-left, .nav-group-right {
+    display: flex;
+    gap: 2rem;
   }
   
-  /* Hero section area at top */
+  /* ===== FIXED HERO SECTION ===== */
+  .hero-static {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: var(--hero-height);
+    z-index: var(--z-base);
+  }
+  
   .hero-section {
-    min-height: 100vh;
+    position: relative;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: var(--spacing-xxl) var(--spacing-md);
-    position: relative;
-  }
-  
-  /* Footer area at bottom */
-  .main-footer {
-    position: relative;
-    z-index: var(--z-base);
-    padding: var(--spacing-xl) 0;
+    align-items: center;
     background-color: var(--color-background);
   }
   
-  /* ===== POSITIONING UTILITIES ===== */
-  .relative {
+  /* ===== SCROLLABLE CONTENT ===== */
+  .scrollable-content {
     position: relative;
+    z-index: var(--z-content);
+    min-height: 100vh; /* Ensure it can scroll */
   }
   
-  .absolute {
-    position: absolute;
-  }
-  
-  .fixed {
-    position: fixed;
-  }
-  
-  .sticky {
-    position: sticky;
-  }
-  
-  .inset-0 {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  
-  .top-0 {
-    top: 0;
-  }
-  
-  .right-0 {
-    right: 0;
-  }
-  
-  .bottom-0 {
-    bottom: 0;
-  }
-  
-  .left-0 {
-    left: 0;
-  }
-  
-  /* ===== SPACING UTILITIES ===== */
-  /* Vertical spacers */
+  /* Spacers to create room for fixed sections */
   .spacer-top {
-    height: 30vh;
-    min-height: 150px;
+    height: var(--hero-height);
   }
   
   .spacer-bottom {
-    height: 35vh;
-    min-height: 150px;
+    height: var(--footer-height);
   }
   
-  /* ===== VISIBILITY UTILITIES ===== */
-  .hidden {
-    display: none !important;
+  .main-content {
+    position: relative;
+    z-index: var(--z-content);
+    background-color: var(--color-content-bg);
+    /* Create trapezoid shapes at top and bottom */
+    clip-path: polygon(
+      0 var(--trapezoid-offset), 
+      100% 0, 
+      100% calc(100% - var(--trapezoid-offset)), 
+      0 100%
+    );
+    --trapezoid-offset: 4rem; /* Height of trapezoid cut */
   }
   
-  .visible {
-    display: block;
+  /* ===== FIXED FOOTER SECTION ===== */
+  .footer-static {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--footer-height);
+    z-index: var(--z-base);
   }
   
-  .invisible {
-    visibility: hidden;
+  .site-footer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: var(--color-background);
+    padding-top: var(--trapezoid-offset);
   }
   
-  .visible-overflow {
-    overflow: visible;
+  /* ===== CONTAINER ===== */
+  .container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   
-  .hidden-overflow {
+  /* ===== FOOTER GRID ===== */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    height: calc(100% - 3rem); /* Leave room for copyright */
+  }
+  
+  .footer-about, .footer-contact {
+    padding: 1rem;
+  }
+  
+  .footer-copyright {
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  /* ===== TRAPEZOID SHAPES ===== */
+  /* Base trapezoid shape for UI elements */
+  .trapezoid {
+    position: relative;
+    /* Create trapezoid by skewing the element */
+    transform: perspective(500px) rotateY(var(--trapezoid-angle));
+    transform-origin: center center;
+    transition: transform 0.3s ease;
+  }
+  
+  .trapezoid:hover {
+    transform: perspective(500px) rotateY(calc(var(--trapezoid-angle) * 1.5));
+  }
+  
+  /* Contact cards with trapezoid shape */
+  .contact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .contact-card {
+    background-color: var(--color-surface);
+    padding: 1.5rem;
+    border-radius: 0.25rem;
     overflow: hidden;
+  }
+  
+  .card-content {
+    /* Counter the parent skew to keep content straight */
+    transform: perspective(500px) rotateY(calc(var(--trapezoid-angle) * -1));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  /* ===== RESPONSIVE ADJUSTMENTS ===== */
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .contact-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .main-content {
+      --trapezoid-offset: 2rem; /* Smaller trapezoid on mobile */
+    }
+    
+    :root {
+      --footer-height: 600px; /* Taller footer on mobile to accommodate stacked content */
+    }
   }

@@ -1,300 +1,217 @@
 /**
- * main.js - Core JavaScript functionality
+ * main.js - Handles fixed section heights and scroll behavior
  * 
- * This file handles:
- * - Mobile menu interactions
- * - Portrait warning
- * - Flash messages
- * - Form validation
- * - Language switcher
- * - General UI interactions
+ * This script calculates the heights of the hero and footer sections
+ * and applies them as CSS custom properties. This ensures the spacers
+ * in the scrollable content accurately match the fixed sections.
+ * 
+ * Mathematical approach:
+ * - We measure the rendered heights of the hero and footer sections
+ * - These measurements are then applied as CSS variables
+ * - The spacers use these variables to create the exact same space
+ * - This creates the illusion that content is scrolling over static backgrounds
  */
 
-// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    initPortraitWarning();
-    initMobileMenu();
-    initFlashMessages();
-    initFormValidation();
+    // Initialize the layout
+    initLayout();
+    
+    // Update on resize
+    window.addEventListener('resize', debounce(initLayout, 200));
+    
+    // Initialize language switcher
     initLanguageSwitcher();
-    initSmoothScrolling();
     
-    // Log initialization complete
-    console.log('Website initialization complete');
-});
-
-/**
- * Initialize portrait mode warning
- */
-function initPortraitWarning() {
-    const hasSeenWarning = localStorage.getItem('hasSeenPortraitWarning');
-    const warningModal = document.getElementById('portraitWarning');
+    // Initialize trapezoid hover effects
+    initTrapezoidEffects();
+  });
+  
+  /**
+   * Initialize the layout by measuring and setting heights
+   */
+  function initLayout() {
+    // Measure the hero and footer sections
+    measureFixedSections();
     
-    if (!warningModal) return;
+    // Apply trapezoid clip paths with the correct angles
+    applyTrapezoidStyles();
     
-    // Check if orientation is portrait
-    const isPortrait = window.innerHeight > window.innerWidth;
+    // Initialize scroll effects
+    initScrollEffects();
     
-    if (isPortrait && !hasSeenWarning) {
-        // If first time in portrait, show the modal with animation
-        warningModal.style.opacity = '0';
-        warningModal.style.transition = 'opacity 0.3s ease-in-out';
-        warningModal.style.display = 'flex';
-        
-        // Delay to allow transition to take effect
-        setTimeout(() => {
-            warningModal.style.opacity = '1';
-        }, 100);
+    console.log('Layout initialized');
+  }
+  
+  /**
+   * Measure fixed sections and set CSS variables
+   */
+  function measureFixedSections() {
+    // Get the hero and footer elements
+    const heroSection = document.querySelector('.hero-section');
+    const footerSection = document.querySelector('.site-footer');
+    const headerHeight = document.querySelector('.site-header').offsetHeight;
+    
+    // Get their computed heights
+    let heroHeight = heroSection ? heroSection.offsetHeight : 0;
+    let footerHeight = footerSection ? footerSection.offsetHeight : 0;
+    
+    // Account for header in hero height calculations
+    heroHeight = window.innerHeight - headerHeight;
+    
+    // Set CSS variables for these heights
+    document.documentElement.style.setProperty('--hero-height', `${heroHeight}px`);
+    document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    
+    // Also set the trapezoid offset based on window width (responsive)
+    const trapezoidOffset = window.innerWidth < 768 ? '2rem' : '4rem';
+    document.documentElement.style.setProperty('--trapezoid-offset', trapezoidOffset);
+    
+    console.log(`Fixed sections measured: Hero=${heroHeight}px, Footer=${footerHeight}px, Header=${headerHeight}px`);
+    
+    // Update spacers to match these heights exactly
+    updateSpacers(heroHeight, footerHeight);
+  }
+  
+  /**
+   * Update spacers to match fixed section heights
+   * @param {number} heroHeight - Height of hero section
+   * @param {number} footerHeight - Height of footer section
+   */
+  function updateSpacers(heroHeight, footerHeight) {
+    const topSpacer = document.querySelector('.spacer-top');
+    const bottomSpacer = document.querySelector('.spacer-bottom');
+    
+    if (topSpacer) {
+      topSpacer.style.height = `${heroHeight}px`;
     }
     
-    // Set up close button
-    const closeButton = document.getElementById('closePortraitWarning');
-    if (closeButton) {
-        closeButton.addEventListener('click', () => {
-            // Animate closing
-            warningModal.style.opacity = '0';
-            setTimeout(() => {
-                warningModal.style.display = 'none';
-            }, 300);
-            
-            // Record that user has seen the warning
-            localStorage.setItem('hasSeenPortraitWarning', 'true');
-        });
+    if (bottomSpacer) {
+      bottomSpacer.style.height = `${footerHeight}px`;
     }
+  }
+  
+  /**
+   * Apply trapezoid styles to the main content and cards
+   */
+  function applyTrapezoidStyles() {
+    // Get all elements with trapezoid class
+    const trapezoids = document.querySelectorAll('.trapezoid');
     
-    // Handle orientation change
-    window.addEventListener('resize', debounce(function() {
-        const isPortraitNow = window.innerHeight > window.innerWidth;
+    // Set random rotation angles for varied effects
+    trapezoids.forEach((element, index) => {
+      // Alternate directions for visual variety (positive and negative angles)
+      const direction = index % 2 === 0 ? 1 : -1;
+      // Random angle between 3 and 7 degrees
+      const angle = (3 + Math.random() * 4) * direction;
+      
+      element.style.setProperty('--trapezoid-angle', `${angle}deg`);
+    });
+    
+    // Also apply clip path to main content for trapezoid shape
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      const offset = parseInt(getComputedStyle(document.documentElement)
+                             .getPropertyValue('--trapezoid-offset'));
+      
+      // Create trapezoid shape with clip-path
+      // This creates angled cuts at top and bottom
+      mainContent.style.clipPath = `polygon(
+        0 ${offset}px, 
+        100% 0, 
+        100% calc(100% - ${offset}px), 
+        0 100%
+      )`;
+    }
+  }
+  
+  /**
+   * Initialize scroll effects
+   */
+  function initScrollEffects() {
+    // Intensity factor for parallax effect
+    const PARALLAX_FACTOR = 0.4;
+    
+    window.addEventListener('scroll', function() {
+      const scrollY = window.scrollY;
+      
+      // Apply subtle parallax effect to hero content
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        // Move hero content slightly as user scrolls
+        heroContent.style.transform = `translateY(${scrollY * PARALLAX_FACTOR}px)`;
         
-        // If switching to portrait and haven't seen warning
-        if (isPortraitNow && !localStorage.getItem('hasSeenPortraitWarning')) {
-            warningModal.style.display = 'flex';
-            setTimeout(() => {
-                warningModal.style.opacity = '1';
-            }, 100);
-        } 
-        // If switching to landscape
-        else if (!isPortraitNow) {
-            warningModal.style.opacity = '0';
-            setTimeout(() => {
-                warningModal.style.display = 'none';
-            }, 300);
+        // Fade out as user scrolls down
+        const opacity = Math.max(0, 1 - (scrollY / 500));
+        heroContent.style.opacity = opacity;
+      }
+    });
+  }
+  
+  /**
+   * Initialize language switcher behavior
+   */
+  function initLanguageSwitcher() {
+    const langLinks = document.querySelectorAll('.language-switcher .lang-link');
+    
+    langLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        // If already on this language, don't do anything
+        if (!this.classList.contains('inactive')) {
+          e.preventDefault();
+          return;
         }
-    }, 250));
-}
-
-/**
- * Initialize mobile menu functionality
- */
-function initMobileMenu() {
-    const menuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (!menuToggle || !mobileMenu) return;
-    
-    menuToggle.addEventListener('click', function() {
-        // Toggle aria-expanded attribute
-        const isExpanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !isExpanded);
         
-        // Toggle menu visibility with animation
-        if (isExpanded) {
-            // Closing menu
-            mobileMenu.style.maxHeight = '0px';
-            setTimeout(() => {
-                mobileMenu.classList.add('hidden');
-            }, 300);
-        } else {
-            // Opening menu
-            mobileMenu.classList.remove('hidden');
-            // Use scrollHeight to determine the proper height
-            mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
-        }
-    });
-}
-
-/**
- * Initialize flash messages auto-dismiss
- */
-function initFlashMessages() {
-    const flashMessages = document.querySelectorAll('.flash-message');
-    
-    flashMessages.forEach(message => {
-        // Add close button if not present
-        if (!message.querySelector('.flash-close')) {
-            const closeButton = document.createElement('button');
-            closeButton.className = 'flash-close';
-            closeButton.innerHTML = '&times;';
-            closeButton.setAttribute('aria-label', 'Close');
-            
-            message.appendChild(closeButton);
-            
-            // Add click event to close button
-            closeButton.addEventListener('click', () => {
-                dismissMessage(message);
-            });
-        }
-        
-        // Auto-dismiss after 5 seconds
-        setTimeout(() => {
-            dismissMessage(message);
-        }, 5000);
+        // Save scroll position to session storage before navigation
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+      });
     });
     
-    function dismissMessage(message) {
-        message.style.opacity = '0';
-        setTimeout(() => {
-            message.style.display = 'none';
-        }, 300);
+    // Restore scroll position after language switch if available
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    if (savedScrollPosition !== null) {
+      window.scrollTo(0, parseInt(savedScrollPosition));
+      sessionStorage.removeItem('scrollPosition');
     }
-}
-
-/**
- * Initialize form validation
- */
-function initFormValidation() {
-    const forms = document.querySelectorAll('form[data-validate="true"]');
+  }
+  
+  /**
+   * Initialize trapezoid hover effects for cards
+   */
+  function initTrapezoidEffects() {
+    const contactCards = document.querySelectorAll('.contact-card');
     
-    forms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            let isValid = true;
-            
-            // Get all required fields in the form
-            const requiredFields = form.querySelectorAll('[required]');
-            
-            // Check each required field
-            requiredFields.forEach(field => {
-                // Remove existing error messages
-                const existingError = field.parentNode.querySelector('.form-error');
-                if (existingError) {
-                    existingError.remove();
-                }
-                
-                // Reset field styling
-                field.classList.remove('error');
-                
-                // Validate the field
-                if (!field.value.trim()) {
-                    isValid = false;
-                    
-                    // Add error styling
-                    field.classList.add('error');
-                    
-                    // Add error message
-                    const errorMessage = document.createElement('div');
-                    errorMessage.className = 'form-error';
-                    errorMessage.textContent = field.dataset.errorMessage || 'This field is required';
-                    field.parentNode.appendChild(errorMessage);
-                }
-                
-                // Additional validation for email fields
-                if (field.type === 'email' && field.value.trim() && !validateEmail(field.value)) {
-                    isValid = false;
-                    
-                    // Add error styling
-                    field.classList.add('error');
-                    
-                    // Add error message
-                    const errorMessage = document.createElement('div');
-                    errorMessage.className = 'form-error';
-                    errorMessage.textContent = field.dataset.emailErrorMessage || 'Please enter a valid email address';
-                    field.parentNode.appendChild(errorMessage);
-                }
-            });
-            
-            // Prevent form submission if validation fails
-            if (!isValid) {
-                event.preventDefault();
-                
-                // Scroll to the first error
-                const firstError = form.querySelector('.error');
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    firstError.focus();
-                }
-            }
-        });
+    contactCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        // Increase the rotation angle on hover
+        const currentAngle = parseFloat(getComputedStyle(this)
+                                       .getPropertyValue('--trapezoid-angle'));
+        this.style.setProperty('--trapezoid-angle', `${currentAngle * 1.5}deg`);
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        // Reset to original angle
+        const originalAngle = parseFloat(getComputedStyle(document.documentElement)
+                                        .getPropertyValue('--trapezoid-angle'));
+        this.style.setProperty('--trapezoid-angle', `${originalAngle}deg`);
+      });
     });
-    
-    // Helper function to validate email
-    function validateEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
-}
-
-/**
- * Initialize language switcher behavior
- */
-function initLanguageSwitcher() {
-    const languageLinks = document.querySelectorAll('.language-switcher a');
-    
-    languageLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Don't switch if already on that language
-            if (!this.classList.contains('inactive')) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Store current scroll position
-            localStorage.setItem('scrollPosition', window.scrollY);
-        });
-    });
-    
-    // Restore scroll position if available
-    const savedScrollPosition = localStorage.getItem('scrollPosition');
-    if (savedScrollPosition) {
-        window.scrollTo(0, parseInt(savedScrollPosition));
-        localStorage.removeItem('scrollPosition');
-    }
-}
-
-/**
- * Initialize smooth scrolling for anchor links
- */
-function initSmoothScrolling() {
-    // Get all links that hash to an element ID
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    
-    anchorLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Get the target element
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            // Only proceed if target exists
-            if (targetElement) {
-                e.preventDefault();
-                
-                // Scroll smoothly to the target
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                // Update URL without reloading page
-                history.pushState(null, null, targetId);
-            }
-        });
-    });
-}
-
-/**
- * Debounce function to limit how often a function is called
- * @param {Function} func - Function to debounce
- * @param {number} wait - Wait time in milliseconds
- * @returns {Function} - Debounced function
- */
-function debounce(func, wait) {
+  }
+  
+  /**
+   * Debounce function to limit how often a function is called
+   * @param {Function} func - The function to debounce
+   * @param {number} wait - The debounce delay in milliseconds
+   * @return {Function} Debounced function
+   */
+  function debounce(func, wait) {
     let timeout;
     return function() {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            func.apply(context, args);
-        }, wait);
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        func.apply(context, args);
+      }, wait);
     };
-}
+  }

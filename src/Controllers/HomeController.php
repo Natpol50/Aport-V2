@@ -8,12 +8,14 @@ use App\Models\PersonalInfoModel;
 use App\Services\TranslationService;
 
 /**
- * HomeController - Handles main site pages
+ * HomeController - Handles main site pages with enhanced language support
  * 
- * This controller is responsible for rendering the main public-facing
- * pages of the website, including the home page and contact page.
+ * This controller manages the main pages of the website with proper
+ * language handling for English and French versions. The implementation
+ * uses the MVC pattern to separate data access, business logic, and presentation.
  * 
- * Improved with better language handling for English routes.
+ * The key mathematical concept here is the separation of concerns, which
+ * results in more maintainable code with high cohesion and low coupling.
  */
 class HomeController extends BaseController
 {
@@ -22,6 +24,7 @@ class HomeController extends BaseController
     
     /**
      * Create a new HomeController instance
+     * Initialize required models
      */
     public function __construct()
     {
@@ -30,18 +33,18 @@ class HomeController extends BaseController
     }
     
     /**
-     * Display the home page (French version is default)
+     * Display the home page (default language - French)
      * 
      * @param RequestObject $request Current request information
      * @return void
      */
     public function index(RequestObject $request): void
     {
-        // Set language to French
+        // Set language to French for default home page
         $request->setLanguageCode('fr');
         $_SESSION['language'] = 'fr';
         
-        // Render the home page with French content
+        // Render the French version of the home page
         $this->renderHomePage($request, 'fr');
     }
     
@@ -57,32 +60,33 @@ class HomeController extends BaseController
         $request->setLanguageCode('en');
         $_SESSION['language'] = 'en';
         
-        // Render the home page with English content
+        // Render the English version of the home page
         $this->renderHomePage($request, 'en');
     }
     
     /**
-     * Common method to render the home page with specified language
+     * Common method to render the home page with the specified language
+     * This avoids code duplication and ensures consistent behavior
      * 
      * @param RequestObject $request Current request information
-     * @param string $langCode Language code
+     * @param string $langCode Language code (en/fr)
      * @return void
      */
     private function renderHomePage(RequestObject $request, string $langCode): void
     {
-        // Initialize translation service
+        // Initialize translation service for the specified language
         $translationService = new TranslationService($langCode);
         
-        // Get current projects
+        // Get current projects for the specified language
         $currentProjects = $this->projectModel->getAllProjects($langCode, 'current');
         
-        // Get past projects
+        // Get past projects for the specified language
         $pastProjects = $this->projectModel->getAllProjects($langCode, 'past');
         
-        // Get personal info
+        // Get personal info for the specified language
         $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
         
-        // Render the home page
+        // Render the home page with all necessary data
         echo $this->render('home/index', [
             'request' => $request,
             'currentProjects' => $currentProjects,
@@ -90,12 +94,12 @@ class HomeController extends BaseController
             'personalInfo' => $personalInfo,
             'translations' => $translationService,
             'language' => $langCode,
-            'is_home_page' => true
+            'current_year' => date('Y')
         ]);
     }
     
     /**
-     * Display the French contact page
+     * Display the contact page in French
      * 
      * @param RequestObject $request Current request information
      * @return void
@@ -111,7 +115,7 @@ class HomeController extends BaseController
     }
     
     /**
-     * Display the English contact page
+     * Display the contact page in English
      * 
      * @param RequestObject $request Current request information
      * @return void
@@ -127,26 +131,27 @@ class HomeController extends BaseController
     }
     
     /**
-     * Common method to render the contact page with specified language
+     * Common method to render the contact page with the specified language
      * 
      * @param RequestObject $request Current request information
-     * @param string $langCode Language code
+     * @param string $langCode Language code (en/fr)
      * @return void
      */
     private function renderContactPage(RequestObject $request, string $langCode): void
     {
-        // Initialize translation service
+        // Initialize translation service for the specified language
         $translationService = new TranslationService($langCode);
         
         // Get personal info for contact details
         $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
         
-        // Render the contact page
+        // Render the contact page with all necessary data
         echo $this->render('home/contact', [
             'request' => $request,
             'personalInfo' => $personalInfo,
             'translations' => $translationService,
-            'language' => $langCode
+            'language' => $langCode,
+            'current_year' => date('Y')
         ]);
     }
     
@@ -172,7 +177,7 @@ class HomeController extends BaseController
         // Get personal info for contact details
         $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
         
-        // Simple validation
+        // Form validation
         $errors = [];
         
         if (empty($subject)) {
@@ -187,7 +192,7 @@ class HomeController extends BaseController
             $errors[] = $translationService->translate('contact.error.invalid_email');
         }
         
-        // If there are errors, redisplay the form with error messages
+        // If there are validation errors, redisplay the form
         if (!empty($errors)) {
             echo $this->render('home/contact', [
                 'request' => $request,
@@ -199,22 +204,22 @@ class HomeController extends BaseController
                     'subject' => $subject,
                     'message' => $message,
                     'email' => $email
-                ]
+                ],
+                'current_year' => date('Y')
             ]);
             return;
         }
         
-        // In a real application, this would send an email
-        // For this example, we'll just show a success message
+        // In a real application, send an email here
+        // For this example, just show a success message
         
         // Set success message in session
         $_SESSION['success'] = [
             $translationService->translate('contact.success')
         ];
         
-        // Redirect back to the contact page based on language
+        // Redirect back to the contact page in the correct language
         $contactUrl = ($langCode === 'en') ? '/contact-en' : '/contact';
-        header("Location: $contactUrl");
-        exit;
+        $this->redirect($contactUrl);
     }
 }
