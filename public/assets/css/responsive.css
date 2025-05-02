@@ -11,276 +11,276 @@
 
 /* Base font size for mobile */
 html {
-    font-size: 15px; /* Slightly reduced base size for mobile */
+  font-size: 15px; /* Slightly reduced base size for mobile */
+}
+
+/* Mobile header adjustments */
+.nav-container {
+  height: 4rem; /* Smaller header height on mobile */
+}
+
+:root {
+  --header-height: 4rem; /* Override the header height variable */
+}
+
+/* Adjust container padding for mobile */
+.container {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+/* Show mobile menu toggle on mobile */
+.mobile-menu-toggle {
+  display: block;
+}
+
+/* Hide navigation groups on mobile */
+.nav-group-left, .nav-group-right {
+  display: none;
+}
+
+/* Center align logo on mobile */
+.logo-container {
+  height: calc(var(--header-height) + 1rem);
+}
+
+.logo-container img {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+/* Position language switcher on mobile */
+.language-switcher {
+  bottom: 1rem;
+  right: 1rem;
+  top: auto;
+}
+
+/* Adjust hero section for mobile */
+.hero-title {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.contact-button {
+  width: 10rem;
+  height: 3.5rem;
+}
+
+.contact-button span {
+  font-size: 1.125rem;
+}
+
+/* Project cards for mobile */
+.project-card-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.project-info {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Footer for mobile */
+.footer-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+.footer-separator {
+  display: none;
+}
+
+.footer-about, .footer-heading {
+  text-align: center;
+}
+
+.contact-links {
+  grid-template-columns: 1fr;
+}
+
+/* Form layout for mobile */
+.form-row {
+  grid-template-columns: 1fr;
+}
+
+/* Spacers for mobile */
+.spacer-top {
+  height: var(--hero-height, 40vh);
+  min-height: 150px;
+}
+
+.spacer-bottom {
+  height: var(--footer-height, 40vh);
+  min-height: 150px;
+}
+
+/* Triangle sections for mobile */
+.triangle-section {
+  height: 80px;
+}
+
+/* ===== DESKTOP BREAKPOINT (≥ 768px) ===== */
+@media (min-width: 768px) {
+  /* Reset base font size for desktop */
+  html {
+      font-size: 16px;
   }
   
-  /* Mobile header adjustments */
+  /* Restore header height on desktop */
   .nav-container {
-    height: 4rem; /* Smaller header height on mobile */
+      height: 5rem;
   }
   
   :root {
-    --header-height: 4rem; /* Override the header height variable */
+      --header-height: 5rem; /* Reset the header height variable */
   }
   
-  /* Adjust container padding for mobile */
+  /* Adjust container padding for desktop */
   .container {
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+      padding-left: var(--spacing-xl);
+      padding-right: var(--spacing-xl);
   }
   
-  /* Show mobile menu toggle on mobile */
+  /* Hide mobile menu toggle on desktop */
   .mobile-menu-toggle {
-    display: block;
+      display: none;
   }
   
-  /* Hide navigation groups on mobile */
+  /* Show navigation groups on desktop */
   .nav-group-left, .nav-group-right {
-    display: none;
+      display: flex;
   }
   
-  /* Center align logo on mobile */
+  /* Adjust logo size for desktop */
   .logo-container {
-    height: calc(var(--header-height) + 1rem);
+      height: calc(var(--header-height) + 1.5rem);
   }
   
   .logo-container img {
-    width: 4.5rem;
-    height: 4.5rem;
-  }
-  
-  /* Position language switcher on mobile */
-  .language-switcher {
-    bottom: 1rem;
-    right: 1rem;
-    top: auto;
-  }
-  
-  /* Adjust hero section for mobile */
-  .hero-title {
-    font-size: 2.5rem;
-    text-align: center;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.25rem;
-    text-align: center;
-  }
-  
-  .contact-button {
-    width: 10rem;
-    height: 3.5rem;
-  }
-  
-  .contact-button span {
-    font-size: 1.125rem;
-  }
-  
-  /* Project cards for mobile */
-  .project-card-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
-  
-  .project-info {
-    margin-bottom: var(--spacing-md);
-  }
-  
-  /* Footer for mobile */
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-xl);
-  }
-  
-  .footer-separator {
-    display: none;
-  }
-  
-  .footer-about, .footer-heading {
-    text-align: center;
-  }
-  
-  .contact-links {
-    grid-template-columns: 1fr;
-  }
-  
-  /* Form layout for mobile */
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  /* Spacers for mobile */
-  .spacer-top {
-    height: var(--hero-height, 40vh);
-    min-height: 150px;
-  }
-  
-  .spacer-bottom {
-    height: var(--footer-height, 40vh);
-    min-height: 150px;
-  }
-  
-  /* Triangle sections for mobile */
-  .triangle-section {
-    height: 80px;
-  }
-  
-  /* ===== DESKTOP BREAKPOINT (≥ 768px) ===== */
-  @media (min-width: 768px) {
-    /* Reset base font size for desktop */
-    html {
-      font-size: 16px;
-    }
-    
-    /* Restore header height on desktop */
-    .nav-container {
-      height: 5rem;
-    }
-    
-    :root {
-      --header-height: 5rem; /* Reset the header height variable */
-    }
-    
-    /* Adjust container padding for desktop */
-    .container {
-      padding-left: var(--spacing-xl);
-      padding-right: var(--spacing-xl);
-    }
-    
-    /* Hide mobile menu toggle on desktop */
-    .mobile-menu-toggle {
-      display: none;
-    }
-    
-    /* Show navigation groups on desktop */
-    .nav-group-left, .nav-group-right {
-      display: flex;
-    }
-    
-    /* Adjust logo size for desktop */
-    .logo-container {
-      height: calc(var(--header-height) + 1.5rem);
-    }
-    
-    .logo-container img {
       width: 6rem;
       height: 6rem;
-    }
-    
-    /* Reposition language switcher for desktop */
-    .language-switcher {
+  }
+  
+  /* Reposition language switcher for desktop */
+  .language-switcher {
       top: 2.5rem;
       right: 2rem;
       bottom: auto;
-    }
-    
-    /* Adjust hero section for desktop */
-    .hero-title {
-      font-size: 5rem;
-    }
-    
-    .hero-subtitle {
-      font-size: 1.5rem;
-    }
-    
-    .contact-button {
-      width: 12rem;
-      height: 4rem;
-    }
-    
-    .contact-button span {
-      font-size: 1.25rem;
-    }
-    
-    /* Project cards for desktop */
-    .project-card-grid {
-      grid-template-columns: 1fr 3fr;
-      gap: var(--spacing-xl);
-    }
-    
-    /* Footer for desktop */
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-xxl);
-    }
-    
-    .footer-separator {
-      display: block;
-    }
-    
-    .footer-about {
-      text-align: right;
-    }
-    
-    .contact-links {
-      grid-template-columns: 1fr;
-    }
-    
-    /* Form layout for desktop */
-    .form-row {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* Spacers for desktop - will be dynamically set with JS */
-    .spacer-top {
-      height: var(--hero-height, 50vh);
-      min-height: 400px;
-    }
-    
-    .spacer-bottom {
-      height: var(--footer-height, 50vh);
-      min-height: 350px;
-    }
-    
-    /* Triangle sections for desktop */
-    .triangle-section {
-      height: 120px;
-    }
   }
   
-  /* ===== ORIENTATION SPECIFIC STYLES ===== */
-  /* Portrait mode warning */
-  @media (orientation: portrait) {
-    /* Show portrait warning on mobile */
-    @media (max-width: 767px) {
+  /* Adjust hero section for desktop */
+  .hero-title {
+      font-size: 5rem;
+  }
+  
+  .hero-subtitle {
+      font-size: 1.5rem;
+  }
+  
+  .contact-button {
+      width: 12rem;
+      height: 4rem;
+  }
+  
+  .contact-button span {
+      font-size: 1.25rem;
+  }
+  
+  /* Project cards for desktop */
+  .project-card-grid {
+      grid-template-columns: 1fr 3fr;
+      gap: var(--spacing-xl);
+  }
+  
+  /* Footer for desktop */
+  .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xxl);
+  }
+  
+  .footer-separator {
+      display: block;
+  }
+  
+  .footer-about {
+      text-align: right;
+  }
+  
+  .contact-links {
+      grid-template-columns: 1fr;
+  }
+  
+  /* Form layout for desktop */
+  .form-row {
+      grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Spacers for desktop - will be dynamically set with JS */
+  .spacer-top {
+      height: var(--hero-height, 50vh);
+      min-height: 400px;
+  }
+  
+  .spacer-bottom {
+      height: var(--footer-height, 50vh);
+      min-height: 350px;
+  }
+  
+  /* Triangle sections for desktop */
+  .triangle-section {
+      height: 120px;
+  }
+}
+
+/* ===== ORIENTATION SPECIFIC STYLES ===== */
+/* Portrait mode warning */
+@media (orientation: portrait) {
+  /* Show portrait warning on mobile */
+  @media (max-width: 767px) {
       .portrait-warning {
-        display: flex;
+          display: flex;
       }
-    }
-    
-    /* More extreme portrait adjustments */
-    @media (max-aspect-ratio: 2/3) and (max-width: 767px) {
+  }
+  
+  /* More extreme portrait adjustments */
+  @media (max-aspect-ratio: 2/3) and (max-width: 767px) {
       .hero-title {
-        font-size: 2rem;
+          font-size: 2rem;
       }
       
       .projects-title {
-        font-size: 2.5rem;
+          font-size: 2.5rem;
       }
       
       .section-title {
-        font-size: 1.5rem;
+          font-size: 1.5rem;
       }
       
       .footer-copyright p {
-        font-size: 1rem;
+          font-size: 1rem;
       }
-    }
   }
-  
-  /* ===== UTILITY RESPONSIVE CLASSES ===== */
-  /* Hidden on mobile */
+}
+
+/* ===== UTILITY RESPONSIVE CLASSES ===== */
+/* Hidden on mobile */
+.hidden-mobile {
+  display: none;
+}
+
+/* Hidden on desktop */
+@media (min-width: 768px) {
   .hidden-mobile {
-    display: none;
+      display: initial;
   }
   
-  /* Hidden on desktop */
-  @media (min-width: 768px) {
-    .hidden-mobile {
-      display: initial;
-    }
-    
-    .hidden-desktop {
+  .hidden-desktop {
       display: none;
-    }
   }
+}

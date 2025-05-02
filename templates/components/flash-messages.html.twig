@@ -1,0 +1,41 @@
+{# templates/components/flash-messages.html.twig #}
+
+{% if success is defined and success is not empty %}
+    <div class="flash-container">
+        {% for message in success %}
+            <div class="flash-message flash-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if error is defined and error is not empty %}
+    <div class="flash-container">
+        {% for message in error %}
+            <div class="flash-message flash-error">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if request.getFlashMessages('success')|length > 0 %}
+    <div class="flash-container">
+        {% for message in request.getFlashMessages('success') %}
+            <div class="flash-message flash-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if request.getFlashMessages('error')|length > 0 %}
+    <div class="flash-container">
+        {% for message in request.getFlashMessages('error') %}
+            <div class="flash-message flash-error">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -7,7 +7,7 @@
     - translations: Translation service
 #}
 
-<article class="project-card hover-lift">
+<article class="project-card hover-lift fade-in">
     <div class="project-card-grid">
         <div class="project-info">
             <h3 class="project-title">
@@ -22,7 +22,7 @@
             
             <p class="project-date">
                 {% if project.status == 'current' %}
-                    {{ translations.translate('project.since') }} {{ project.start_date|date('F Y') }}
+                    {{ translations.translate('admin.since') }} {{ project.start_date|date('F Y') }}
                 {% else %}
                     {{ project.start_date|date('F Y') }}
                     {% if project.end_date %}

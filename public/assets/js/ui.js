@@ -13,8 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize navigation active state
     initNavigationActiveState();
     
-    // Initialize flash message auto-dismissal
-    initFlashMessages();
+    // Initialize trapezoid hover effects
+    initTrapezoidEffects();
+    
+    // Initialize mobile menu
+    initMobileMenu();
 });
 
 /**
@@ -50,7 +53,7 @@ function initFormValidation() {
                     
                     // Add error message
                     const errorMessage = document.createElement('p');
-                    errorMessage.className = 'error-message text-red-500 text-sm mt-1';
+                    errorMessage.className = 'error-message text-sm mt-1';
                     errorMessage.textContent = field.dataset.errorMessage || 'This field is required';
                     field.parentNode.appendChild(errorMessage);
                 }
@@ -64,7 +67,7 @@ function initFormValidation() {
                     
                     // Add error message
                     const errorMessage = document.createElement('p');
-                    errorMessage.className = 'error-message text-red-500 text-sm mt-1';
+                    errorMessage.className = 'error-message text-sm mt-1';
                     errorMessage.textContent = field.dataset.emailErrorMessage || 'Please enter a valid email address';
                     field.parentNode.appendChild(errorMessage);
                 }
@@ -87,6 +90,8 @@ function initFormValidation() {
 
 /**
  * Validate an email address
+ * Uses regex pattern to ensure valid email format
+ * 
  * @param {string} email - The email address to validate
  * @return {boolean} - True if the email is valid, false otherwise
  */
@@ -109,66 +114,117 @@ function initNavigationActiveState() {
         const href = link.getAttribute('href');
         
         // Skip non-path links (e.g., '#contact')
-        if (href.startsWith('#')) return;
+        if (href && href.startsWith('#')) return;
         
         // Check if this link matches the current path
         if (href === currentPath || 
             (href === '/' && currentPath === '') || 
             (href !== '/' && currentPath.startsWith(href))) {
             link.classList.add('active');
-            
-            // Update nav underline position
-            updateNavUnderline(link);
         }
     });
 }
 
 /**
- * Update the navigation underline position
- * @param {HTMLElement} activeLink - The active navigation link
+ * Initialize trapezoid hover effects for cards
+ * Uses mathematical transformations for visual effects
  */
-function updateNavUnderline(activeLink) {
-    const underline = document.querySelector('.nav-underline');
-    if (!underline || !activeLink) return;
+function initTrapezoidEffects() {
+    const trapezoidElements = document.querySelectorAll('.trapezoid, .contact-card');
     
-    // Calculate position
-    const linkRect = activeLink.getBoundingClientRect();
-    const linkCenter = linkRect.left + (linkRect.width / 2);
-    const underlineWidth = linkRect.width - 20; // Slightly shorter than the link
-    
-    // Update underline position
-    underline.style.left = `${linkCenter - (underlineWidth / 2)}px`;
-    underline.style.width = `${underlineWidth}px`;
+    trapezoidElements.forEach(element => {
+        // Store original transform for resetting
+        const originalTransform = getComputedStyle(element).transform;
+        
+        element.addEventListener('mouseenter', function() {
+            // More dramatic skew on hover - mathematical amplification
+            const skewAngle = 20; // degrees
+            
+            // Calculate skew transformation
+            this.style.transform = `skewX(-${skewAngle}deg)`;
+            
+            // Also lift element slightly
+            this.style.transform += ' translateY(-5px)';
+            
+            // Add shadow for depth perception
+            this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
+            
+            // If there's content inside that should stay straight
+            const content = this.querySelector('.card-content, .trapezoid-text');
+            if (content) {
+                // Counter-skew the content to keep it readable
+                content.style.transform = `skewX(${skewAngle}deg)`;
+            }
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            // Reset transformations
+            this.style.transform = originalTransform || '';
+            this.style.boxShadow = '';
+            
+            // Reset content skew
+            const content = this.querySelector('.card-content, .trapezoid-text');
+            if (content) {
+                content.style.transform = '';
+            }
+        });
+    });
 }
 
 /**
- * Initialize auto-dismissal of flash messages
+ * Initialize mobile menu behavior
  */
-function initFlashMessages() {
-    const flashMessages = document.querySelectorAll('.flash-message');
+function initMobileMenu() {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
     
-    flashMessages.forEach(message => {
-        // Auto-dismiss flash messages after 5 seconds
-        setTimeout(() => {
-            message.style.opacity = '0';
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 300);
-        }, 5000);
+    if (!menuToggle || !mobileMenu) return;
+    
+    menuToggle.addEventListener('click', function() {
+        // Toggle aria-expanded state
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
         
-        // Add close button to flash messages
-        const closeButton = document.createElement('button');
-        closeButton.innerHTML = '&times;';
-        closeButton.className = 'absolute top-2 right-2 text-lg font-bold';
-        closeButton.addEventListener('click', () => {
-            message.style.opacity = '0';
+        // Toggle mobile menu visibility with animation
+        if (isExpanded) {
+            // Close menu with animation
+            mobileMenu.style.maxHeight = '0';
+            
+            // After animation completes, hide the menu
             setTimeout(() => {
-                message.style.display = 'none';
-            }, 300);
-        });
+                mobileMenu.classList.add('hidden');
+            }, 300); // Match transition duration
+        } else {
+            // Show menu first (unhide it)
+            mobileMenu.classList.remove('hidden');
+            
+            // Then animate its height
+            // Use requestAnimationFrame to ensure DOM has updated
+            requestAnimationFrame(() => {
+                mobileMenu.style.maxHeight = `${mobileMenu.scrollHeight}px`;
+            });
+        }
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        // Check if menu is open and click is outside menu and toggle button
+        const isMenuOpen = menuToggle.getAttribute('aria-expanded') === 'true';
         
-        // Make sure the message has relative positioning for absolute positioning of the close button
-        message.style.position = 'relative';
-        message.appendChild(closeButton);
+        if (isMenuOpen && 
+            !mobileMenu.contains(event.target) && 
+            !menuToggle.contains(event.target)) {
+            
+            // Set aria-expanded to false
+            menuToggle.setAttribute('aria-expanded', 'false');
+            
+            // Close menu with animation
+            mobileMenu.style.maxHeight = '0';
+            
+            // After animation completes, hide the menu
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
     });
 }

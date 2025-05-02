@@ -14,240 +14,246 @@
 
 /* Page structure for scrolling effect */
 .page-structure {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== VISIBILITY BASED ON SCROLL POSITION ===== */
+/* Elements that fade in/out based on scroll position */
+
+/* Hero content fades out when scrolling down */
+.hero-content {
+  opacity: 1;
+  transition: opacity var(--transition-medium);
+}
+
+.hero-content.fade-out {
+  opacity: 0;
+}
+
+/* Footer content fades in when scrolling to bottom */
+.footer-content {
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+}
+
+.footer-content.fade-in {
+  opacity: 1;
+}
+
+/* Contact button visibility */
+#contact-button {
+  opacity: 1;
+  transition: opacity var(--transition-medium);
+}
+
+#contact-button.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== PARALLAX EFFECTS ===== */
+/* Elements that move at different speeds during scrolling */
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  will-change: transform;
+  transform: translateY(var(--parallax-offset, 0));
+}
+
+/* Different parallax speeds */
+.parallax-slow {
+  --parallax-speed: 0.1;
+}
+
+.parallax-medium {
+  --parallax-speed: 0.2;
+}
+
+.parallax-fast {
+  --parallax-speed: 0.3;
+}
+
+/* ===== HOVER EFFECTS ===== */
+/* Subtle effects for interactive elements */
+
+.hover-lift {
+  transition: transform var(--transition-medium);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-glow {
+  transition: box-shadow var(--transition-medium);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(101, 140, 121, 0.5);
+}
+
+/* ===== CONTENT VISIBILITY TRANSITIONS ===== */
+/* Effects for elements that appear/disappear based on scroll position */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--transition-medium), transform var(--transition-medium);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-out {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--transition-medium), transform var(--transition-medium);
+}
+
+.fade-out.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* ===== TRANSITION SECTIONS ===== */
+/* Triangular sections that transition between content areas */
+
+.triangle-section {
+  position: relative;
+  height: 120px;
+  width: 100%;
+  overflow: hidden;
+  z-index: var(--z-above);
+  background-color: transparent;
+}
+
+.triangle-section svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== PROJECTS SECTION STYLING ===== */
+.projects-section {
+  position: relative;
+  background-color: #f5f5f5;
+  padding: var(--spacing-xxl) 0;
+  color: #262732;
+  z-index: var(--z-above);
+}
+
+/* ===== TRAPEZOID SHAPE UTILITIES ===== */
+.trapezoid {
+  position: relative;
+  overflow: visible;
+}
+
+.trapezoid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: inherit;
+  z-index: -1;
+  transform: skewX(-15deg);
+  transition: transform var(--transition-medium);
+}
+
+.trapezoid:hover::before {
+  transform: skewX(-20deg);
+}
+
+/* Trapezoid text - counters the parent skew to keep text straight */
+.trapezoid-text {
+  display: inline-block;
+  transform: skewX(15deg);
+}
+
+/* Project card with trapezoid shape */
+.project-card {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== ANIMATIONS ===== */
+/* Pulse animation for highlights */
+@keyframes pulse {
+  0% {
+      transform: scale(1);
   }
-  
-  /* Fixed hero section at top */
-  .hero-static {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--hero-height, 100vh);
-    z-index: var(--z-base);
-    pointer-events: none; /* Allow clicks to pass through to scrollable content */
+  50% {
+      transform: scale(1.05);
   }
-  
-  /* Fixed footer section at bottom */
-  .footer-static {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: var(--footer-height, auto);
-    z-index: var(--z-base);
-    pointer-events: none; /* Allow clicks to pass through to scrollable content */
+  100% {
+      transform: scale(1);
   }
-  
-  /* Scrollable middle content */
-  .scrollable-content {
-    position: relative;
-    z-index: var(--z-above);
-    width: 100%;
-    margin-top: var(--header-height);
-    min-height: 100vh; /* Ensure it's tall enough to scroll */
-    background-color: transparent;
+}
+
+/* Rotate animation for loading indicators */
+@keyframes rotate {
+  0% {
+      transform: rotate(0deg);
   }
-  
-  /* Scroll wrapper to contain scrollable content */
-  .scroll-wrapper {
-    position: relative;
-    z-index: var(--z-above);
-    padding-top: var(--hero-height, 100vh);
-    padding-bottom: var(--footer-height, 300px);
+  100% {
+      transform: rotate(360deg);
   }
-  
-  /* Interactive elements that should be clickable inside fixed sections */
-  .interactive {
-    position: relative;
-    z-index: var(--z-above);
-    pointer-events: auto;
+}
+
+/* Fade in up animation for content sections */
+@keyframes fadeInUp {
+  0% {
+      opacity: 0;
+      transform: translateY(20px);
   }
-  
-  /* ===== VISIBILITY BASED ON SCROLL POSITION ===== */
-  /* Elements that fade in/out based on scroll position */
-  
-  /* Hero content fades out when scrolling down */
-  .hero-content {
-    opacity: 1;
-    transition: opacity var(--transition-medium);
+  100% {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
-  .hero-content.fade-out {
-    opacity: 0;
-  }
-  
-  /* Footer content fades in when scrolling to bottom */
-  .footer-content {
-    opacity: 0;
-    transition: opacity var(--transition-medium);
-  }
-  
-  .footer-content.fade-in {
-    opacity: 1;
-  }
-  
-  /* Contact button visibility */
-  #contact-button {
-    opacity: 1;
-    transition: opacity var(--transition-medium);
-  }
-  
-  #contact-button.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-  
-  /* ===== PARALLAX EFFECTS ===== */
-  /* Elements that move at different speeds during scrolling */
-  
-  .parallax-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    will-change: transform;
-    transform: translateY(var(--parallax-offset, 0));
-  }
-  
-  /* Different parallax speeds */
-  .parallax-slow {
-    --parallax-speed: 0.1;
-  }
-  
-  .parallax-medium {
-    --parallax-speed: 0.2;
-  }
-  
-  .parallax-fast {
-    --parallax-speed: 0.3;
-  }
-  
-  /* ===== HOVER EFFECTS ===== */
-  /* Subtle effects for interactive elements */
-  
-  .hover-lift {
-    transition: transform var(--transition-medium);
-  }
-  
-  .hover-lift:hover {
-    transform: translateY(-4px);
-  }
-  
-  .hover-glow {
-    transition: box-shadow var(--transition-medium);
-  }
-  
-  .hover-glow:hover {
-    box-shadow: 0 0 15px rgba(101, 140, 121, 0.5);
-  }
-  
-  /* ===== CONTENT VISIBILITY TRANSITIONS ===== */
-  /* Effects for elements that appear/disappear based on scroll position */
-  
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--transition-medium), transform var(--transition-medium);
-  }
-  
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .fade-out {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity var(--transition-medium), transform var(--transition-medium);
-  }
-  
-  .fade-out.hidden {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  
-  /* ===== SCROLL INDICATORS ===== */
-  /* Subtle indicators for scrollable content */
-  
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-    color: var(--color-text);
-    font-size: 1.5rem;
-    opacity: 0.7;
-    pointer-events: auto;
-    cursor: pointer;
-  }
-  
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateX(-50%) translateY(0);
-    }
-    40% {
-      transform: translateX(-50%) translateY(-10px);
-    }
-    60% {
-      transform: translateX(-50%) translateY(-5px);
-    }
-  }
-  
-  /* ===== TRANSITION SECTIONS ===== */
-  /* Triangular sections that transition between content areas */
-  
-  .triangle-section {
-    position: relative;
-    height: 120px;
-    width: 100%;
-    overflow: hidden;
-    z-index: var(--z-above);
-    background-color: transparent;
-  }
-  
-  .triangle-section svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* ===== PROJECTS SECTION STYLING ===== */
-  .projects-section {
-    position: relative;
-    background-color: #f5f5f5;
-    padding: var(--spacing-xxl) 0;
-    color: #262732;
-    z-index: var(--z-above);
-  }
-  
-  /* ===== CUSTOM SCROLLBAR ===== */
-  /* Styled scrollbar for the main content */
-  
-  /* For Webkit browsers (Chrome, Safari) */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: rgba(38, 39, 50, 0.1);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-primary);
-    border-radius: 4px;
-  }
-  
-  /* For Firefox */
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-primary) rgba(38, 39, 50, 0.1);
-  }
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+/* Styled scrollbar for the main content */
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(38, 39, 50, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 4px;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) rgba(38, 39, 50, 0.1);
+}

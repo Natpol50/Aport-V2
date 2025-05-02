@@ -1,73 +1,80 @@
-{# Add this in the <head> section after the main CSS #}
-<link rel="stylesheet" href="/assets/css/main.css">
-<link rel="stylesheet" href="/assets/css/visual-fixes.css">
-{% block stylesheets %}{% endblock %}
-
-{# Replace the language switcher in the nav-container with our updated version #}
-{# Include our updated language switcher component #}
-{% include 'components/language-switcher.html.twig' %}
-
-{# Update the footer section to work better on small screens #}
-{% block footer %}
-<footer class="site-footer">
-    <div class="container">
-        <div class="footer-grid">
-            {# About Section - Will be hidden on mobile #}
-            <div class="footer-about">
-                <h2 class="footer-heading">
-                    {{ translations.translate('footer.about_title') }}
-                </h2>
-                <div class="about-content">
-                    {{ personalInfo.about_text|raw }}
-                </div>
-            </div>
-            
-            {# Contact Cards Section #}
-            <div class="footer-contact">
-                <h2 class="footer-heading">
-                    {{ translations.translate('footer.contact_title') }}
-                </h2>
-                <div class="contact-cards">
-                    {# Email Card #}
-                    <a href="mailto:{{ personalInfo.email }}" class="contact-card interactive" target="_blank">
-                        <div class="card-content">
-                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
-                            <span>{{ personalInfo.email }}</span>
-                        </div>
-                    </a>
-                    
-                    {# GitHub Card #}
-                    <a href="{{ personalInfo.github_url }}" class="contact-card interactive" target="_blank" rel="noopener">
-                        <div class="card-content">
-                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
-                            <span>GitHub</span>
-                        </div>
-                    </a>
-                    
-                    {# LinkedIn Card #}
-                    <a href="{{ personalInfo.linkedin_url }}" class="contact-card interactive" target="_blank" rel="noopener">
-                        <div class="card-content">
-                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
-                            <span>LinkedIn</span>
-                        </div>
-                    </a>
-                    
-                    {% if personalInfo.discord_url %}
-                        {# Discord Card #}
-                        <a href="{{ personalInfo.discord_url }}" class="contact-card interactive" target="_blank" rel="noopener">
-                            <div class="card-content">
-                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
-                                <span>Discord</span>
-                            </div>
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="{{ language|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{{ translations.translate('meta.description') }}{% endblock %}">
+    
+    <title>{% block title %}{{ translations.translate('site.title') }}{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files - The order matters for cascading priority -->
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    <link rel="stylesheet" href="/assets/css/effects.css">
+    <link rel="stylesheet" href="/assets/css/utilities.css">
+    <link rel="stylesheet" href="/assets/css/responsive.css">
+    
+    <!-- Custom stylesheets -->
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <!-- Page container for overall structure -->
+    <div class="page-container">
+        <!-- Flash messages for notifications -->
+        {% include 'components/flash-messages.html.twig' %}
+        
+        <!-- Fixed header/navbar -->
+        {% include 'components/navigation.html.twig' %}
+        
+        <!-- Fixed hero section in background -->
+        <div class="hero-static">
+            {% block hero %}
+                {% include 'components/hero.html.twig' %}
+            {% endblock %}
         </div>
         
-        <div class="footer-copyright">
-            <p>© {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}</p>
+        <!-- Scrollable content layer -->
+        <div class="scrollable-content">
+            <!-- Top spacer to push content below hero -->
+            <div class="spacer-top"></div>
+            
+            <!-- Main content area -->
+            <main class="main-content">
+                {% block content %}{% endblock %}
+            </main>
+            
+            <!-- Bottom spacer to allow scrolling to footer -->
+            <div class="spacer-bottom"></div>
         </div>
+        
+        <!-- Fixed footer in background -->
+        <div class="footer-static">
+            {% block footer %}
+                {% include 'components/footer.html.twig' %}
+            {% endblock %}
+        </div>
+        
+        <!-- Language switcher (positioned absolutely) -->
+        {% include 'components/language-switcher.html.twig' %}
+        
+        <!-- Optional: portrait mode warning for mobile -->
+        {% include 'components/portrait-warning.html.twig' %}
     </div>
-</footer>
-{% endblock %}
+    
+    <!-- JavaScript - Load at the end for performance -->
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/responsive.js"></script>
+    <script src="/assets/js/parallax.js"></script>
+    <script src="/assets/js/ui.js"></script>
+    
+    <!-- Custom scripts -->
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

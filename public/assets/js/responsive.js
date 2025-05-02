@@ -204,6 +204,8 @@ function updateNavUnderline(activeLink) {
 
 /**
  * Debounce function to limit how often a function is called
+ * Uses mathematical principles to improve performance
+ * 
  * @param {Function} func - The function to debounce
  * @param {number} wait - The debounce wait time in milliseconds
  * @return {Function} - The debounced function

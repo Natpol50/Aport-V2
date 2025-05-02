@@ -1,57 +1,73 @@
-<footer id="contact-section" class="main-footer {% if is_home_page is defined and is_home_page %}footer-home{% endif %}">
+```twig
+{# templates/components/footer.html.twig #}
+
+<footer class="site-footer">
     <div class="container">
-        {% if is_home_page is defined and is_home_page %}
-            <div class="footer-grid">
-                {# About Section #}
-                <div class="footer-about">
-                    <h2 class="footer-heading">
-                        {{ translations.translate('footer.about_title') }}
-                    </h2>
-                    <p>
-                        {{ personalInfo.about_text|raw }}
-                    </p>
-                </div>
-
-                {# Vertical Separator #}
-                <div class="footer-separator"></div>
-
-                {# Contact Links #}
-                <div id="contact-links" class="interactive">
-                    <h2 class="footer-heading">
-                        {{ translations.translate('footer.contact_title') }}
-                    </h2>
-                    <div class="contact-links">
-                        <a href="mailto:{{ personalInfo.email }}" target="_blank" class="interactive contact-link">
-                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
-                            <span>Mail Pro</span>
-                        </a>
-                        <a href="mailto:nathan.polette@viacesi.fr" target="_blank" class="interactive contact-link">
-                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
-                            <span>Mail Scolaire</span>
-                        </a>
-                        <a href="{{ personalInfo.github_url }}" target="_blank" class="interactive contact-link">
-                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
-                            <span>Github</span>
-                        </a>
-                        <a href="{{ personalInfo.linkedin_url }}" target="_blank" class="interactive contact-link">
-                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
-                            <span>LinkedIn</span>
-                        </a>
-                        {% if personalInfo.discord_url %}
-                            <a href="{{ personalInfo.discord_url }}" target="_blank" class="interactive contact-link">
-                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
-                                <span>Discord</span>
-                            </a>
-                        {% endif %}
-                    </div>
+        <div class="footer-grid">
+            {# About Section #}
+            <div class="footer-about">
+                <h2 class="footer-heading">
+                    {{ translations.translate('footer.about_title') }}
+                </h2>
+                <div class="about-content">
+                    {{ personalInfo.about_text|raw }}
                 </div>
             </div>
-        {% endif %}
 
+            {# Contact Cards Section #}
+            <div id="contact-links" class="footer-contact interactive">
+                <h2 class="footer-heading">
+                    {{ translations.translate('footer.contact_title') }}
+                </h2>
+                <div class="contact-cards">
+                    {# Email Card #}
+                    <a href="mailto:{{ personalInfo.email }}" class="contact-card trapezoid" target="_blank">
+                        <div class="card-content">
+                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                            <span>{{ personalInfo.email }}</span>
+                        </div>
+                    </a>
+                    
+                    {# Academic Email Card #}
+                    <a href="mailto:nathan.polette@viacesi.fr" class="contact-card trapezoid" target="_blank">
+                        <div class="card-content">
+                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                            <span>Mail Scolaire</span>
+                        </div>
+                    </a>
+                    
+                    {# GitHub Card #}
+                    <a href="{{ personalInfo.github_url }}" class="contact-card trapezoid" target="_blank" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
+                            <span>GitHub</span>
+                        </div>
+                    </a>
+                    
+                    {# LinkedIn Card #}
+                    <a href="{{ personalInfo.linkedin_url }}" class="contact-card trapezoid" target="_blank" rel="noopener">
+                        <div class="card-content">
+                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
+                            <span>LinkedIn</span>
+                        </div>
+                    </a>
+                    
+                    {% if personalInfo.discord_url %}
+                        {# Discord Card #}
+                        <a href="{{ personalInfo.discord_url }}" class="contact-card trapezoid" target="_blank" rel="noopener">
+                            <div class="card-content">
+                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
+                                <span>Discord</span>
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
         <div class="footer-copyright">
-            <p>
-                © {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}
-            </p>
+            <p>© {{ current_year }} Nathan Polette. {{ translations.translate('footer.rights_reserved') }}</p>
         </div>
     </div>
 </footer>
+```
