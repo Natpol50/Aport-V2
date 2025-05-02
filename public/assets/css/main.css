@@ -1,0 +1,69 @@
+/**
+ * main.css - Master CSS file
+ * 
+ * This file imports all other CSS files in the correct order.
+ * The order is important to ensure proper cascade and specificity.
+ */
+
+/* Base styles first (variables, reset, typography) */
+@import 'base.css';
+
+/* Layout structure (containers, grid, positioning) */
+@import 'layout.css';
+
+/* Components (reusable UI elements) */
+@import 'components.css';
+
+/* Navigation components */
+@import 'navigation.css';
+
+/* Special effects (scrolling, animations) */
+@import 'effects.css';
+
+/* Utility classes */
+@import 'utilities.css';
+
+/* Responsive styles (should always be last) */
+@import 'responsive.css';
+
+/**
+ * Print styles
+ * Adjusted styling for printed pages
+ */
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  .main-header,
+  .main-footer,
+  .portrait-warning,
+  .mobile-menu-toggle,
+  .language-switcher {
+    display: none !important;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .card,
+  .project-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}

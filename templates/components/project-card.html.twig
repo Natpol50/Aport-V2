@@ -7,12 +7,19 @@
     - translations: Translation service
 #}
 
-<article class="project-card">
+<article class="project-card hover-lift">
     <div class="project-card-grid">
         <div class="project-info">
             <h3 class="project-title">
                 {{ project.type|upper }} - <span>{{ project.title }}</span>
             </h3>
+            
+            {% if project.status %}
+                <div class="project-status status-{{ project.status }}">
+                    {{ translations.translate('admin.status_' ~ project.status) }}
+                </div>
+            {% endif %}
+            
             <p class="project-date">
                 {% if project.status == 'current' %}
                     {{ translations.translate('project.since') }} {{ project.start_date|date('F Y') }}
@@ -23,16 +30,17 @@
                     {% endif %}
                 {% endif %}
             </p>
+            
             <div class="project-links">
                 {% if project.github_url %}
-                    <a href="{{ project.github_url }}" target="_blank" class="project-link">
-                        {{ project.github_url|replace({'https://': '', 'http://': ''}) }}
+                    <a href="{{ project.github_url }}" target="_blank" class="project-link" rel="noopener">
+                        <span class="hidden-mobile">GitHub: </span>{{ project.github_url|replace({'https://': '', 'http://': ''}) }}
                     </a>
                 {% endif %}
                 
                 {% if project.website_url %}
-                    <a href="{{ project.website_url }}" target="_blank" class="project-link">
-                        {{ project.website_url|replace({'https://': '', 'http://': ''}) }}
+                    <a href="{{ project.website_url }}" target="_blank" class="project-link" rel="noopener">
+                        <span class="hidden-mobile">Website: </span>{{ project.website_url|replace({'https://': '', 'http://': ''}) }}
                     </a>
                 {% endif %}
             </div>
@@ -42,6 +50,7 @@
             <p class="project-description">
                 {{ project.description|nl2br }}
             </p>
+            
             <p class="project-skills">
                 {{ project.skills }}
             </p>

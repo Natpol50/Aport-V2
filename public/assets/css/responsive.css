@@ -1,436 +1,286 @@
 /**
- * responsive.css - Responsive design without Tailwind
+ * responsive.css - Responsive breakpoints and adjustments
  * 
- * This file contains all media queries to make the site responsive
- * across different device sizes. It follows a mobile-first approach
- * where we start with base styles for small screens and then add
- * styles for larger screens.
+ * This file contains all media queries with two main breakpoints:
+ * 1. Mobile (< 768px)
+ * 2. Desktop (≥ 768px)
+ */
 
-/* ===== MOBILE FIRST BASE STYLES ===== */
-/* These styles apply to all devices and are enhanced for larger screens */
+/* ===== MOBILE FIRST (Default Styling) ===== */
+/* These styles will apply to all devices by default */
 
-/* Base font size adjustments for small screens */
+/* Base font size for mobile */
 html {
-    font-size: 14px;
-}
-
-/* Hero section adjustments for small screens */
-.hero-title {
-    font-size: 2rem;
-}
-
-.hero-subtitle {
-    font-size: 1.25rem;
-}
-
-.contact-button {
-    width: 9rem;
-    height: 3rem;
-}
-
-.contact-button span {
-    font-size: 1rem;
-}
-
-/* Project card adjustments for small screens */
-.project-card-grid {
-    grid-template-columns: 1fr;
-}
-
-.project-info {
-    margin-bottom: var(--spacing-md);
-}
-
-/* Footer adjustments for small screens */
-.footer-grid {
-    grid-template-columns: 1fr;
-}
-.contact-link {
-    height: 3rem;
-}
-
-.contact-link img {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.contact-link span {
-    font-size: 0.875rem;
-}
-
-/* Form adjustments for small screens */
-.form-row {
-    grid-template-columns: 1fr;
-}
-
-/* Table adjustments for small screens */
-.table th, 
-.table td {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: 0.875rem;
-}
-
-/* Navigation adjustments for small screens */
-.nav-container {
-    height: 4rem;
-}
-
-.desktop-nav {
-    display: none;
-}
-
-.mobile-nav {
-    display: flex;
-    padding: var(--spacing-lg) 0;
-}
-
-.mobile-nav a {
-    font-size: 1.125rem;
-}
-
-.logo-container img {
-    width: 4rem;
-    height: 4rem;
-}
-
-.language-switcher {
-    bottom: 0.5rem;
-    top: auto;
-}
-
-.mobile-menu-toggle {
+    font-size: 15px; /* Slightly reduced base size for mobile */
+  }
+  
+  /* Mobile header adjustments */
+  .nav-container {
+    height: 4rem; /* Smaller header height on mobile */
+  }
+  
+  :root {
+    --header-height: 4rem; /* Override the header height variable */
+  }
+  
+  /* Adjust container padding for mobile */
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+  
+  /* Show mobile menu toggle on mobile */
+  .mobile-menu-toggle {
     display: block;
-    position: absolute;
-    top: 1.25rem;
-    right: var(--spacing-md);
-}
-
-.main-content {
-    padding-top: 4rem;
-}
-
-/* ===== ORIENTATION SPECIFIC STYLES ===== */
-/* Portrait mode */
-@media (orientation: portrait) {
-    /* Show portrait warning */
-    .portrait-warning {
-        display: flex;
-    }
-    
-    /* Further adjustments for portrait mode */
-    .contact-links {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Hero section in portrait mode */
-    .hero-section {
-        padding-top: 7rem;
-    }
-    
-    .hero-title {
-        font-size: 1.75rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.125rem;
-    }
-    
-    /* Project section in portrait mode */
-    .projects-title {
-        font-size: 2.5rem;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-    }
-    
-    /* Hide specific elements in extreme portrait */
-    @media (max-aspect-ratio: 2/3) {
-        .footer-copyright p {
-            font-size: 1rem;
-        }
-    }
-}
-
-/* Landscape mode */
-@media (orientation: landscape) {
-    /* Hide portrait warning */
-    .portrait-warning {
-        display: none;
-    }
-    
-    /* Different navigation layout for landscape */
-    .language-switcher {
-        top: 2rem;
-        bottom: auto;
-    }
-    
-    /* Contact links in landscape */
-    .contact-links {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* ===== SMALL SCREENS (576px and up) ===== */
-@media (min-width: 576px) {
+  }
+  
+  /* Hide navigation groups on mobile */
+  .nav-group-left, .nav-group-right {
+    display: none;
+  }
+  
+  /* Center align logo on mobile */
+  .logo-container {
+    height: calc(var(--header-height) + 1rem);
+  }
+  
+  .logo-container img {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  
+  /* Position language switcher on mobile */
+  .language-switcher {
+    bottom: 1rem;
+    right: 1rem;
+    top: auto;
+  }
+  
+  /* Adjust hero section for mobile */
+  .hero-title {
+    font-size: 2.5rem;
+    text-align: center;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  
+  .contact-button {
+    width: 10rem;
+    height: 3.5rem;
+  }
+  
+  .contact-button span {
+    font-size: 1.125rem;
+  }
+  
+  /* Project cards for mobile */
+  .project-card-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .project-info {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* Footer for mobile */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  .footer-separator {
+    display: none;
+  }
+  
+  .footer-about, .footer-heading {
+    text-align: center;
+  }
+  
+  .contact-links {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Form layout for mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Spacers for mobile */
+  .spacer-top {
+    height: var(--hero-height, 40vh);
+    min-height: 150px;
+  }
+  
+  .spacer-bottom {
+    height: var(--footer-height, 40vh);
+    min-height: 150px;
+  }
+  
+  /* Triangle sections for mobile */
+  .triangle-section {
+    height: 80px;
+  }
+  
+  /* ===== DESKTOP BREAKPOINT (≥ 768px) ===== */
+  @media (min-width: 768px) {
+    /* Reset base font size for desktop */
     html {
-        font-size: 15px;
+      font-size: 16px;
     }
     
-    /* Better form layouts on small screens */
-    .form-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* Improved spacing */
-    .content-section {
-        padding: var(--spacing-xl) 0;
-    }
-    
-    /* Adjust grid spacing */
-    .grid {
-        gap: var(--spacing-lg);
-    }
-    
-    /* More horizontal space for mobile menu items */
-    .mobile-menu a {
-        padding: var(--spacing-sm) var(--spacing-lg);
-    }
-}
-
-/* ===== MEDIUM SCREENS (768px and up) ===== */
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-    
-    /* Switch from mobile to desktop navigation */
-    .desktop-nav {
-        display: flex;
-    }
-    
-    .mobile-nav {
-        display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: none;
-    }
-    
-    /* Adjust container padding */
-    .container {
-        padding-left: var(--spacing-lg);
-        padding-right: var(--spacing-lg);
-    }
-    
-    /* Restore project card grid */
-    .project-card-grid {
-        grid-template-columns: 1fr 3fr;
-    }
-    
-    /* Hero section adjustments */
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.5rem;
-    }
-    
-    .contact-button {
-        width: 12rem;
-        height: 4rem;
-    }
-    
-    .contact-button span {
-        font-size: 1.25rem;
-    }
-    
-    /* Table adjustments */
-    .table th, 
-    .table td {
-        padding: var(--spacing-sm) var(--spacing-md);
-        font-size: 1rem;
-    }
-    
-    /* Adjust form layouts */
-    .form-row.thirds {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    /* More complex grid layouts become available */
-    .grid-cols-md-2 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .grid-cols-md-3 {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    /* Navigation height adjustment */
+    /* Restore header height on desktop */
     .nav-container {
-        height: 5rem;
+      height: 5rem;
+    }
+    
+    :root {
+      --header-height: 5rem; /* Reset the header height variable */
+    }
+    
+    /* Adjust container padding for desktop */
+    .container {
+      padding-left: var(--spacing-xl);
+      padding-right: var(--spacing-xl);
+    }
+    
+    /* Hide mobile menu toggle on desktop */
+    .mobile-menu-toggle {
+      display: none;
+    }
+    
+    /* Show navigation groups on desktop */
+    .nav-group-left, .nav-group-right {
+      display: flex;
+    }
+    
+    /* Adjust logo size for desktop */
+    .logo-container {
+      height: calc(var(--header-height) + 1.5rem);
     }
     
     .logo-container img {
-        width: 5rem;
-        height: 5rem;
+      width: 6rem;
+      height: 6rem;
     }
     
-    .main-content {
-        padding-top: 5rem;
-    }
-}
-
-
-
-/* ===== SPECIFIC RESPONSIVE FIXES ===== */
-
-/* Fix for portrait mode triangle sections */
-@media (orientation: portrait) {
-    .triangle-section {
-        height: 80px;
+    /* Reposition language switcher for desktop */
+    .language-switcher {
+      top: 2.5rem;
+      right: 2rem;
+      bottom: auto;
     }
     
-    .triangle-section svg {
-        height: 80px;
-    }
-}
-
-/* Fix for too-large text on narrow but tall phones */
-@media (max-height: 700px) and (max-width: 400px) {
+    /* Adjust hero section for desktop */
     .hero-title {
-        font-size: 1.5rem;
+      font-size: 5rem;
     }
     
     .hero-subtitle {
-        font-size: 1rem;
+      font-size: 1.5rem;
     }
     
-    .projects-title {
+    .contact-button {
+      width: 12rem;
+      height: 4rem;
+    }
+    
+    .contact-button span {
+      font-size: 1.25rem;
+    }
+    
+    /* Project cards for desktop */
+    .project-card-grid {
+      grid-template-columns: 1fr 3fr;
+      gap: var(--spacing-xl);
+    }
+    
+    /* Footer for desktop */
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xxl);
+    }
+    
+    .footer-separator {
+      display: block;
+    }
+    
+    .footer-about {
+      text-align: right;
+    }
+    
+    .contact-links {
+      grid-template-columns: 1fr;
+    }
+    
+    /* Form layout for desktop */
+    .form-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Spacers for desktop - will be dynamically set with JS */
+    .spacer-top {
+      height: var(--hero-height, 50vh);
+      min-height: 400px;
+    }
+    
+    .spacer-bottom {
+      height: var(--footer-height, 50vh);
+      min-height: 350px;
+    }
+    
+    /* Triangle sections for desktop */
+    .triangle-section {
+      height: 120px;
+    }
+  }
+  
+  /* ===== ORIENTATION SPECIFIC STYLES ===== */
+  /* Portrait mode warning */
+  @media (orientation: portrait) {
+    /* Show portrait warning on mobile */
+    @media (max-width: 767px) {
+      .portrait-warning {
+        display: flex;
+      }
+    }
+    
+    /* More extreme portrait adjustments */
+    @media (max-aspect-ratio: 2/3) and (max-width: 767px) {
+      .hero-title {
         font-size: 2rem;
+      }
+      
+      .projects-title {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .footer-copyright p {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  /* ===== UTILITY RESPONSIVE CLASSES ===== */
+  /* Hidden on mobile */
+  .hidden-mobile {
+    display: none;
+  }
+  
+  /* Hidden on desktop */
+  @media (min-width: 768px) {
+    .hidden-mobile {
+      display: initial;
     }
     
-    .section-title {
-        font-size: 1.25rem;
+    .hidden-desktop {
+      display: none;
     }
-}
-
-/* Fix for language switcher positioning on mobile */
-@media (max-width: 576px) {
-    .language-switcher {
-        position: fixed;
-        bottom: 1rem;
-        right: 1rem;
-        top: auto;
-        background-color: rgba(38, 39, 50, 0.7);
-        backdrop-filter: blur(4px);
-        padding: 0.5rem;
-        border-radius: 9999px;
-    }
-}
-
-/* Fix for collapsed admin menu on tablet sizes */
-@media (min-width: 768px) and (max-width: 991px) {
-    .admin-content .card {
-        padding: var(--spacing-md);
-    }
-    
-    .admin-content .table th,
-    .admin-content .table td {
-        padding: var(--spacing-xs) var(--spacing-sm);
-        font-size: 0.875rem;
-    }
-}
-
-/* Fix for footer positioning on homepage */
-@media (min-height: 800px) {
-    .footer-home {
-        bottom: 0;
-    }
-}
-
-@media (max-height: 799px) {
-    .footer-home {
-        position: relative;
-        margin-top: 3rem;
-    }
-    
-    .spacer {
-        height: 20vh;
-    }
-}
-
-/* Fix for SVG triangles in projects section */
-.triangle-section svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-/* Fix for modal scroll on small screens */
-@media (max-height: 500px) {
-    .modal {
-        max-height: 85vh;
-    }
-    
-    .modal-body {
-        max-height: 50vh;
-        overflow-y: auto;
-    }
-}
-
-/* Fix for admin dashboard cards on smaller screens */
-@media (max-width: 767px) {
-    .admin-content .grid {
-        gap: var(--spacing-md);
-    }
-    
-    .admin-content .card {
-        margin-bottom: var(--spacing-md);
-    }
-}
-
-/* Fix for contact form on mobile */
-@media (max-width: 576px) {
-    .contact-form .form-actions {
-        flex-direction: column;
-    }
-    
-    .contact-form .btn {
-        width: 100%;
-    }
-}
-
-.container {
-    max-width: var(--container-width);
-    padding-left: var(--spacing-xl);
-    padding-right: var(--spacing-xl);
-}
-
-/* Hero section for large screens */
-.hero-title {
-    font-size: 4rem;
-}
-
-.hero-subtitle {
-    font-size: 2rem;
-}
-
-/* Content width adjustments */
-.content-wrapper {
-    max-width: 64rem;
-}
-
-/* Footer adjustments */
-.footer-heading {
-    font-size: 1.75rem;
-}
-
-.contact-link {
-    height: 4.5rem;
-}
-
-.contact-link span {
-    font-size: 1.25rem;
-}
+  }

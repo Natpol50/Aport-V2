@@ -12,70 +12,228 @@
     <link rel="apple-touch-icon" href="/assets/img/AshaLogo.png">
     
     {# Google Fonts #}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="/assets/css/styles.css">
-
+    {# Main CSS (imports all other CSS files) #}
+    <link rel="stylesheet" href="/assets/css/main.css">
     
     {# Additional stylesheets #}
     {% block stylesheets %}{% endblock %}
 </head>
 
 <body>
-    {# Portrait mode warning #}
-    <div id="portraitWarning" class="portrait-warning">
-        <div class="portrait-warning-container">
-            <h2 class="portrait-warning-title">⚠️ {{ translations.translate('warning.title') }}</h2>
-            <p class="portrait-warning-message">{{ translations.translate('warning.portrait_mode') }}</p>
-            <button id="closePortraitWarning" class="portrait-warning-button">
-                {{ translations.translate('warning.got_it') }}
-            </button>
+    {# Page wrapper for the fixed and scrollable structure #}
+    <div class="page-structure">
+        {# Portrait mode warning (only shows in portrait mode on mobile) #}
+        <div id="portraitWarning" class="portrait-warning">
+            <div class="portrait-warning-container">
+                <h2 class="portrait-warning-title">⚠️ {{ translations.translate('warning.title') }}</h2>
+                <p class="portrait-warning-message">{{ translations.translate('warning.portrait_mode') }}</p>
+                <button id="closePortraitWarning" class="portrait-warning-button">
+                    {{ translations.translate('warning.got_it') }}
+                </button>
+            </div>
+        </div>
+
+        {# Navigation (fixed at top) #}
+        <header class="main-header fixed-layer">
+            <div class="nav-container">
+                <div class="container nav-content">
+                    {# Left side navigation links #}
+                    <div class="nav-group-left">
+                        <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
+                            {{ translations.translate('nav.projects') }}
+                        </a>
+                        <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                            {{ translations.translate('nav.contact') }}
+                        </a>
+                    </div>
+                    
+                    {# Right side navigation links and controls #}
+                    <div class="nav-group-right">
+                        {% if request.isAuthenticated() %}
+                            <a href="/admin" class="nav-link interactive {% if current_path starts with '/admin' %}active{% endif %}">
+                                {{ translations.translate('nav.admin') }}
+                            </a>
+                            <a href="/logout" class="nav-link interactive">
+                                {{ translations.translate('nav.logout') }}
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    {# Mobile menu toggle (only visible on mobile) #}
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-label="{{ translations.translate('admin.open_menu') }}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    {# Centered logo (positioned above everything) #}
+                    <div class="logo-container">
+                        <img src="/assets/img/AshaLogo.png" alt="Logo Asha">
+                    </div>
+                </div>
+                
+                {# Mobile menu (hidden by default) #}
+                {% if request.isAuthenticated() %}
+                <div id="mobile-menu" class="mobile-menu hidden">
+                    <a href="/admin" class="{% if current_path == '/admin' %}active{% endif %}">
+                        {{ translations.translate('admin.dashboard') }}
+                    </a>
+                    <a href="/admin/projects" class="{% if current_path starts with '/admin/projects' or current_path starts with '/admin/project/' %}active{% endif %}">
+                        {{ translations.translate('admin.projects') }}
+                    </a>
+                    <a href="/admin/profile" class="{% if current_path == '/admin/profile' %}active{% endif %}">
+                        {{ translations.translate('admin.profile') }}
+                    </a>
+                    <div class="divider"></div>
+                    <div class="user-info">
+                        {{ request.getUserFullName() }}
+                    </div>
+                    <a href="/">
+                        {{ translations.translate('admin.view_site') }}
+                    </a>
+                    <a href="/logout" class="danger">
+                        {{ translations.translate('admin.logout') }}
+                    </a>
+                </div>
+                {% endif %}
+                
+                {# Language switcher #}
+                <div class="language-switcher interactive">
+                    <a href="/language/switch/fr" class="lang-link {% if language != 'fr' %}inactive{% endif %}" aria-label="Version française" lang="fr">
+                        <img src="/assets/img/flag-fr.png" alt="Français" class="lang-icon" width="24" height="16">
+                    </a>
+                    <span class="separator" aria-hidden="true">/</span>
+                    <a href="/language/switch/en" class="lang-link {% if language != 'en' %}inactive{% endif %}" aria-label="English version" lang="en">
+                        <img src="/assets/img/flag-gb.png" alt="English" class="lang-icon" width="24" height="16">
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        {# Flash messages container #}
+        <div class="container">
+            {% if error is defined and error is not empty %}
+                {% for message in error %}
+                    <div class="flash-message flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.getFlashMessages('error') is not empty %}
+                {% for message in request.getFlashMessages('error') %}
+                    <div class="flash-message flash-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if success is defined and success is not empty %}
+                {% for message in success %}
+                    <div class="flash-message flash-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if request.getFlashMessages('success') is not empty %}
+                {% for message in request.getFlashMessages('success') %}
+                    <div class="flash-message flash-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        {# Fixed hero section at top #}
+        <div class="hero-static">
+            {% block hero %}
+                {# Default hero content - can be overridden in child templates #}
+                <div class="hero-section">
+                    <div class="hero-content interactive">
+                        <h1 class="hero-title">Polette Nathan</h1>
+                        <p class="hero-subtitle">{{ translations.translate('home.subtitle') }}</p>
+                        <button id="contact-button" class="interactive contact-button" onclick="window.location.href='{{ language == 'fr' ? '/contact' : '/contact-en' }}'">
+                            <span>{{ translations.translate('home.contact_button') }}</span>
+                        </button>
+                    </div>
+                    
+                    {# Scroll indicator #}
+                    <div class="scroll-indicator interactive">⇣</div>
+                </div>
+            {% endblock %}
+        </div>
+
+        {# Scrollable content in the middle #}
+        <div class="scrollable-content">
+            <div class="scroll-wrapper">
+                {# Main content #}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        {# Fixed footer at bottom #}
+        <div class="footer-static">
+            {% block footer %}
+                {# Default footer content - can be overridden in child templates #}
+                <div class="main-footer {% if is_home_page is defined and is_home_page %}footer-home{% endif %}">
+                    <div class="container">
+                        {% if is_home_page is defined and is_home_page %}
+                            <div class="footer-grid footer-content">
+                                {# About Section #}
+                                <div class="footer-about">
+                                    <h2 class="footer-heading">
+                                        {{ translations.translate('footer.about_title') }}
+                                    </h2>
+                                    <p>
+                                        {{ personalInfo.about_text|raw }}
+                                    </p>
+                                </div>
+
+                                {# Vertical Separator #}
+                                <div class="footer-separator"></div>
+
+                                {# Contact Links #}
+                                <div id="contact-links" class="interactive">
+                                    <h2 class="footer-heading">
+                                        {{ translations.translate('footer.contact_title') }}
+                                    </h2>
+                                    <div class="contact-links">
+                                        <a href="mailto:{{ personalInfo.email }}" target="_blank" class="interactive contact-link">
+                                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                                            <span>Mail Pro</span>
+                                        </a>
+                                        <a href="mailto:nathan.polette@viacesi.fr" target="_blank" class="interactive contact-link">
+                                            <img src="/assets/img/mail.png" alt="" aria-hidden="true">
+                                            <span>Mail Scolaire</span>
+                                        </a>
+                                        <a href="{{ personalInfo.github_url }}" target="_blank" class="interactive contact-link">
+                                            <img src="/assets/img/github.png" alt="" aria-hidden="true">
+                                            <span>Github</span>
+                                        </a>
+                                        <a href="{{ personalInfo.linkedin_url }}" target="_blank" class="interactive contact-link">
+                                            <img src="/assets/img/linkedin.png" alt="" aria-hidden="true">
+                                            <span>LinkedIn</span>
+                                        </a>
+                                        {% if personalInfo.discord_url %}
+                                            <a href="{{ personalInfo.discord_url }}" target="_blank" class="interactive contact-link">
+                                                <img src="/assets/img/discord.png" alt="" aria-hidden="true">
+                                                <span>Discord</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="footer-copyright interactive">
+                            <p>
+                                © {{ current_year }} Asha Geyon. {{ translations.translate('footer.rights_reserved') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
         </div>
     </div>
 
-    {# Navigation #}
-    {% include 'components/navigation.html.twig' %}
-
-    {# Flash messages #}
-    <div class="container">
-        {% if error is defined and error is not empty %}
-            {% for message in error %}
-                <div class="flash-message flash-error">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        {% if request.getFlashMessages('error') is not empty %}
-            {% for message in request.getFlashMessages('error') %}
-                <div class="flash-message flash-error">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        {% if success is defined and success is not empty %}
-            {% for message in success %}
-                <div class="flash-message flash-success">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        {% if request.getFlashMessages('success') is not empty %}
-            {% for message in request.getFlashMessages('success') %}
-                <div class="flash-message flash-success">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    </div>
-
-    {# Main content #}
-    <main class="main-content">
-        {% block content %}{% endblock %}
-    </main>
-
-    {# Footer #}
-    {% include 'components/footer.html.twig' %}
-
     {# Core JavaScript Files #}
+    <script src="/assets/js/layout-effects.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/navigation-enhancements.js"></script>
-    <script src="/assets/js/ui.js"></script>
-    <script src="/assets/js/responsive.js"></script>
     
     {# Additional scripts #}
     {% block javascripts %}{% endblock %}

@@ -1,20 +1,24 @@
 /**
  * main.js - Core JavaScript functionality
  * 
- * This file contains the main JavaScript functionality for the website.
- * It handles initialization, event binding, and core features.
+ * This file handles:
+ * - Mobile menu interactions
+ * - Portrait warning
+ * - Flash messages
+ * - Form validation
+ * - Language switcher
+ * - General UI interactions
  */
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components
     initPortraitWarning();
-    initSmoothScrolling();
-    initParallaxEffects();
     initMobileMenu();
-    initLanguageSwitcher();
-    initContactForm();
     initFlashMessages();
+    initFormValidation();
+    initLanguageSwitcher();
+    initSmoothScrolling();
     
     // Log initialization complete
     console.log('Website initialization complete');
@@ -64,7 +68,7 @@ function initPortraitWarning() {
         const isPortraitNow = window.innerHeight > window.innerWidth;
         
         // If switching to portrait and haven't seen warning
-        if (isPortraitNow && !hasSeenWarning) {
+        if (isPortraitNow && !localStorage.getItem('hasSeenPortraitWarning')) {
             warningModal.style.display = 'flex';
             setTimeout(() => {
                 warningModal.style.opacity = '1';
@@ -78,102 +82,6 @@ function initPortraitWarning() {
             }, 300);
         }
     }, 250));
-}
-
-/**
- * Initialize smooth scrolling for anchor links
- */
-function initSmoothScrolling() {
-    // Get all links that hash to an element ID
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    
-    anchorLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Get the target element
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            // Only proceed if target exists
-            if (targetElement) {
-                e.preventDefault();
-                
-                // Scroll smoothly to the target
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                // Update URL without reloading page
-                history.pushState(null, null, targetId);
-            }
-        });
-    });
-}
-
-/**
- * Initialize parallax effects for scrolling
- */
-function initParallaxEffects() {
-    // Elements that should fade in/out based on scroll position
-    const contactButton = document.getElementById('contact-button');
-    const contactLinks = document.getElementById('contact-links');
-    const contactElements = document.querySelectorAll('.contact-link');
-    
-    // Throttle scroll event for better performance
-    let ticking = false;
-    
-    function updateVisibility() {
-        // Get viewport dimensions and scroll position
-        const viewportHeight = window.innerHeight;
-        const scrollPosition = window.scrollY;
-        const documentHeight = document.documentElement.scrollHeight;
-        
-        // Calculate visibility thresholds
-        const buttonThreshold = viewportHeight * 0.3;
-        const linksThreshold = documentHeight - viewportHeight * 1.3;
-        
-        // Determine element visibility
-        const showButton = scrollPosition < buttonThreshold;
-        const showLinks = scrollPosition > linksThreshold;
-        
-        // Helper function to update element visibility
-        function updateElement(element, show) {
-            if (!element) return;
-            
-            element.style.opacity = show ? '1' : '0';
-            element.style.pointerEvents = show ? 'auto' : 'none';
-        }
-        
-        // Update visibility states
-        updateElement(contactButton, showButton);
-        updateElement(contactLinks, showLinks);
-        
-        // Update individual contact links with staggered delay
-        contactElements.forEach((link, index) => {
-            // Set a small delay for each link to create a staggered effect
-            setTimeout(() => {
-                updateElement(link, showLinks);
-            }, index * 50);
-        });
-        
-        // Reset ticking flag
-        ticking = false;
-    }
-    
-    // Handle scroll events with requestAnimationFrame for performance
-    function onScroll() {
-        if (!ticking) {
-            requestAnimationFrame(updateVisibility);
-            ticking = true;
-        }
-    }
-    
-    // Set up event listeners
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', debounce(updateVisibility, 250), { passive: true });
-    
-    // Initial visibility update
-    updateVisibility();
 }
 
 /**
@@ -204,102 +112,6 @@ function initMobileMenu() {
             mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
         }
     });
-}
-
-/**
- * Initialize language switcher behavior
- */
-function initLanguageSwitcher() {
-    const languageLinks = document.querySelectorAll('.language-switcher a');
-    
-    languageLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Don't switch if already on that language
-            if (!this.classList.contains('inactive')) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Store current scroll position
-            localStorage.setItem('scrollPosition', window.scrollY);
-        });
-    });
-    
-    // Restore scroll position if available
-    const savedScrollPosition = localStorage.getItem('scrollPosition');
-    if (savedScrollPosition) {
-        window.scrollTo(0, parseInt(savedScrollPosition));
-        localStorage.removeItem('scrollPosition');
-    }
-}
-
-/**
- * Initialize contact form validation and submission
- */
-function initContactForm() {
-    const contactForm = document.getElementById('contact-form');
-    
-    if (!contactForm) return;
-    
-    contactForm.addEventListener('submit', function(e) {
-        let isValid = true;
-        
-        // Get form fields
-        const emailField = document.getElementById('email');
-        const subjectField = document.getElementById('subject');
-        const messageField = document.getElementById('message');
-        
-        // Clear previous error messages
-        document.querySelectorAll('.form-error').forEach(error => error.remove());
-        document.querySelectorAll('.form-control.error').forEach(field => {
-            field.classList.remove('error');
-        });
-        
-        // Validate required fields
-        if (subjectField && !subjectField.value.trim()) {
-            isValid = false;
-            markFieldAsInvalid(subjectField, 'Subject is required');
-        }
-        
-        if (messageField && !messageField.value.trim()) {
-            isValid = false;
-            markFieldAsInvalid(messageField, 'Message is required');
-        }
-        
-        // Validate email format if provided
-        if (emailField && emailField.value.trim() && !isValidEmail(emailField.value)) {
-            isValid = false;
-            markFieldAsInvalid(emailField, 'Please enter a valid email address');
-        }
-        
-        // Prevent form submission if validation fails
-        if (!isValid) {
-            e.preventDefault();
-            
-            // Focus on the first invalid field
-            const firstInvalid = document.querySelector('.form-control.error');
-            if (firstInvalid) {
-                firstInvalid.focus();
-            }
-        }
-    });
-    
-    // Helper function to mark field as invalid
-    function markFieldAsInvalid(field, errorMessage) {
-        field.classList.add('error');
-        
-        const errorElement = document.createElement('div');
-        errorElement.className = 'form-error';
-        errorElement.textContent = errorMessage;
-        
-        field.parentNode.appendChild(errorElement);
-    }
-    
-    // Helper function to validate email format
-    function isValidEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
 }
 
 /**
@@ -339,11 +151,141 @@ function initFlashMessages() {
 }
 
 /**
+ * Initialize form validation
+ */
+function initFormValidation() {
+    const forms = document.querySelectorAll('form[data-validate="true"]');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+            
+            // Get all required fields in the form
+            const requiredFields = form.querySelectorAll('[required]');
+            
+            // Check each required field
+            requiredFields.forEach(field => {
+                // Remove existing error messages
+                const existingError = field.parentNode.querySelector('.form-error');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                // Reset field styling
+                field.classList.remove('error');
+                
+                // Validate the field
+                if (!field.value.trim()) {
+                    isValid = false;
+                    
+                    // Add error styling
+                    field.classList.add('error');
+                    
+                    // Add error message
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'form-error';
+                    errorMessage.textContent = field.dataset.errorMessage || 'This field is required';
+                    field.parentNode.appendChild(errorMessage);
+                }
+                
+                // Additional validation for email fields
+                if (field.type === 'email' && field.value.trim() && !validateEmail(field.value)) {
+                    isValid = false;
+                    
+                    // Add error styling
+                    field.classList.add('error');
+                    
+                    // Add error message
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'form-error';
+                    errorMessage.textContent = field.dataset.emailErrorMessage || 'Please enter a valid email address';
+                    field.parentNode.appendChild(errorMessage);
+                }
+            });
+            
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+                
+                // Scroll to the first error
+                const firstError = form.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+            }
+        });
+    });
+    
+    // Helper function to validate email
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+}
+
+/**
+ * Initialize language switcher behavior
+ */
+function initLanguageSwitcher() {
+    const languageLinks = document.querySelectorAll('.language-switcher a');
+    
+    languageLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Don't switch if already on that language
+            if (!this.classList.contains('inactive')) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Store current scroll position
+            localStorage.setItem('scrollPosition', window.scrollY);
+        });
+    });
+    
+    // Restore scroll position if available
+    const savedScrollPosition = localStorage.getItem('scrollPosition');
+    if (savedScrollPosition) {
+        window.scrollTo(0, parseInt(savedScrollPosition));
+        localStorage.removeItem('scrollPosition');
+    }
+}
+
+/**
+ * Initialize smooth scrolling for anchor links
+ */
+function initSmoothScrolling() {
+    // Get all links that hash to an element ID
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Get the target element
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            // Only proceed if target exists
+            if (targetElement) {
+                e.preventDefault();
+                
+                // Scroll smoothly to the target
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update URL without reloading page
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+}
+
+/**
  * Debounce function to limit how often a function is called
- * 
- * @param {Function} func - The function to debounce
- * @param {number} wait - The debounce wait time in milliseconds
- * @return {Function} - The debounced function
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Wait time in milliseconds
+ * @returns {Function} - Debounced function
  */
 function debounce(func, wait) {
     let timeout;
@@ -351,7 +293,7 @@ function debounce(func, wait) {
         const context = this;
         const args = arguments;
         clearTimeout(timeout);
-        timeout = setTimeout(function() {
+        timeout = setTimeout(() => {
             func.apply(context, args);
         }, wait);
     };
