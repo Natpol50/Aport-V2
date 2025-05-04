@@ -283,3 +283,217 @@
     padding: 1rem;
     height: 100%;
   }
+
+
+  .nav-group-left, .nav-group-right {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+    z-index: var(--z-base);
+  }
+  
+  /* Space for centered logo */
+  .nav-group-left {
+    margin-right: 0rem; /* Create space for the logo */
+  }
+  
+  .nav-group-right {
+    margin-left: 0rem; /* Create space for the logo */
+  }
+
+
+
+/* ===== NAVIGATION LAYOUT ===== */
+/* Split navigation into left and right groups with reduced spacing */
+.nav-group-left, .nav-group-right {
+    display: flex;
+    gap: 2rem; /* Reduced from 3rem for tighter overall layout */
+    align-items: center;
+    position: relative;
+    z-index: var(--z-base);
+  }
+  
+  /* Reduced space for centered logo */
+  .nav-group-left {
+    margin-right: 3.5rem; /* Reduced from 8rem to create less space */
+  }
+  
+  .nav-group-right {
+    margin-left: 3.5rem; /* Reduced from 8rem to create less space */
+  }
+  
+  /* ===== CENTERED LOGO WITH OVERFLOW ===== */
+  /* Adjusted logo container for better proportional sizing */
+  .logo-container {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    z-index: var(--z-above);
+    height: calc(var(--header-height) + 1.25rem); /* Slightly reduced overflow */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+    pointer-events: none;
+  }
+  
+  /* Slightly reduced logo size for better proportion */
+  .logo-container img {
+    width: 5rem; /* Reduced from 6rem */
+    height: 5rem; /* Reduced from 6rem */
+    object-fit: contain;
+    pointer-events: all;
+  }
+  
+  /* ===== NAVIGATION LINKS ===== */
+  /* Adjusted link styling for better spacing */
+  .nav-link {
+    font-size: 1.2rem; /* Slightly reduced from 1.25rem */
+    font-weight: var(--font-weight-bold);
+    padding: 0.5rem 0.75rem; /* Added horizontal padding for better clickable area */
+    position: relative;
+    transition: color var(--transition-medium), transform var(--transition-fast);
+  }
+  
+  /* Responsive adjustments for mobile */
+  @media (max-width: 768px) {
+    .nav-group-left, .nav-group-right {
+      display: none; /* Hide on mobile as before */
+    }
+    
+    .logo-container {
+      height: calc(var(--header-height) + 0.75rem);
+    }
+    
+    .logo-container img {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+
+
+
+  .nav-container {
+    height: var(--header-height);
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.nav-content {
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Center the nav content */
+    align-items: center;
+    position: relative;
+    padding: 0 1rem;
+}
+
+/* Logo styling */
+.logo-container {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    z-index: 10;
+    height: calc(var(--header-height) + 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+    width: 5rem; /* Fixed width for logo space */
+}
+
+.logo-container img {
+    width: 5rem;
+    height: 5rem;
+    object-fit: contain;
+}
+
+/* Centered navigation structure */
+.centered-nav {
+    width: 100%;
+    max-width: 800px; /* Limit width for better spacing control */
+}
+
+.nav-items {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-side {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Space for logo in the middle */
+.nav-logo-space {
+    width: 5rem;
+}
+
+/* Navigation links */
+.nav-link {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0.5rem 0.75rem;
+    position: relative;
+    transition: color var(--transition-medium), transform var(--transition-fast);
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: var(--color-primary);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .centered-nav {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        right: 1rem;
+    }
+    
+    .logo-container {
+        height: calc(var(--header-height) + 0.5rem);
+    }
+    
+    .logo-container img {
+        width: 4rem;
+        height: 4rem;
+    }
+}
+
+.nav-container {
+    height: var(--header-height);
+    background-color: rgba(62, 62, 83, 0.85); /* Use the correct color variable */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: var(--z-base);
+}

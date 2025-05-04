@@ -66,14 +66,15 @@
                 {% include 'components/footer.html.twig' %}
             {% endblock %}
         </div>
-        
-        <!-- Language switcher (positioned absolutely) -->
-        {% include 'components/language-switcher.html.twig' %}
-        
-        <!-- Optional: portrait mode warning for mobile -->
-        {% include 'components/portrait-warning.html.twig' %}
     </div>
     
+
+    <!-- Language switcher (positioned absolutely) -->
+    {% include 'components/language-switcher.html.twig' %}  
+
+    <!-- Optional: portrait mode warning for mobile -->
+    {% include 'components/portrait-warning.html.twig' %}
+
     <!-- JavaScript - Load at the end for performance -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/responsive.js"></script>

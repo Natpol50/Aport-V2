@@ -1,5 +1,4 @@
-
-{# templates/components/navigation.html.twig #}
+{# templates/components/navigation.html.twig - Balanced Navigation #}
 
 <nav class="main-header">
     <div class="nav-container" aria-label="{{ translations.translate('nav.aria_label') }}">
@@ -7,22 +6,36 @@
         <div class="container nav-content">
             {# Left side navigation links #}
             <div class="nav-group-left">
-                <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
-                    {{ translations.translate('nav.projects') }}
-                </a>
-                <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
-                    {{ translations.translate('nav.contact') }}
-                </a>
+                {% if request.isAuthenticated() %}
+                    {# If authenticated, both links go on the left #}
+                    <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
+                        {{ translations.translate('nav.projects') }}
+                    </a>
+                    <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                        {{ translations.translate('nav.contact') }}
+                    </a>
+                {% else %}
+                    {# If not authenticated, only Projects link goes on the left #}
+                    <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
+                        {{ translations.translate('nav.projects') }}
+                    </a>
+                {% endif %}
             </div>
             
             {# Right side navigation links and controls #}
             <div class="nav-group-right">
                 {% if request.isAuthenticated() %}
+                    {# If authenticated, admin and logout links go on the right #}
                     <a href="/admin" class="nav-link interactive {% if current_path starts with '/admin' %}active{% endif %}">
                         {{ translations.translate('nav.admin') }}
                     </a>
                     <a href="/logout" class="nav-link interactive">
                         {{ translations.translate('nav.logout') }}
+                    </a>
+                {% else %}
+                    {# If not authenticated, only Contact link goes on the right #}
+                    <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                        {{ translations.translate('nav.contact') }}
                     </a>
                 {% endif %}
             </div>
