@@ -1,0 +1,210 @@
+/* ===== HERO SECTION POSITIONING ===== */
+.hero-section {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    position: fixed; /* Change from static to fixed */
+    top: 0; /* Stick to the top */
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: calc(var(--header-height) + 6rem); /* Header height + 6rem as requested */
+    padding-bottom: 3rem;
+    z-index: var(--z-base); /* Keep below content */
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
+  }
+  
+  /* Remove any potentially conflicting absolute positioning in pseudo-elements */
+  .hero-section::before, .hero-section::after {
+    position: fixed; /* Change from absolute to fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* ===== FOOTER POSITIONING ===== */
+  .site-footer {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    position: fixed; /* Change from relative to fixed */
+    bottom: 0; /* Stick to the bottom */
+    left: 0;
+    width: 100%;
+    height: auto; /* Auto height based on content */
+    z-index: var(--z-base); /* Keep below content */
+    padding: 3rem 1rem 1rem;
+  }
+  
+  /* ===== UPDATED PAGE STRUCTURE ===== */
+  /* These updates ensure the fixed hero and footer work properly with scrollable content */
+  .scrollable-content {
+    position: relative;
+    z-index: var(--z-above); /* Above hero and footer */
+    min-height: 100vh;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Update spacers to match hero and footer heights */
+  .spacer-top {
+    height: calc(var(--header-height) + 12rem); /* Account for hero section + padding */
+  }
+  
+  .spacer-bottom {
+    height: var(--footer-height); /* Match footer height */
+  }
+  
+  /* Ensure content is properly positioned between hero and footer */
+  .main-content {
+    position: relative;
+    z-index: var(--z-above);
+    background-color: var(--color-content-bg);
+    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 12rem); /* Ensure enough space */
+  }
+
+
+  /* ===== RESPONSIVE FOOTER STYLING ===== */
+
+/* Footer container with max-height constraint */
+.site-footer {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 50vh; /* Ensure footer never exceeds half the viewport height */
+    overflow-y: auto; /* Allow scrolling if content exceeds max-height */
+    z-index: var(--z-base);
+    padding: 2rem 1rem 1rem; /* Slightly reduced padding */
+    box-sizing: border-box;
+  }
+  
+  /* Improved grid for better responsiveness */
+  .footer-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr; /* Default to single column on mobile */
+  }
+  
+  /* Responsive grid adjustments */
+  @media (min-width: 640px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr; /* Two columns on tablets and larger */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr; /* Maintain two columns on desktop */
+      gap: 3rem; /* Larger gap on bigger screens */
+    }
+  }
+  
+  /* Contact cards grid with auto-fit for responsive rows */
+  .contact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-row-gap: 0;
+    grid-column-gap: 2rem; /* Space between cards */
+    width: 100%;
+  }
+  
+
+
+  /* Improved contact card sizing */
+  .contact-card {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    position: relative;
+    transition: all 0.3s ease;
+    border: none;
+    overflow: visible;
+    margin: 0.5rem 0; /* Reduced margin */
+    height: 60px; /* Smaller height */
+    box-shadow: var(--shadow-md);
+    min-width: 0; /* Allow cards to shrink if needed */
+  }
+  
+  /* About section responsiveness */
+  .footer-about {
+    max-width: 100%; /* Allow full width on small screens */
+  }
+  
+  @media (min-width: 640px) {
+    .footer-about {
+      max-width: 90%; /* Allow some breathing room on larger screens */
+    }
+  }
+  
+  /* Automatic text overflow handling for footer content */
+  .about-content {
+    line-height: 1.6;
+    max-height: 20vh; /* Limit height to ensure visibility of contact section */
+    overflow-y: auto; /* Allow scrolling for overflowing text */
+    margin-bottom: 1rem;
+  }
+  
+  /* Ensure smooth scrolling for footer content */
+  .about-content::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .about-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .about-content::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 3px;
+  }
+  
+  /* Improved footer heading spacing */
+  .footer-heading {
+    font-size: 1.5rem; /* Reduced size */
+    font-weight: 800;
+    margin-bottom: 1rem; /* Reduced margin */
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Compact copyright section */
+  .footer-copyright {
+    text-align: center;
+    padding-top: 1rem;
+    font-size: 0.75rem; /* Smaller text */
+    opacity: 0.7;
+  }
+  
+  /* Handle visibility of content based on screen size */
+  @media (max-height: 500px) {
+    /* For very small height viewports, hide some content to ensure essential elements are visible */
+    .about-content {
+      max-height: 15vh;
+    }
+    
+    .footer-copyright {
+      font-size: 0.7rem;
+      padding-top: 0.5rem;
+    }
+  }
+  
+  /* Ensure spacer matches actual footer height */
+  .spacer-bottom {
+    height: min(50vh, var(--footer-height)); /* Use either 50vh or measured height, whichever is smaller */
+  }
+
+  
+
+@media screen and (max-width: 768px) {
+    .contact-card {
+      top: 0px; /* Reduced gap between rows */;
+    }
+    .contact-card {
+      height: 40px; /* Make the card smaller */;
+    }
+}
