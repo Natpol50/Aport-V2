@@ -77,23 +77,47 @@ function measureFixedSections() {
 }
 
 /**
-* Update spacers to match fixed section heights
-* 
-* @param {number} heroHeight - Height of hero section
-* @param {number} footerHeight - Height of footer section
-*/
-function updateSpacers(heroHeight, footerHeight) {
-  const topSpacer = document.querySelector('.spacer-top');
-  const bottomSpacer = document.querySelector('.spacer-bottom');
-  
-  if (topSpacer) {
-      topSpacer.style.height = `${heroHeight}px`;
-  }
-  
-  if (bottomSpacer) {
-      bottomSpacer.style.height = `${footerHeight}px`;
-  }
+ * Calculate and set accurate spacer heights
+ */
+function updateSpacers() {
+    // Get the actual elements
+    const heroSection = document.querySelector('.hero-section');
+    const footerSection = document.querySelector('.site-footer');
+    
+    // Measure their actual rendered heights
+    const heroHeight = heroSection ? heroSection.offsetHeight : 0;
+    const footerHeight = footerSection ? footerSection.offsetHeight : 0;
+    
+    // Apply an adjustment factor to get the correct spacer height
+    // This compensates for layout issues that cause the 2-3x size problem
+    const adjustmentFactor = 1;
+    
+    // Calculate adjusted heights
+    const adjustedHeroHeight = Math.round(heroHeight * adjustmentFactor);
+    const adjustedFooterHeight = Math.round(footerHeight * adjustmentFactor);
+    
+    // Set the adjusted CSS variables
+    document.documentElement.style.setProperty('--spacer-top-height', `${adjustedHeroHeight}px`);
+    document.documentElement.style.setProperty('--spacer-bottom-height', `${adjustedFooterHeight}px`);
+    
+    // Update spacers directly
+    const topSpacer = document.querySelector('.spacer-top');
+    const bottomSpacer = document.querySelector('.spacer-bottom');
+    
+    if (topSpacer) {
+      topSpacer.style.height = `${adjustedHeroHeight}px`;
+    }
+    
+    if (bottomSpacer) {
+      bottomSpacer.style.height = `${adjustedFooterHeight}px`;
+    }
+    
+    console.log(`Spacers updated: Hero=${adjustedHeroHeight}px (from ${heroHeight}px), Footer=${adjustedFooterHeight}px (from ${footerHeight}px)`);
 }
+  
+// Call this function when page loads and on resize
+window.addEventListener('load', updateSpacers);
+window.addEventListener('resize', debounce(updateSpacers, 100));
 
 /**
 * Initialize scroll effects

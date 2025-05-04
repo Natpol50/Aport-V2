@@ -270,7 +270,7 @@ SQL;
     $projectCount = (int)$stmt->fetchColumn();
     
     if ($projectCount === 0) {
-        echo "No projects found. Creating sample project...\n";
+        echo "No projects found. Creating sample projects...\n";
         
         // Get language IDs
         $englishId = null;
@@ -285,45 +285,51 @@ SQL;
             }
         }
         
-        // Insert a sample project
-        $stmt = $pdo->prepare("INSERT INTO projects (type, status, start_date, end_date, github_url, website_url) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            'personal',
-            'current',
-            date('Y-m-d'),
-            null,
-            'https://github.com/username/portfolio',
-            'https://example.com'
-        ]);
-        
-        $projectId = $pdo->lastInsertId();
-        
-        // Insert translations
-        if ($englishId) {
-            $stmt = $pdo->prepare("INSERT INTO project_translations (project_id, language_id, title, subtitle, description, skills) VALUES (?, ?, ?, ?, ?, ?)");
+        // Insert 16 sample projects
+        for ($i = 1; $i <= 16; $i++) {
+            $status = ($i % 2 === 0) ? 'current' : 'past'; // Alternate between current and past
+            $startDate = date('Y-m-d', strtotime("-" . rand(1, 1000) . " days"));
+            $endDate = $status === 'past' ? date('Y-m-d', strtotime($startDate . " + " . rand(30, 365) . " days")) : null;
+            
+            $stmt = $pdo->prepare("INSERT INTO projects (type, status, start_date, end_date, github_url, website_url) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([
-                $projectId,
-                $englishId,
-                'Portfolio Website',
-                'Multilingual Portfolio with MVC Architecture',
-                'A personal portfolio website built with a custom MVC framework. Features include multilingual support, administrative panel, and responsive design.',
-                'PHP, MySQL, MVC, Twig, Tailwind CSS, JavaScript'
+                'personal',
+                $status,
+                $startDate,
+                $endDate,
+                'https://github.com/username/project' . $i,
+                'https://example.com/project' . $i
             ]);
+            
+            $projectId = $pdo->lastInsertId();
+            
+            // Insert translations
+            if ($englishId) {
+                $stmt = $pdo->prepare("INSERT INTO project_translations (project_id, language_id, title, subtitle, description, skills) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([
+                    $projectId,
+                    $englishId,
+                    "Project $i",
+                    "Subtitle for Project $i",
+                    "Description for Project $i in English. This is a sample project to demonstrate multilingual support.",
+                    "PHP, MySQL, JavaScript"
+                ]);
+            }
+            
+            if ($frenchId) {
+                $stmt = $pdo->prepare("INSERT INTO project_translations (project_id, language_id, title, subtitle, description, skills) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([
+                    $projectId,
+                    $frenchId,
+                    "Projet $i",
+                    "Sous-titre pour le Projet $i",
+                    "Description pour le Projet $i en français. Ceci est un projet exemple pour démontrer le support multilingue.",
+                    "PHP, MySQL, JavaScript"
+                ]);
+            }
         }
         
-        if ($frenchId) {
-            $stmt = $pdo->prepare("INSERT INTO project_translations (project_id, language_id, title, subtitle, description, skills) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([
-                $projectId,
-                $frenchId,
-                'Site Portfolio',
-                'Portfolio Multilingue avec Architecture MVC',
-                'Un site portfolio personnel construit avec un framework MVC personnalisé. Les fonctionnalités incluent le support multilingue, un panneau d\'administration et un design responsive.',
-                'PHP, MySQL, MVC, Twig, Tailwind CSS, JavaScript'
-            ]);
-        }
-        
-        echo "Sample project created successfully.\n";
+        echo "16 sample projects created successfully.\n";
     } else {
         echo "Projects already exist ($projectCount projects).\n";
     }

@@ -111,13 +111,11 @@ html {
 
 /* Spacers for mobile */
 .spacer-top {
-  height: var(--hero-height, 40vh);
-  min-height: 150px;
+  height: var(--spacer-top-height, auto);
 }
 
 .spacer-bottom {
-  height: var(--footer-height, 40vh);
-  min-height: 150px;
+  height: var(--spacer-bottom-height, auto);
 }
 
 /* Triangle sections for mobile */
@@ -223,13 +221,11 @@ html {
   
   /* Spacers for desktop - will be dynamically set with JS */
   .spacer-top {
-      height: var(--hero-height, 50vh);
-      min-height: 400px;
+    height: var(--spacer-top-height, auto);
   }
   
   .spacer-bottom {
-      height: var(--footer-height, 50vh);
-      min-height: 350px;
+    height: var(--spacer-bottom-height, auto);
   }
   
   /* Triangle sections for desktop */
@@ -238,15 +234,22 @@ html {
   }
 }
 
+
+
+@media (max-width: 767px) {
+    .portrait-warning {
+        display: flex;
+    }
+
+    .footer-about {
+      display: none;
+    }
+}
+
 /* ===== ORIENTATION SPECIFIC STYLES ===== */
 /* Portrait mode warning */
 @media (orientation: portrait) {
-  /* Show portrait warning on mobile */
-  @media (max-width: 767px) {
-      .portrait-warning {
-          display: flex;
-      }
-  }
+
   
   /* More extreme portrait adjustments */
   @media (max-aspect-ratio: 2/3) and (max-width: 767px) {
@@ -283,4 +286,6 @@ html {
   .hidden-desktop {
       display: none;
   }
+
+
 }

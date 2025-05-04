@@ -84,8 +84,12 @@
 .scrollable-content {
   position: relative;
   z-index: var(--z-above);
-  min-height: 100vh; /* Ensure it can scroll */
+  min-height: 100vh;
+  padding-top: 0; /* Remove any competing padding */
+  margin-top: 0; /* Remove any competing margin */
 }
+
+
 
 /* Spacers to create room for fixed sections */
 .spacer-top {
@@ -101,7 +105,7 @@
   position: relative;
   z-index: var(--z-above);
   background-color: var(--color-content-bg);
-  
+  margin-top: 0; /* Remove any competing margin */
   /* Create trapezoid shapes at top and bottom using clip-path */
   clip-path: polygon(
       0 var(--trapezoid-offset, 4rem), 
