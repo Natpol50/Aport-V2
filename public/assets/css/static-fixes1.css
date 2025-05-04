@@ -208,3 +208,78 @@
       height: 40px; /* Make the card smaller */;
     }
 }
+
+/* Updated contact button CSS */
+.contact-button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    position: relative;
+    transform: skewX(-15deg); /* Maintained skew */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    overflow: hidden; /* To contain the highlight */
+  }
+  
+  /* Skewed highlight on left edge */
+  .contact-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px; /* Adjusted position */
+    height: 100%;
+    width: 15px; /* Slightly wider */
+    background-color: rgba(0, 0, 0, 0.2);
+    transform: none; /* Remove the counter-skew */
+  }
+  
+  /* Text container to counter-skew the text */
+  .contact-button span {
+    display: inline-block;
+    transform: skewX(15deg); /* Counter-skew to make text straight */
+  }
+
+
+
+
+  /* Updated contact card CSS */
+.contact-card {
+    background-color: transparent; /* Make original background transparent */
+    color: var(--color-text);
+    position: relative;
+    transition: all 0.3s ease;
+    border: none;
+    overflow: visible;
+    margin: 1rem 0;
+    height: 80px;
+    box-shadow: none; /* Remove shadow from parent */
+  }
+  
+  /* Create the trapezoid shape with a skewed pseudo-element */
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-surface);
+    z-index: 0; /* Change from -1 to 0 */
+    transform: skewX(15deg);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: var(--shadow-md); /* Move shadow to pseudo-element */
+  }
+  
+  /* Card content needs higher z-index */
+  .card-content {
+    position: relative;
+    z-index: 100; /* Make sure this is higher than the ::before z-index */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    height: 100%;
+  }
