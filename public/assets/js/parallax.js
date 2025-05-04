@@ -39,7 +39,7 @@ function initParallaxEffects() {
       // Hero section parallax (move down slowly as user scrolls)
       if (heroContent) {
           // Parallax factor - smaller values create more subtle movement
-          const parallaxFactor = 0.4; 
+          const parallaxFactor = 0.2; 
           
           // Calculate translateY value based on scroll position
           const translateY = Math.min(scrollY * parallaxFactor, 200);
