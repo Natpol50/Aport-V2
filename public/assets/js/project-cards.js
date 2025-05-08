@@ -1,41 +1,62 @@
 /**
- * Project card interactions
+ * project-cards.js - Enhanced Project Card Interactions
  * 
- * This script handles the interactive elements of project cards including:
- * - Entrance animations as cards scroll into view
+ * This script controls all project card behavior including:
+ * - Immediate visibility without requiring scroll
+ * - Sequentially animated entrance for visual interest
  * - Hover effects with 3D-like transforms
- * - Skill tag highlighting
+ * - Optional filtering functionality
+ * 
+ * Mathematical principles applied:
+ * - Sequential timing functions for staggered animations
+ * - Proportional transform values for consistent hover effects
+ * - CSS transition timing coordination
  */
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize project card animations and interactions
     initProjectCards();
     
-    // Set up filtering functionality
+    // Set up filtering functionality if filter buttons exist
     initProjectFilters();
 });
 
+/**
+ * Initialize project card animations and interactions
+ * Ensures all cards are visible immediately without requiring scroll
+ * Uses a mathematical sequence for staggered appearance
+ */
 function initProjectCards() {
     // Get all project cards
     const projectCards = document.querySelectorAll('.project-card');
 
     // Force all cards to be immediately visible with no animations
-    projectCards.forEach((card) => {
+    projectCards.forEach((card, index) => {
         // Add visible class
         card.classList.add('visible');
         
         // Force immediate visibility with inline styles
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-        card.style.transition = 'none';
+        card.style.opacity = '0'; // Start invisible
+        card.style.transform = 'translateY(20px)'; // Start slightly below final position
         
-        // Re-enable transitions only for hover effects after a small delay
+        // Apply a sequential animation delay for staggered appearance
+        // This creates a mathematical progression of delays for visual interest
+        const delay = 100 + (index * 150); // Base delay + 150ms between each card
+        
+        // Trigger the appearance after a small delay
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; // Add transition
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, delay);
+        
+        // Re-enable only hover transitions after the card has appeared
         setTimeout(() => {
             card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
-        }, 100);
+        }, delay + 600); // Wait until after the card has fully appeared
     });
 
-    // Keep only the hover effects
+    // Add hover effects
     projectCards.forEach((card) => {
         card.addEventListener('mouseenter', function () {
             this.style.transform = `translateY(-5px) rotateY(1deg)`;
@@ -47,14 +68,21 @@ function initProjectCards() {
             this.style.boxShadow = '';
         });
     });
+    
+    // Log completion for debugging
+    console.log(`Initialized ${projectCards.length} project cards with sequential animation`);
 }
 
 /**
  * Initialize project filtering functionality
+ * Enables filtering by project type/category if filter buttons exist
  */
 function initProjectFilters() {
     const filterButtons = document.querySelectorAll('.project-filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
+    
+    // Exit if no filter buttons found
+    if (filterButtons.length === 0) return;
     
     // Set up filter buttons
     filterButtons.forEach(button => {
@@ -97,10 +125,14 @@ function initProjectFilters() {
 }
 
 /**
- * Highlight matching skills when hovering over skill tags
+ * Initialize skill tag highlighting
+ * Optional functionality to highlight matching skills across projects
  */
 function initSkillHighlighting() {
     const skillTags = document.querySelectorAll('.skill-tag');
+    
+    // Exit if no skill tags found
+    if (skillTags.length === 0) return;
     
     skillTags.forEach(tag => {
         tag.addEventListener('mouseenter', function() {

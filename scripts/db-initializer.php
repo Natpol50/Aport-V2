@@ -429,6 +429,10 @@ SQL;
                 'en' => 'Introduction',
                 'fr' => 'Introduction'
             ],
+            'home.since' => [
+                'en' => 'Since',
+                'fr' => 'Depuis'
+            ],
             'contact.title' => [
                 'en' => 'Contact',
                 'fr' => 'Contact'

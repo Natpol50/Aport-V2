@@ -132,7 +132,7 @@
   gap: 3rem;
 }
 
-.footer-heading {
+.footer-heading-about, .footer-heading-contacts {
   font-size: 1.75rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
@@ -141,7 +141,19 @@
 }
 
 /* Accent line under footer headings */
-.footer-heading::after {
+.footer-heading-about::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  right: 0;
+  width: 50%;
+  height: 3px;
+  background-color: var(--color-primary);
+  transform: skewX(-15deg);
+}
+
+/* Accent line under footer headings */
+.footer-heading-contacts::after {
   content: '';
   position: absolute;
   bottom: -0.5rem;

@@ -164,7 +164,7 @@
   }
   
   /* Improved footer heading spacing */
-  .footer-heading {
+  .footer-heading-about, .footer-heading-contacts {
     font-size: 1.5rem; /* Reduced size */
     font-weight: 800;
     margin-bottom: 1rem; /* Reduced margin */
@@ -528,3 +528,52 @@
     height: 2px;
     background-color: var(--color-primary, #658C79);
   }
+
+  /**
+ * project-cards-override.css - Force Project Card Visibility
+ *
+ * This stylesheet contains high-specificity rules to ensure project cards
+ * are visible immediately without requiring scroll
+ */
+
+/* Global override to ensure cards are always visible */
+.project-card,
+.project-card.fade-in,
+.projects-container .project-card,
+main .project-card,
+.content-section .project-card,
+.fade-in.project-card,
+.project-card.fade-in:not(.visible),
+body .project-card {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  animation: none !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Ensure immediate visibility for all project content */
+.project-card *,
+.project-card .project-info,
+.project-card .project-content,
+.project-card .project-title,
+.project-card .project-description,
+.project-card .project-skills,
+.project-card .project-links {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Preserve hover effects */
+.project-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Disable scroll-based animations for cards */
+html.no-scroll-animations-for-cards .project-card,
+.no-scroll-animations-for-cards .project-card,
+.main-content .project-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  animation: none !important;
+}
