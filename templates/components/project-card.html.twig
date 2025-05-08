@@ -22,7 +22,7 @@
             
             <p class="project-date">
                 {% if project.status == 'current' %}
-                    {{ translations.translate('project.since') }} {{ project.start_date|date('F Y') }}
+                    {{ translations.translate('home.since') }} {{ project.start_date|date('F Y') }}
                 {% else %}
                     {{ project.start_date|date('F Y') }}
                     {% if project.end_date %}

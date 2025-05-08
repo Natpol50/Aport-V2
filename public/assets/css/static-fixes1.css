@@ -577,3 +577,109 @@ html.no-scroll-animations-for-cards .project-card,
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
   animation: none !important;
 }
+
+
+/* ===== CONTACT BUTTON FIXES ===== */
+/* Make the contact button width flexible to accommodate longer French text */
+.contact-button {
+  display: inline-block;
+  min-width: 140px; /* Minimum width */
+  width: auto; /* Allow natural width based on content */
+  max-width: 200px; /* Maximum width */
+  padding: 0.75rem 1.5rem; /* Reduced horizontal padding */
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.125rem;
+  position: relative;
+  transform: skewX(-15deg);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  text-align: center; /* Ensure text is centered */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Ensure text is properly displayed with counter-skew */
+.contact-button span {
+  display: inline-block;
+  transform: skewX(15deg); /* Counter-skew to make text straight */
+  width: 100%; /* Ensure span takes full width of button */
+  text-align: center; /* Center the text */
+}
+
+/* Adjust highlight position to match button size */
+.contact-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  height: 100%;
+  width: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  transform: none; /* Remove any transform that might affect positioning */
+}
+
+/* ===== CONTACT CARD FIXES ===== */
+/* Improve text centering in contact cards */
+.card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start; /* Align content to start */
+  padding: 1rem;
+  height: 100%;
+  width: 100%; /* Ensure content takes full width */
+}
+
+/* Fixed width for the icon container to ensure consistent spacing */
+.card-content img {
+  width: 32px;
+  height: 32px;
+  margin-right: 1rem;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Make text properly centered vertically */
+.card-content span {
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-block; /* Allow proper vertical alignment */
+  vertical-align: middle;
+  line-height: 1.2; /* Improve line height for better text readability */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+  width: calc(100% - 42px); /* Account for icon width and margin */
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+  /* Adjust contact button size on mobile */
+  .contact-button {
+    min-width: 120px;
+    max-width: 180px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+  }
+  
+  /* Make contact cards more compact on mobile */
+  .contact-card {
+    height: 60px; /* Reduced height */
+  }
+  
+  .card-content {
+    padding: 0.5rem 1rem; /* Reduced padding */
+  }
+  
+  .card-content img {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.75rem;
+  }
+  
+  .card-content span {
+    font-size: 0.9rem;
+  }
+}

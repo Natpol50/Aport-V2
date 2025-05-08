@@ -34,47 +34,11 @@
             <div class="projects-container">
                 {% if currentProjects|length > 0 %}
                     {% for project in currentProjects %}
-                        <article class="project-card">
-                            <div class="project-card-grid">
-                                <div class="project-info">
-                                    <div class="project-type">{{ project.type|upper }}</div>
-                                    <h3 class="project-title">{{ project.title }}</h3>
-                                    <div class="project-status status-{{ project.status }}">
-                                        {{ translations.translate('admin.status_' ~ project.status) }}
-                                    </div>
-                                    
-                                    <p class="project-date">
-                                        {% if project.status == 'current' %}
-                                            {{ translations.translate('home.since') }} {{ project.start_date|date('M Y') }}
-                                        {% else %}
-                                            {{ project.start_date|date('M Y') }}
-                                            {% if project.end_date %}
-                                                - {{ project.end_date|date('M Y') }}
-                                            {% endif %}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                
-                                <div class="project-content">
-                                    <p class="project-description">{{ project.description|nl2br }}</p>
-                                    <p class="project-skills">{{ project.skills }}</p>
-                                    
-                                    <div class="project-links">
-                                        {% if project.github_url %}
-                                            <a href="{{ project.github_url }}" class="project-link" target="_blank" rel="noopener">
-                                                <span>GitHub</span>
-                                            </a>
-                                        {% endif %}
-                                        
-                                        {% if project.website_url %}
-                                            <a href="{{ project.website_url }}" class="project-link" target="_blank" rel="noopener">
-                                                <span>Website</span>
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                        {% include 'components/project-card.html.twig' with {
+                            'project': project,
+                            'language': language,
+                            'translations': translations
+                        } %}
                     {% endfor %}
                 {% else %}
                     <p class="no-projects">{{ translations.translate('home.no_current_projects') }}</p>
@@ -95,43 +59,11 @@
             <div class="projects-container">
                 {% if pastProjects|length > 0 %}
                     {% for project in pastProjects %}
-                        <article class="project-card">
-                            <div class="project-card-grid">
-                                <div class="project-info">
-                                    <div class="project-type">{{ project.type|upper }}</div>
-                                    <h3 class="project-title">{{ project.title }}</h3>
-                                    <div class="project-status status-{{ project.status }}">
-                                        {{ translations.translate('admin.status_' ~ project.status) }}
-                                    </div>
-                                    
-                                    <p class="project-date">
-                                        {{ project.start_date|date('M Y') }}
-                                        {% if project.end_date %}
-                                            - {{ project.end_date|date('M Y') }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                
-                                <div class="project-content">
-                                    <p class="project-description">{{ project.description|nl2br }}</p>
-                                    <p class="project-skills">{{ project.skills }}</p>
-                                    
-                                    <div class="project-links">
-                                        {% if project.github_url %}
-                                            <a href="{{ project.github_url }}" class="project-link" target="_blank" rel="noopener">
-                                                <span>GitHub</span>
-                                            </a>
-                                        {% endif %}
-                                        
-                                        {% if project.website_url %}
-                                            <a href="{{ project.website_url }}" class="project-link" target="_blank" rel="noopener">
-                                                <span>Website</span>
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                        {% include 'components/project-card.html.twig' with {
+                            'project': project,
+                            'language': language,
+                            'translations': translations
+                        } %}
                     {% endfor %}
                 {% else %}
                     <p class="no-projects">{{ translations.translate('home.no_past_projects') }}</p>
