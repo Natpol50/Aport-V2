@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const Z_INDEX_BASE = getComputedStyle(document.documentElement).getPropertyValue('--z-base') || '1';
     const Z_INDEX_ABOVE = getComputedStyle(document.documentElement).getPropertyValue('--z-above') || '10';
+    const Z_INDEX_HERO_TOP = '95'; // New z-index value for hero when at top
     
     updateElementVisibility();
     
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isAtBottom = distanceFromBottom <= atBottomThreshold;
         
         if (heroStatic) {
-            heroStatic.style.zIndex = isAtTop ? Z_INDEX_ABOVE : Z_INDEX_BASE;
+            heroStatic.style.zIndex = isAtTop ? Z_INDEX_HERO_TOP : Z_INDEX_BASE;
         }
         
         if (footerStatic) {
@@ -37,43 +38,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function throttle(func, limit) {
-        let lastCall = 0;
-        
-        return function(...args) {
-            const now = Date.now();
-            
-            if (now - lastCall >= limit) {
-                lastCall = now;
-                func.apply(this, args);
-            }
-        };
-    }
+    // Rest of your code...
 });
-
-/**
- * Fix contact button clickability
- */
-function fixContactButton() {
-    const contactButtons = document.querySelectorAll('.contact-button, [data-action="contact"]');
-    
-    contactButtons.forEach(button => {
-      if (button) {
-        // Ensure proper z-index and pointer-events
-        button.style.position = 'relative';
-        button.style.zIndex = '100';
-        button.style.pointerEvents = 'auto';
-        
-        // Add debug click handler to check if events are being received
-        button.addEventListener('click', function(e) {
-          console.log('Contact button clicked');
-          e.stopPropagation(); // Prevent event bubbling
-        });
-      }
-    });
-  }
-  
-  document.addEventListener('DOMContentLoaded', function() {
-    // ... other initializations
-    fixContactButton();
-  });
