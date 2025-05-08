@@ -131,10 +131,21 @@
 .triangle-section {
   position: relative;
   height: 120px;
-  width: 100%;
+  width: 140%; /* Wider than container for overflow */
   overflow: hidden;
   z-index: var(--z-above);
   background-color: transparent;
+}
+
+/* Top triangle overflows to the left */
+.triangle-section:first-of-type {
+  margin-left: -40%; /* Significant left overflow */
+}
+
+/* Bottom triangle adjustments */
+.triangle-section:last-of-type {
+  width: 100%; /* Reset to normal width */
+  margin-left: 0;
 }
 
 .triangle-section svg {

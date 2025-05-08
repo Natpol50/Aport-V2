@@ -108,13 +108,7 @@
   z-index: var(--z-above);
   background-color: var(--color-content-bg);
   margin-top: 0; /* Remove any competing margin */
-  /* Create trapezoid shapes at top and bottom using clip-path */
-  clip-path: polygon(
-      0 var(--trapezoid-offset, 4rem), 
-      100% 0, 
-      100% calc(100% - var(--trapezoid-offset, 4rem)), 
-      0 100%
-  );
+  /* Removed trapezoid clip-path for rectangular shape */
 }
 
 /* ===== CONTAINER ===== */

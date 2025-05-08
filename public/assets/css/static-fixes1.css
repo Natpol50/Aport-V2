@@ -633,7 +633,7 @@ html.no-scroll-animations-for-cards .project-card,
   cursor: pointer;
   transform: skewX(-15deg) translateY(-5px) !important; /* Keep skew when hovering */
   transition: transform 0.2s ease;
-  color: var(--color-primary-darker) !important; /* Darker color on hover */: 
+  color: var(--color-primary-darker) !important; /* Darker color on hover */
 }
 
 .contact-button.interactive {
@@ -1176,3 +1176,4 @@ html.no-scroll-animations-for-cards .project-card,
 .contact-button span {
   pointer-events: auto !important;
 }
+
