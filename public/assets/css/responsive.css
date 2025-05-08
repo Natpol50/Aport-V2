@@ -167,7 +167,7 @@ html {
   
   /* Reposition language switcher for desktop */
   .language-switcher {
-      top: 2.5rem;
+      top: 2rem;
       right: 2rem;
       bottom: auto;
   }
