@@ -260,3 +260,37 @@
       max-height: 100vh;
   }
 }
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu-toggle {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  z-index: var(--z-above);
+}
+
+.mobile-menu {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-surface);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  z-index: var(--z-above);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu.hidden {
+  display: none;
+}
+
+.mobile-menu.visible {
+  max-height: 100vh;
+}

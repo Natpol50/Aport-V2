@@ -37,13 +37,13 @@
             <div class="project-links">
                 {% if project.github_url %}
                     <a href="{{ project.github_url }}" target="_blank" class="project-link" rel="noopener">
-                        <span class="hidden-mobile">GitHub: </span>{{ project.github_url|replace({'https://': '', 'http://': ''}) }}
+                        {{ project.github_url|replace({'https://': '', 'http://': ''}) }}
                     </a>
                 {% endif %}
                 
                 {% if project.website_url %}
                     <a href="{{ project.website_url }}" target="_blank" class="project-link" rel="noopener">
-                        <span class="hidden-mobile">Website: </span>{{ project.website_url|replace({'https://': '', 'http://': ''}) }}
+                        {{ project.website_url|replace({'https://': '', 'http://': ''}) }}
                     </a>
                 {% endif %}
             </div>

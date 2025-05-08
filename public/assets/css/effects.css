@@ -169,12 +169,12 @@
   bottom: 0;
   background-color: inherit;
   z-index: -1;
-  transform: skewX(-15deg);
+  transform: skewX(-20deg);
   transition: transform var(--transition-medium);
 }
 
 .trapezoid:hover::before {
-  transform: skewX(-20deg);
+  transform: skewX(10deg);
 }
 
 /* Trapezoid text - counters the parent skew to keep text straight */

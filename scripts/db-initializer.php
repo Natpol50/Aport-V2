@@ -717,6 +717,14 @@ SQL;
                 'en' => 'Pending',
                 'fr' => 'En attente'
             ],
+            'portrait_warning.message' => [
+                'en' => 'Please don\'t visit that website suing a mobile device, it isn\'t made for it at all, bugs may occurs.',
+                'fr' => 'Désolé mais ce site n\'est pas fait du tout pour être visité avec un appareil mobile, des bugs peuvent arriver, je vous conseille d\'utiliser un ordinateur.'
+            ],
+            'portrait_warning.dismiss' => [
+                'en' => 'Don\'t care',
+                'fr' => 'M\'en fous'
+            ],
         ];
         
         $insertedCount = 0;

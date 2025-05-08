@@ -94,10 +94,12 @@
 /* Spacers to create room for fixed sections */
 .spacer-top {
   height: var(--hero-height);
+  position: relative;
 }
 
 .spacer-bottom {
   height: var(--footer-height);
+  position: relative;
 }
 
 /* Main content area */

@@ -210,7 +210,7 @@
 }
 
 .contact-card:hover::before {
-  transform: skewX(-20deg);
+  transform: skewX(-35deg);
   background-color: var(--color-surface-hover);
 }
 

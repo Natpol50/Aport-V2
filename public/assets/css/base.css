@@ -67,6 +67,8 @@ p, h1, h2, h3, h4, h5, h6 {
   --color-primary-lighter: #A5BEB2;    /* +30% lightness */
   --color-primary-dark: #4D6A5B;       /* -15% lightness */
   --color-primary-darker: #34483E;     /* -30% lightness */
+  --color-cesi: #fee131;             /* CESI yellow */
+  --color-koesio: #874cb7;          /* Koesio purple */
   
   /* Dark background colors - Desaturated blue-grey */
   --color-background: #262732;         /* Base dark background */

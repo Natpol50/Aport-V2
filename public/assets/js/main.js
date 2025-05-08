@@ -39,6 +39,9 @@ function initLayout() {
   // Initialize scroll effects
   initScrollEffects();
   
+  // Ensure contact button is clickable
+  ensureContactButtonClickable();
+  
   console.log('Layout initialized');
 }
 
@@ -47,33 +50,29 @@ function initLayout() {
 * This is the core mathematical operation that makes the layout work
 */
 function measureFixedSections() {
-  // Get the hero and footer elements
-  const heroSection = document.querySelector('.hero-section');
-  const footerSection = document.querySelector('.site-footer');
-  const header = document.querySelector('.main-header');
-  
-  // Get their computed heights
-  const headerHeight = header ? header.offsetHeight : 0;
-  
-  // Calculate hero height
-  // For visual balance, we use the full viewport minus header
-  let heroHeight = heroSection ? heroSection.offsetHeight : 0;
-  if (heroHeight === 0) {
-      heroHeight = window.innerHeight - headerHeight;
-  }
-  
-  // Get footer height
-  const footerHeight = footerSection ? footerSection.offsetHeight : 0;
-  
-  // Set CSS variables for these heights
-  document.documentElement.style.setProperty('--hero-height', `${heroHeight}px`);
-  document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
-  document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-  
-  console.log(`Fixed sections measured: Hero=${heroHeight}px, Footer=${footerHeight}px, Header=${headerHeight}px`);
-  
-  // Update spacers to match these heights exactly
-  updateSpacers(heroHeight, footerHeight);
+    const heroSection = document.querySelector('.hero-section');
+    const footerSection = document.querySelector('.site-footer');
+    const header = document.querySelector('.main-header');
+    
+    const headerHeight = header ? header.offsetHeight : 0;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate hero height - ensure it doesn't exceed viewport minus header
+    let heroHeight = heroSection ? Math.min(heroSection.scrollHeight, viewportHeight - headerHeight) * 0.9 : 0;
+    
+    // Get footer height - ensure it doesn't overlap with hero
+    const maxFooterHeight = Math.min(footerSection ? footerSection.scrollHeight : 0, viewportHeight * 0.4);
+    const footerHeight = maxFooterHeight;
+    
+    // Set CSS variables
+    document.documentElement.style.setProperty('--hero-height', `${heroHeight}px`);
+    document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    
+    console.log(`Fixed sections measured: Hero=${heroHeight}px, Footer=${footerHeight}px, Header=${headerHeight}px`);
+    
+    // Update spacers right away with accurate heights
+    updateSpacers(heroHeight, footerHeight);
 }
 
 /**
@@ -88,13 +87,14 @@ function updateSpacers() {
     const heroHeight = heroSection ? heroSection.offsetHeight : 0;
     const footerHeight = footerSection ? footerSection.offsetHeight : 0;
     
-    // Apply an adjustment factor to get the correct spacer height
+    // Apply separate adjustment factors for hero and footer
     // This compensates for layout issues that cause the 2-3x size problem
-    const adjustmentFactor = 1;
+    const heroAdjustmentFactor = 0.9;
+    const footerAdjustmentFactor = 1;
     
-    // Calculate adjusted heights
-    const adjustedHeroHeight = Math.round(heroHeight * adjustmentFactor);
-    const adjustedFooterHeight = Math.round(footerHeight * adjustmentFactor);
+    // Calculate adjusted heights with separate factors
+    const adjustedHeroHeight = Math.round(heroHeight * heroAdjustmentFactor);
+    const adjustedFooterHeight = Math.round(footerHeight * footerAdjustmentFactor);
     
     // Set the adjusted CSS variables
     document.documentElement.style.setProperty('--spacer-top-height', `${adjustedHeroHeight}px`);
@@ -296,6 +296,31 @@ function initFlashMessages() {
       message.style.position = 'relative';
       message.appendChild(closeButton);
   });
+}
+
+/**
+* Ensure the contact button is clickable by setting proper CSS properties
+*/
+function ensureContactButtonClickable() {
+  const contactButton = document.querySelector('.contact-button');
+  if (contactButton) {
+    // Force high z-index and pointer-events
+    contactButton.style.zIndex = '9999';
+    contactButton.style.position = 'relative';
+    contactButton.style.pointerEvents = 'auto';
+    
+    // Ensure all parent elements don't block pointer events
+    let parent = contactButton.parentElement;
+    while (parent && parent !== document.body) {
+      const computedStyle = window.getComputedStyle(parent);
+      if (computedStyle.pointerEvents === 'none') {
+        parent.style.pointerEvents = 'auto';
+      }
+      parent = parent.parentElement;
+    }
+    
+    console.log('Contact button clickability enforced');
+  }
 }
 
 /**

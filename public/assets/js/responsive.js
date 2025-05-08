@@ -64,9 +64,9 @@ function handleOrientationChange(event) {
     const warningElement = document.getElementById('portraitWarning');
     if (warningElement) {
         if (isPortrait && localStorage.getItem('hasSeenPortraitWarning') !== 'true') {
-            warningElement.style.display = 'flex';
+            warningElement.classList.remove('hidden');
         } else {
-            warningElement.style.display = 'none';
+            warningElement.classList.add('hidden');
         }
     }
     
@@ -176,14 +176,12 @@ function checkPortraitWarning() {
     
     if (warningElement) {
         if (isPortrait && !hasSeenWarning) {
-            warningElement.style.display = 'flex';
-            warningElement.style.opacity = '1';
+            warningElement.classList.remove('hidden');
         } else {
-            warningElement.style.display = 'none';
+            warningElement.classList.add('hidden');
         }
     }
 }
-
 /**
  * Update the navigation underline position
  * @param {HTMLElement} activeLink - The active navigation link

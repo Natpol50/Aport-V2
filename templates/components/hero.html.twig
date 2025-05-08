@@ -1,4 +1,3 @@
-
 {# templates/components/hero.html.twig #}
 
 <div class="hero-section">
@@ -6,7 +5,8 @@
     <h1 class="hero-title">Nathan Polette</h1>
     <p class="hero-subtitle">{{ translations.translate('home.subtitle') }}</p>
     <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" 
-       class="contact-button interactive">
+       class="contact-button interactive clickable"
+       style="position: relative; z-index: 9999; pointer-events: auto;">
       <span>{{ translations.translate('home.contact_button') }}</span>
     </a>
   </div>
