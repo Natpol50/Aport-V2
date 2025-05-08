@@ -1,18 +1,5 @@
-/**
- * project-cards.css - Optimized Project Card Styling
- *
- * This stylesheet defines the visual appearance of project cards with:
- * - Modified animation behavior to ensure immediate visibility
- * - Preserved hover effects and visual styling
- * - Responsive grid layout for different screen sizes
- * 
- * Mathematical aspects:
- * - Proportional spacing using the spacing scale variables
- * - Balanced grid layout with responsive breakpoints
- * - Carefully timed transitions for smooth animations
- */
-
 /* Project Card Component Styling */
+
 .project-card {
   position: relative;
   margin-bottom: 2rem;
@@ -21,11 +8,6 @@
   overflow: hidden;
   box-shadow: var(--shadow-md);
   transition: transform var(--transition-medium), box-shadow var(--transition-medium);
-  
-  /* Initial state is now set via JavaScript for immediate visibility */
-  /* The following properties will be overridden by JS but serve as fallback */
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .project-card:hover {
@@ -189,9 +171,10 @@
   }
 }
 
-/* Animation - Modified to work with JS-based init */
+/* Animation */
 .project-card.fade-in {
-  /* Initial state now set via JavaScript */
+  opacity: 0;
+  transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease, box-shadow var(--transition-medium);
 }
 
@@ -200,30 +183,6 @@
   transform: translateY(0);
 }
 
-/* Individual project card animation for sequential display */
-@keyframes cardAppear {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Skill tag styling for optional highlighting feature */
-.skill-tag {
-  display: inline-block;
-  background-color: rgba(101, 140, 121, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius);
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: var(--font-size-xs);
-  transition: background-color 0.2s ease;
-}
-
-.skill-tag.highlight {
-  background-color: rgba(101, 140, 121, 0.4);
+.project-card.fade-in.visible:hover {
+  transform: translateY(-5px);
 }

@@ -1,5 +1,11 @@
 {#
-    Project card component
+    Enhanced Project Card Component - templates/components/project-card.html.twig
+    
+    Features:
+    - Aggressive trapezoid badge showing project type (personal/cesi/etc)
+    - Mouse-tracking 3D effect that responds to cursor position
+    - Improved visual hierarchy and content organization
+    - Fully responsive design
     
     Parameters:
     - project: The project object to display
@@ -7,30 +13,27 @@
     - translations: Translation service
 #}
 
-<article class="project-card hover-lift fade-in">
+<article class="project-card hover-lift fade-in" data-type="{{ project.type|lower }}">
     <div class="project-card-grid">
         <div class="project-info">
+            {# Type Badge with Trapezoid Shape #}
+            <div class="trapezoid-badge">
+                <span class="trapezoid-text">{{ project.type|upper }}</span>
+            </div>
+            
             <h3 class="project-title">
-                {{ project.type|upper }} - <span>{{ project.title }}</span>
+                {{ project.title }}
             </h3>
             
-            {% if project.status %}
-                <div class="project-status status-{{ project.status }}">
-                    {{ translations.translate('admin.status_' ~ project.status) }}
-                </div>
-            {% endif %}
-            
+            {# Project Date - Simplified to just show date range #}
             <p class="project-date">
-                {% if project.status == 'current' %}
-                    {{ translations.translate('home.since') }} {{ project.start_date|date('F Y') }}
-                {% else %}
-                    {{ project.start_date|date('F Y') }}
-                    {% if project.end_date %}
-                        - {{ project.end_date|date('F Y') }}
-                    {% endif %}
+                {{ project.start_date|date('F Y') }}
+                {% if project.end_date %}
+                    - {{ project.end_date|date('F Y') }}
                 {% endif %}
             </p>
             
+            {# Project Links #}
             <div class="project-links">
                 {% if project.github_url %}
                     <a href="{{ project.github_url }}" target="_blank" class="project-link" rel="noopener">
@@ -47,14 +50,17 @@
         </div>
         
         <div class="project-content">
+            {# Project Description #}
             <p class="project-description">
                 {{ project.description|nl2br }}
             </p>
             
+            {# Project Skills #}
             <p class="project-skills">
                 {{ project.skills }}
             </p>
             
+            {# Admin Actions - Only visible to admins #}
             {% if is_admin is defined and is_admin %}
                 <div class="project-actions">
                     <a href="/admin/project/edit/{{ project.id }}" class="btn btn-primary">

@@ -85,5 +85,53 @@
     
     <!-- Custom scripts -->
     {% block javascripts %}{% endblock %}
+
+    <script>
+    
+    // Inline script to force 3D effect on project cards
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("Inline 3D effect initializer loaded");
+        
+        // Find all project cards
+        const projectCards = document.querySelectorAll('.project-card');
+        
+        projectCards.forEach(card => {
+            // Force 3D transform style
+            card.style.transformStyle = "preserve-3d";
+            card.style.perspective = "1000px";
+            card.style.willChange = "transform";
+            
+            // Track mouse movement
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Calculate rotation
+                const rotateY = ((mouseX / rect.width) * 2 - 1) * 7; 
+                const rotateX = ((mouseY / rect.height) * 2 - 1) * -5; 
+                
+                // Apply rotation
+                this.style.transform = `perspective(1000px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+                
+                // Adjust badge if present
+                const badge = this.querySelector('.trapezoid-badge');
+                if (badge) {
+                    badge.style.transform = `skewX(-25deg) translateX(${(mouseX / rect.width - 0.5) * 5}px)`;
+                }
+            });
+            
+            // Reset on mouse leave
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+                
+                const badge = this.querySelector('.trapezoid-badge');
+                if (badge) {
+                    badge.style.transform = 'skewX(-20deg)';
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

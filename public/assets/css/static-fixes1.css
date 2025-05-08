@@ -683,3 +683,514 @@ html.no-scroll-animations-for-cards .project-card,
     font-size: 0.9rem;
   }
 }
+
+/**
+ * Enhanced Project Card Styling
+ *
+ * Mathematical principles:
+ * - Trapezoid badge created using skewed transform for dynamic visual effect
+ * - 3D rotation calculations for perspective mouse tracking
+ * - Proportional movement based on relative mouse position
+ */
+
+/* Project badge with trapezoid shape */
+.trapezoid-badge {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: visible;
+  transform: skewX(-20deg); /* Aggressive trapezoid shape */
+  transform-origin: left center;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+/* Text inside badge - counter-skewed to appear straight */
+.trapezoid-badge .trapezoid-text {
+  display: inline-block;
+  transform: skewX(20deg); /* Counter-skew to make text straight */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Badge colors based on project type */
+.project-card[data-type="personal"] .trapezoid-badge {
+  background-color: #7048e8; /* Purple for personal projects */
+}
+
+.project-card[data-type="cesi"] .trapezoid-badge {
+  background-color: #0ca678; /* Teal for CESI projects */
+}
+
+.project-card[data-type="professional"] .trapezoid-badge {
+  background-color: #1971c2; /* Blue for professional projects */
+}
+
+.project-card[data-type="opensource"] .trapezoid-badge {
+  background-color: #e67700; /* Orange for opensource projects */
+}
+
+/* Enhanced project card for 3D effects */
+.project-card {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d; /* Enable 3D transformations */
+  perspective: 1000px; /* Add perspective for 3D effect */
+  will-change: transform; /* Optimize for animation performance */
+}
+
+/* 3D rotation transforms */
+.project-card.mouse-tracking {
+  transform: rotateY(var(--rotateY, 0)) rotateX(var(--rotateX, 0)) translateZ(0);
+}
+
+/* Make elements within card respect 3D space */
+.project-card-grid,
+.project-info,
+.project-content {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0.1px); /* Slight raise in 3D space */
+}
+
+/* Enhanced hover effects */
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Light reflection effect */
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.project-card:hover::after {
+  opacity: var(--highlight-opacity, 0);
+  transform: translate(var(--highlight-x, 0), var(--highlight-y, 0));
+}
+
+/* Project title enhancement */
+.project-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-dark);
+  transition: transform 0.2s ease;
+}
+
+/* Project status badge positioning */
+.project-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trapezoid-badge {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+  }
+  
+  .project-card[data-mouse-tracking="true"] {
+    transform: none !important; /* Disable 3D effects on mobile */
+  }
+}
+
+/* Project badge with trapezoid shape */
+.trapezoid-badge {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: visible;
+  transform: skewX(-20deg); /* Aggressive trapezoid shape */
+  transform-origin: left center;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Make badge pop when card is hovered */
+.project-card:hover .trapezoid-badge {
+  transform: skewX(-25deg) translateZ(10px); /* More aggressive skew on hover + 3D effect */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Text inside badge - counter-skewed to appear straight */
+.trapezoid-badge .trapezoid-text {
+  display: inline-block;
+  transform: skewX(20deg); /* Counter-skew to make text straight */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Badge colors based on project type */
+.project-card[data-type="personal"] .trapezoid-badge {
+  background-color: #7048e8; /* Purple for personal projects */
+}
+
+.project-card[data-type="cesi"] .trapezoid-badge {
+  background-color: #0ca678; /* Teal for CESI projects */
+}
+
+.project-card[data-type="professional"] .trapezoid-badge {
+  background-color: #1971c2; /* Blue for professional projects */
+}
+
+.project-card[data-type="opensource"] .trapezoid-badge {
+  background-color: #e67700; /* Orange for opensource projects */
+}
+
+.project-card[data-type="school"] .trapezoid-badge {
+  background-color: #2b8a3e; /* Green for school projects */
+}
+
+.project-card[data-type="hackathon"] .trapezoid-badge {
+  background-color: #e03131; /* Red for hackathon projects */
+}
+
+/* Default color for any other project types */
+.trapezoid-badge {
+  background-color: var(--color-primary, #658C79); /* Default badge color */
+}
+
+/* Enhanced project card for 3D effects */
+.project-card {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d; /* Enable 3D transformations */
+  perspective: 1000px; /* Add perspective for 3D effect */
+  will-change: transform; /* Optimize for animation performance */
+}
+
+/* 3D rotation transforms */
+.project-card.mouse-tracking {
+  transform: rotateY(var(--rotateY, 0)) rotateX(var(--rotateX, 0)) translateZ(0);
+}
+
+/* Make elements within card respect 3D space */
+.project-card-grid,
+.project-info,
+.project-content {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0.1px); /* Slight raise in 3D space */
+}
+
+/* Enhanced hover effects */
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Light reflection effect */
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.project-card:hover::after {
+  opacity: var(--highlight-opacity, 0);
+  transform: translate(var(--highlight-x, 0), var(--highlight-y, 0));
+}
+
+/* Project title enhancement */
+.project-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-dark);
+  transition: transform 0.2s ease;
+}
+
+/* Project status badge positioning */
+.project-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trapezoid-badge {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+  }
+  
+  .project-card[data-mouse-tracking="true"] {
+    transform: none !important; /* Disable 3D effects on mobile */
+  }
+}
+
+/**
+ * Enhanced Project Card Styling
+ *
+ * Mathematical principles:
+ * - Trapezoid badge created using skewed transform for dynamic visual effect
+ * - 3D rotation calculations for perspective mouse tracking
+ * - Proportional movement based on relative mouse position
+ */
+
+/* Project badge with trapezoid shape */
+.trapezoid-badge {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: visible;
+  transform: skewX(-20deg); /* Aggressive trapezoid shape */
+  transform-origin: left center;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Make badge pop when card is hovered */
+.project-card:hover .trapezoid-badge {
+  transform: skewX(-25deg) translateZ(10px); /* More aggressive skew on hover + 3D effect */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Text inside badge - counter-skewed to appear straight */
+.trapezoid-badge .trapezoid-text {
+  display: inline-block;
+  transform: skewX(20deg); /* Counter-skew to make text straight */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Badge colors based on project type */
+.project-card[data-type="personal"] .trapezoid-badge {
+  background-color: #7048e8; /* Purple for personal projects */
+}
+
+.project-card[data-type="cesi"] .trapezoid-badge {
+  background-color: #0ca678; /* Teal for CESI projects */
+}
+
+.project-card[data-type="professional"] .trapezoid-badge {
+  background-color: #1971c2; /* Blue for professional projects */
+}
+
+.project-card[data-type="opensource"] .trapezoid-badge {
+  background-color: #e67700; /* Orange for opensource projects */
+}
+
+.project-card[data-type="school"] .trapezoid-badge {
+  background-color: #2b8a3e; /* Green for school projects */
+}
+
+.project-card[data-type="hackathon"] .trapezoid-badge {
+  background-color: #e03131; /* Red for hackathon projects */
+}
+
+/* Default color for any other project types */
+.trapezoid-badge {
+  background-color: var(--color-primary, #658C79); /* Default badge color */
+}
+
+/* Enhanced project card for 3D effects */
+.project-card {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d; /* Enable 3D transformations */
+  perspective: 1000px; /* Add perspective for 3D effect */
+  will-change: transform; /* Optimize for animation performance */
+  transform: perspective(1000px) rotateY(0deg) rotateX(0deg); /* Initial state with perspective */
+}
+
+/* Project card on hover */
+.project-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Light reflection effect */
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.project-card:hover::after {
+  opacity: var(--highlight-opacity, 0);
+  transform: translate(var(--highlight-x, 0), var(--highlight-y, 0));
+}
+
+/* Project title enhancement */
+.project-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-dark);
+  transition: transform 0.2s ease;
+}
+
+/* Project status badge positioning */
+.project-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trapezoid-badge {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+  }
+  
+  .project-card[data-mouse-tracking="true"] {
+    transform: none !important; /* Disable 3D effects on mobile */
+  }
+}
+
+
+
+/* Project card basic styles with !important flags */
+.project-card {
+  transform-style: preserve-3d !important;
+  perspective: 1000px !important;
+  will-change: transform !important;
+  transition: transform 0.3s ease !important;
+  box-shadow: 0.3s ease !important;
+  position: relative !important;
+  z-index: 1 !important;
+  transform: perspective(1000px) rotateY(0deg) rotateX(0deg) !important;
+}
+
+/* Project badge with trapezoid shape */
+.trapezoid-badge {
+  display: inline-block !important;
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  padding: 0.4rem 1.2rem !important;
+  font-size: 0.75rem !important;
+  font-weight: var(--font-weight-bold) !important;
+  margin-bottom: 0.75rem !important;
+  position: relative !important;
+  overflow: visible !important;
+  transform: skewX(-20deg) !important;
+  transform-origin: left center !important;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25) !important;
+  z-index: 2 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Text inside badge - counter-skewed to appear straight */
+.trapezoid-badge .trapezoid-text {
+  display: inline-block !important;
+  transform: skewX(20deg) !important; 
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Badge colors based on project type with !important */
+.project-card[data-type="personal"] .trapezoid-badge {
+  background-color: #7048e8 !important; 
+}
+
+.project-card[data-type="cesi"] .trapezoid-badge {
+  background-color: #0ca678 !important; 
+}
+
+.project-card[data-type="professional"] .trapezoid-badge {
+  background-color: #1971c2 !important; 
+}
+
+.project-card[data-type="opensource"] .trapezoid-badge {
+  background-color: #e67700 !important; 
+}
+
+.project-card[data-type="school"] .trapezoid-badge {
+  background-color: #2b8a3e !important;
+}
+
+.project-card[data-type="hackathon"] .trapezoid-badge {
+  background-color: #e03131 !important; 
+}
