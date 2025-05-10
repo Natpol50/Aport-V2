@@ -42,6 +42,9 @@ function initLayout() {
   // Ensure contact button is clickable
   ensureContactButtonClickable();
   
+  // Initialize footer visibility handler
+  initFooterVisibility();
+  
   console.log('Layout initialized');
 }
 
@@ -87,9 +90,12 @@ function updateSpacers() {
     const heroHeight = heroSection ? heroSection.offsetHeight : 0;
     const footerHeight = footerSection ? footerSection.offsetHeight : 0;
     
+    // Check if on mobile
+    const isMobile = window.innerWidth <= 768;
+    
     // Apply separate adjustment factors for hero and footer
-    // This compensates for layout issues that cause the 2-3x size problem
-    const heroAdjustmentFactor = 0.9;
+    // Use a smaller factor for hero on mobile devices
+    const heroAdjustmentFactor = isMobile ? 0.9 : 0.9; // Smaller factor (0.6) for mobile
     const footerAdjustmentFactor = 1;
     
     // Calculate adjusted heights with separate factors
@@ -112,12 +118,70 @@ function updateSpacers() {
       bottomSpacer.style.height = `${adjustedFooterHeight}px`;
     }
     
-    console.log(`Spacers updated: Hero=${adjustedHeroHeight}px (from ${heroHeight}px), Footer=${adjustedFooterHeight}px (from ${footerHeight}px)`);
+    // Initial footer visibility check
+    updateFooterVisibility();
+    
+    console.log(`Spacers updated: Hero=${adjustedHeroHeight}px (from ${heroHeight}px), Footer=${adjustedFooterHeight}px (from ${footerHeight}px), Mobile=${isMobile}`);
 }
   
 // Call this function when page loads and on resize
 window.addEventListener('load', updateSpacers);
 window.addEventListener('resize', debounce(updateSpacers, 100));
+
+/**
+ * Initialize footer visibility handler
+ * Adds scroll event listener to hide/show footer content based on scroll position
+ */
+function initFooterVisibility() {
+  // Initial check
+  updateFooterVisibility();
+  
+  // Add scroll event listener
+  window.addEventListener('scroll', throttle(updateFooterVisibility, 100));
+}
+
+/**
+ * Update footer visibility based on scroll position
+ * Hides footer content when not scrolled halfway through page
+ */
+function updateFooterVisibility() {
+  const footerContent = document.querySelector('.footer-static .container');
+  const footerContacts = document.querySelector('.footer-contact');
+  const footerAbout = document.querySelector('.footer-about');
+  const footerCopyright = document.querySelector('.footer-copyright');
+  
+  if (!footerContent) return;
+  
+  // Calculate scroll position and page height
+  const scrollPosition = window.scrollY || window.pageYOffset;
+  const windowHeight = window.innerHeight;
+  const documentHeight = Math.max(
+    document.body.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.clientHeight,
+    document.documentElement.scrollHeight,
+    document.documentElement.offsetHeight
+  );
+  
+  // Determine if we're scrolled more than halfway
+  const halfwayPoint = (documentHeight - windowHeight) / 2;
+  const isHalfwayOrMore = scrollPosition >= halfwayPoint;
+  
+  // Set opacity based on scroll position
+  if (isHalfwayOrMore) {
+    // Past halfway - show footer content
+    if (footerContent) footerContent.style.opacity = '1';
+    if (footerContacts) footerContacts.style.opacity = '1';
+    if (footerAbout) footerAbout.style.opacity = '1';
+    if (footerCopyright) footerCopyright.style.opacity = '1';
+  } else {
+    // Before halfway - hide footer content
+    if (footerContent) footerContent.style.opacity = '0';
+    if (footerContacts) footerContacts.style.opacity = '0';
+    if (footerAbout) footerAbout.style.opacity = '0';
+    if (footerCopyright) footerCopyright.style.opacity = '0';
+  }
+}
 
 /**
 * Initialize scroll effects
