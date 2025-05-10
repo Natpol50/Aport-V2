@@ -872,12 +872,12 @@ SQL;
             // Add translations
             if ($englishId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $englishId, $lang[5]]);
+                $stmt->execute([$compId, $englishId, $lang[6]]);  // Changed from index 5 to 6
             }
             
             if ($frenchId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $frenchId, $lang[6]]);
+                $stmt->execute([$compId, $frenchId, $lang[7]]);  // Changed from index 6 to 7
             }
         }
         
@@ -898,12 +898,12 @@ SQL;
             // Add translations
             if ($englishId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $englishId, $sw[5]]);
+                $stmt->execute([$compId, $englishId, $sw[6]]);  // Changed from index 5 to 6
             }
             
             if ($frenchId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $frenchId, $sw[6]]);
+                $stmt->execute([$compId, $frenchId, $sw[7]]);  // Changed from index 6 to 7
             }
         }
         
@@ -924,12 +924,12 @@ SQL;
             // Add translations
             if ($englishId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $englishId, $skill[5]]);
+                $stmt->execute([$compId, $englishId, $skill[6]]);  // Changed from index 5 to 6
             }
             
             if ($frenchId) {
                 $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
-                $stmt->execute([$compId, $frenchId, $skill[6]]);
+                $stmt->execute([$compId, $frenchId, $skill[7]]);  // Changed from index 6 to 7
             }
         }
         

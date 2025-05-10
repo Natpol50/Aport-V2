@@ -27,9 +27,10 @@
             
             {# Project Date - Simplified to just show date range #}
             <p class="project-date">
-                {{ project.start_date|date('F Y') }}
                 {% if project.end_date %}
-                    - {{ project.end_date|date('F Y') }}
+                    {{ project.start_date|date('F Y') }} - {{ project.end_date|date('F Y') }}
+                {% else %}
+                    {{ translations.translate('home.since') }} {{ project.start_date|date('F Y') }}
                 {% endif %}
             </p>
             
