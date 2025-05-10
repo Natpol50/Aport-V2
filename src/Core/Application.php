@@ -219,6 +219,10 @@ class Application
         $this->router->get('/403', 'ErrorController@forbidden');
         $this->router->get('/500', 'ErrorController@serverError');
         $this->router->get('/maintenance', 'ErrorController@maintenance');
+
+        $this->router->get('/contact-standalone', 'ContactController@contactPage');
+        $this->router->get('/contact-en-standalone', 'ContactController@contactPageEn');
+        $this->router->post('/contact/submit-standalone', 'ContactController@submitContact');
     }
     
     /**

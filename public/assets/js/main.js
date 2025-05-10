@@ -61,7 +61,7 @@ function measureFixedSections() {
     const viewportHeight = window.innerHeight;
     
     // Calculate hero height - ensure it doesn't exceed viewport minus header
-    let heroHeight = heroSection ? Math.min(heroSection.scrollHeight, viewportHeight - headerHeight) * 0.9 : 0;
+    let heroHeight = heroSection ? Math.min(heroSection.scrollHeight, viewportHeight - headerHeight) * 1 : 0;
     
     // Get footer height - ensure it doesn't overlap with hero
     const maxFooterHeight = Math.min(footerSection ? footerSection.scrollHeight : 0, viewportHeight * 0.4);
@@ -95,7 +95,7 @@ function updateSpacers() {
     
     // Apply separate adjustment factors for hero and footer
     // Use a smaller factor for hero on mobile devices
-    const heroAdjustmentFactor = isMobile ? 0.9 : 0.9; // Smaller factor (0.6) for mobile
+    const heroAdjustmentFactor = isMobile ? 0.9 : 1; // Smaller factor (0.9) for mobile
     const footerAdjustmentFactor = 1;
     
     // Calculate adjusted heights with separate factors

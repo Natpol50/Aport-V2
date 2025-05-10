@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="{{ language|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ translations.translate('contact.meta_description') }}">
+    
+    <title>{{ translations.translate('contact.title') }} - {{ translations.translate('site.title') }}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/img/ashaLogo.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/img/ashaLogo.ico">
+
+    <!-- Essential CSS -->
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    <link rel="stylesheet" href="/assets/css/effects.css">
+    <link rel="stylesheet" href="/assets/css/utilities.css">
+    <link rel="stylesheet" href="/assets/css/responsive.css">
+    <link rel="stylesheet" href="/assets/css/project-cards.css">
+    <link rel="stylesheet" href="/assets/css/static-fixes1.css">
+    <link rel="stylesheet" href="/assets/css/competencies.css">
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    <link rel="stylesheet" href="/assets/css/utilities.css">
+    
+    <!-- Custom standalone contact page styling -->
+    <link rel="stylesheet" href="/assets/css/contact-standalone.css">
+    <!-- Add link to notifications CSS -->
+    <link rel="stylesheet" href="/assets/css/notifications.css">
+</head>
+<body>
+    <!-- Only include the navigation component -->
+    {% include 'components/navigation.html.twig' %}
+    
+    <!-- Flash messages for form feedback -->
+    {% if success is defined and success is not empty %}
+        <div class="flash-container">
+            {% for message in success %}
+                <div class="flash-message flash-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if error is defined and error is not empty %}
+        <div class="flash-container">
+            {% for message in error %}
+                <div class="flash-message flash-error">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if request.getFlashMessages('success')|length > 0 %}
+        <div class="flash-container">
+            {% for message in request.getFlashMessages('success') %}
+                <div class="flash-message flash-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if request.getFlashMessages('error')|length > 0 %}
+        <div class="flash-container">
+            {% for message in request.getFlashMessages('error') %}
+                <div class="flash-message flash-error">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- Main contact content -->
+    <div class="contact-page-container">
+        <div class="contact-content">
+            <!-- Trapezoid page title -->
+            <h1 class="contact-page-title">
+                <span>{{ translations.translate('contact.heading') }}</span>
+            </h1>
+            
+            <!-- Contact grid with info and form -->
+            <div class="contact-grid">
+                <!-- Contact information section -->
+                <div class="contact-info">
+                    <h2 class="contact-info-title">
+                        {{ translations.translate('contact.info_heading') }}
+                    </h2>
+                    
+                    <div class="contact-methods">
+                        <!-- Email -->
+                        <div class="contact-method-item">
+                            <div class="contact-icon-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="contact-method-details">
+                                <div class="contact-method-label">{{ translations.translate('contact.email') }}</div>
+                                <div class="contact-method-value">
+                                    <a href="mailto:{{ personalInfo.email }}">{{ personalInfo.email }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Academic Email -->
+                        <div class="contact-method-item">
+                            <div class="contact-icon-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="contact-method-details">
+                                <div class="contact-method-label">{{ translations.translate('contact.academic_email') }}</div>
+                                <div class="contact-method-value">
+                                    <a href="mailto:nathan.polette@viacesi.fr">nathan.polette@viacesi.fr</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GitHub -->
+                        <div class="contact-method-item">
+                            <div class="contact-icon-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                            </div>
+                            <div class="contact-method-details">
+                                <div class="contact-method-label">GitHub</div>
+                                <div class="contact-method-value">
+                                    <a href="{{ personalInfo.github_url }}" target="_blank" rel="noopener">
+                                        {{ personalInfo.github_url|replace({'https://': '', 'http://': ''}) }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- LinkedIn -->
+                        <div class="contact-method-item">
+                            <div class="contact-icon-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="contact-method-details">
+                                <div class="contact-method-label">LinkedIn</div>
+                                <div class="contact-method-value">
+                                    <a href="{{ personalInfo.linkedin_url }}" target="_blank" rel="noopener">
+                                        {{ personalInfo.linkedin_url|replace({'https://': '', 'http://': ''}) }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if personalInfo.discord_url %}
+                            <!-- Discord -->
+                            <div class="contact-method-item">
+                                <div class="contact-icon-container">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="contact-method-details">
+                                    <div class="contact-method-label">Discord</div>
+                                    <div class="contact-method-value">
+                                        <a href="{{ personalInfo.discord_url }}" target="_blank" rel="noopener">
+                                            {{ personalInfo.discord_url|replace({'https://': '', 'http://': ''}) }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Contact form section -->
+                <div class="contact-form-container">
+                    <h2 class="contact-form-title">
+                        {{ translations.translate('contact.form_heading') }}
+                    </h2>
+                    
+                    <form action="/contact/submit-standalone" method="POST" class="contact-form">
+                        <div class="form-group">
+                            <label for="email" class="form-label">{{ translations.translate('contact.your_email') }}</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-input"
+                                placeholder="{{ translations.translate('contact.email_placeholder') }}"
+                                value="{{ formData.email|default('') }}"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label">{{ translations.translate('contact.subject') }} *</label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject" 
+                                class="form-input"
+                                placeholder="{{ translations.translate('contact.subject_placeholder') }}"
+                                value="{{ formData.subject|default('') }}"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">{{ translations.translate('contact.message') }} *</label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                class="form-input"
+                                placeholder="{{ translations.translate('contact.message_placeholder') }}"
+                                required
+                            >{{ formData.message|default('') }}</textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <span>{{ translations.translate('contact.submit') }}</span>
+                        </button>
+                        
+                        <div class="required-fields-note">
+                            * {{ translations.translate('contact.required_fields') }}
+                        </div>
+                    </form>
+                    
+                    <!-- Move form submission info inside the form container -->
+                    <div class="form-submission-info">
+                        <p>{{ translations.translate('contact.form_info')|default('Your message will be securely sent to Nathan\'s inbox. He typically responds within 48 hours on business days.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer with copyright info -->
+    <footer class="contact-page-footer">
+        <p>© {{ current_year }} Nathan Polette. {{ translations.translate('footer.rights_reserved') }}</p>
+    </footer>
+
+    <!-- Language switcher (positioned absolutely) -->
+    {% include 'components/language-switcher.html.twig' %}
+    
+    <!-- Essential JavaScript for navigation -->
+    <script src="/assets/js/mobile-menu.js"></script>
+    <script>
+        /**
+         * contact-standalone.js - JavaScript for standalone contact page
+         *
+         * This script handles:
+         * 1. Form validation with visual feedback
+         * 2. Auto-dismissing flash messages
+         * 3. Enhanced focus effects for form elements
+         */
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form validation
+            initFormValidation();
+            
+            // Initialize auto-dismiss for flash messages
+            initFlashMessages();
+            
+            // Enhanced focus effects
+            initEnhancedFocusEffects();
+        });
+        
+        /**
+         * Initialize form validation with visual feedback
+         */
+        function initFormValidation() {
+            const form = document.querySelector('.contact-form');
+            
+            if (!form) return;
+            
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                
+                // Get required fields
+                const requiredFields = form.querySelectorAll('[required]');
+                
+                // Check each required field
+                requiredFields.forEach(field => {
+                    // Remove existing error messages
+                    const existingError = field.parentNode.querySelector('.field-error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    // Reset field styling
+                    field.classList.remove('error-field');
+                    
+                    // Validate the field
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        
+                        // Add error styling
+                        field.classList.add('error-field');
+                        
+                        // Add error message
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'field-error';
+                        errorMessage.textContent = field.dataset.errorMessage || 'This field is required';
+                        field.parentNode.appendChild(errorMessage);
+                    }
+                });
+                
+                // Validate email if provided
+                const emailField = form.querySelector('#email');
+                if (emailField && emailField.value.trim()) {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(emailField.value)) {
+                        isValid = false;
+                        
+                        // Add error styling
+                        emailField.classList.add('error-field');
+                        
+                        // Add error message
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'field-error';
+                        errorMessage.textContent = 'Please enter a valid email address';
+                        emailField.parentNode.appendChild(errorMessage);
+                    }
+                }
+                
+                // Prevent form submission if validation fails
+                if (!isValid) {
+                    event.preventDefault();
+                    
+                    // Scroll to the first error
+                    const firstError = form.querySelector('.error-field');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                }
+            });
+        }
+        
+        /**
+         * Initialize auto-dismissing flash messages
+         */
+        function initFlashMessages() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            
+            flashMessages.forEach(message => {
+                // Auto-dismiss flash messages after 5 seconds
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateY(-20px)';
+                    
+                    // Remove from DOM after animation completes
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+                
+                // Create close button for each message
+                const closeButton = document.createElement('button');
+                closeButton.innerHTML = '&times;';
+                closeButton.className = 'flash-close-btn';
+                closeButton.style.cssText = `
+                    position: absolute;
+                    top: 0.5rem;
+                    right: 0.5rem;
+                    background: transparent;
+                    border: none;
+                    color: white;
+                    font-size: 1.25rem;
+                    cursor: pointer;
+                    opacity: 0.7;
+                `;
+                
+                closeButton.addEventListener('click', () => {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateY(-20px)';
+                    
+                    // Remove from DOM after animation completes
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                });
+                
+                message.appendChild(closeButton);
+            });
+        }
+        
+        /**
+         * Initialize enhanced focus effects for form elements
+         * 
+         * This creates the dynamic trapezoid effect when focusing on inputs
+         */
+        function initEnhancedFocusEffects() {
+            const formInputs = document.querySelectorAll('.form-input');
+            
+            formInputs.forEach(input => {
+                // Add focus event for enhanced effect
+                input.addEventListener('focus', function() {
+                    // Apply more dramatic trapezoid effect on focus
+                    this.style.transform = 'skewX(-2deg)';
+                    this.style.borderColor = 'var(--color-primary)';
+                    this.style.boxShadow = '0 0 0 2px rgba(101, 140, 121, 0.3)';
+                    
+                    // Create pulse animation for the border
+                    this.style.animation = 'pulseBorder 2s infinite';
+                });
+                
+                // Remove enhanced effect on blur
+                input.addEventListener('blur', function() {
+                    this.style.transform = '';
+                    this.style.borderColor = '';
+                    this.style.boxShadow = '';
+                    this.style.animation = '';
+                });
+            });
+            
+            // Define the pulse animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulseBorder {
+                    0% {
+                        box-shadow: 0 0 0 0 rgba(101, 140, 121, 0.4);
+                    }
+                    70% {
+                        box-shadow: 0 0 0 3px rgba(101, 140, 121, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(101, 140, 121, 0);
+                    }
+                }
+                
+                .error-field {
+                    border-color: var(--color-error) !important;
+                    background-color: rgba(239, 68, 68, 0.05) !important;
+                }
+                
+                .field-error {
+                    color: var(--color-error);
+                    font-size: 0.8rem;
+                    margin-top: 0.25rem;
+                    transform: skewX(-1.5deg); /* Reduced angle from -5deg to -1.5deg (about 1/3rd) */
+                    display: block; /* Changed from inline-block to block to fix blank box */
+                    animation: slideIn 0.3s ease-out forwards;
+                }
+                
+                @keyframes slideIn {
+                    0% {
+                        transform: translateX(-10px) skewX(-1.5deg); /* Reduced angle here too */
+                        opacity: 0;
+                    }
+                    100% {
+                        transform: translateX(0) skewX(-1.5deg); /* Reduced angle here too */
+                        opacity: 1;
+                    }
+                }
+                
+                /* Add responsive styling to fix blank space */
+                .contact-page-container {
+                    min-height: calc(100vh - 200px); /* Adjust for header and footer */
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .contact-content {
+                    flex: 1;
+                }
+                
+                .form-submission-info {
+                    text-align: center;
+                    margin-top: 1.5rem;
+                    padding: 1rem;
+                    background-color: #f9f9f9;
+                    border-radius: 0.5rem;
+                    border-left: 3px solid var(--color-primary);
+                }
+                
+                /* Fix for input focus effect - reduce angle */
+                .form-input:focus {
+                    transform: skewX(-1deg) !important; /* Reduced from -2deg */
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Also update the focus event listener to use a more subtle angle
+            formInputs.forEach(input => {
+                // Add focus event for enhanced effect
+                input.addEventListener('focus', function() {
+                    // Apply more subtle trapezoid effect on focus
+                    this.style.transform = 'skewX(-1deg)'; // Reduced from -2deg
+                    this.style.borderColor = 'var(--color-primary)';
+                    this.style.boxShadow = '0 0 0 2px rgba(101, 140, 121, 0.3)';
+                    
+                    // Create pulse animation for the border
+                    this.style.animation = 'pulseBorder 2s infinite';
+                });
+                
+                // Remove enhanced effect on blur
+                input.addEventListener('blur', function() {
+                    this.style.transform = '';
+                    this.style.borderColor = '';
+                    this.style.boxShadow = '';
+                    this.style.animation = '';
+                });
+            });
+        }
+    </script>
+    <script src="/assets/js/notifications.js"></script>
+</body>
+</html>

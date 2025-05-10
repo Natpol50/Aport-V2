@@ -1,0 +1,462 @@
+/**
+ * contact-standalone.css - Aggressive trapezoid styling for contact page
+ *
+ * This CSS file contains the dedicated styling for the standalone contact page,
+ * featuring mathematically-calculated trapezoid shapes and transformations.
+ * 
+ * Mathematical principles:
+ * - Skew transforms based on specific angle calculations
+ * - Proportional spacing based on golden ratio
+ * - Visual hierarchy through size proportions
+ * - Clip path polygon coordinates for precise shape control
+ */
+
+/* ===== CONSTANTS AND VARIABLES ===== */
+:root {
+    /* Trapezoid angle variables for consistent skew across elements */
+    --trapezoid-skew-x: -15deg;
+    --trapezoid-skew-y: 5deg;
+    
+    /* Offsets for clip-path polygons */
+    --trapezoid-offset-small: 10px;
+    --trapezoid-offset-medium: 20px;
+    --trapezoid-offset-large: 30px;
+    
+    /* Golden ratio (φ ≈ 1.618) based proportions */
+    --golden-ratio: 1.618;
+    --spacing-golden-small: calc(1rem * var(--golden-ratio));
+    --spacing-golden-medium: calc(var(--spacing-golden-small) * var(--golden-ratio));
+    --spacing-golden-large: calc(var(--spacing-golden-medium) * var(--golden-ratio));
+}
+
+/* ===== PAGE LAYOUT ===== */
+body.contact-standalone {
+    background-color: var(--color-background);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+}
+
+/* ===== CONTACT PAGE CONTAINER ===== */
+.contact-page-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-golden-medium) 1rem;
+    margin-top: 2rem;
+}
+
+/* ===== MAIN CONTENT BOX ===== */
+.contact-content {
+    width: 100%;
+    max-width: 1200px;
+    background-color: var(--color-surface);
+    position: relative;
+    overflow: visible;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    /* Filter for enhanced depth perception */
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+/* Trapezoid top edge using skewY transform */
+.contact-content::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: var(--color-primary);
+    transform: skewY(calc(var(--trapezoid-skew-y)/3));
+    z-index: -1;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Trapezoid bottom edge using negative skewY */
+.contact-content::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: var(--color-primary);
+    transform: skewY(calc((var(--trapezoid-skew-y) * -1) / 3));
+    z-index: -1;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== TITLE WITH TRAPEZOID SHAPE ===== */
+.contact-page-title {
+    position: absolute;
+    top: -2rem;
+    left: 3rem;
+    background-color: var(--color-primary-dark);
+    color: white;
+    padding: 0.7rem 2rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    
+    /* Trapezoid shape using skewX transform */
+    transform: skewX(var(--trapezoid-skew-x));
+    transform-origin: left bottom;
+    z-index: 2;
+    /* Enhanced box shadow for depth */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Counter-skew for title text */
+.contact-page-title span {
+    display: inline-block;
+    transform: skewX(calc(var(--trapezoid-skew-x) * -1));
+}
+
+/* ===== CONTENT GRID ===== */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-golden-medium);
+    padding: var(--spacing-golden-medium);
+}
+
+/* Responsive grid adjustment */
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-golden-small);
+    }
+    
+    .contact-page-title {
+        font-size: 1.5rem;
+        top: -1.75rem;
+        left: 2rem;
+    }
+}
+
+/* ===== CONTACT INFO SECTION ===== */
+.contact-info {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-golden-small);
+    position: relative;
+    
+    /* Trapezoid shape using clip-path */
+    clip-path: polygon(
+        0 0, 
+        100% 0, 
+        calc(100% - var(--trapezoid-offset-medium)) 100%, 
+        0 100%
+    );
+}
+
+.contact-info-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-golden-small);
+    position: relative;
+    display: inline-block;
+}
+
+/* Accent line with skew transform */
+.contact-info-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 80%;
+    height: 3px;
+    background-color: var(--color-primary);
+    transform: skewX(var(--trapezoid-skew-x));
+}
+
+/* Contact methods list */
+.contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-golden-small) * 0.75);
+}
+
+/* ===== INDIVIDUAL CONTACT METHOD ===== */
+.contact-method-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Icon container with trapezoid shape */
+.contact-icon-container {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: skewX(var(--trapezoid-skew-x));
+    position: relative;
+    flex-shrink: 0;
+    /* Enhanced with subtle transition */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Icon counter-skew to appear normal */
+.contact-icon-container svg {
+    transform: skewX(calc(var(--trapezoid-skew-x) * -1));
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Hover effect for icon container */
+.contact-method-item:hover .contact-icon-container {
+    transform: skewX(var(--trapezoid-skew-x)) translateY(-3px);
+    background-color: var(--color-primary-dark);
+}
+
+/* Method details with flex layout */
+.contact-method-details {
+    flex: 1;
+}
+
+.contact-method-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.contact-method-value {
+    opacity: 0.9;
+    word-break: break-word;
+}
+
+.contact-method-value a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.contact-method-value a:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+    transform: translateX(3px);
+}
+
+/* ===== CONTACT FORM SECTION ===== */
+.contact-form-container {
+    position: relative;
+}
+
+.contact-form-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-golden-small);
+    position: relative;
+    display: inline-block;
+}
+
+/* Accent line with skew transform */
+.contact-form-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 80%;
+    height: 3px;
+    background-color: var(--color-primary);
+    transform: skewX(var(--trapezoid-skew-x));
+}
+
+/* Form layout with golden ratio spacing */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-golden-small);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Form inputs with trapezoid focus effect */
+.form-input {
+    padding: 0.7rem 1rem;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-surface-hover);
+    border-radius: var(--border-radius);
+    color: var(--color-text);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    transform: skewX(-2deg);
+    box-shadow: 0 0 0 3px rgba(101, 140, 121, 0.2);
+}
+
+textarea.form-input {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Submit button with aggressive trapezoid shape */
+.submit-btn {
+    align-self: flex-end;
+    padding: 0.7rem 2rem;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    
+    /* Trapezoid shape using skewX transform */
+    transform: skewX(var(--trapezoid-skew-x));
+    position: relative;
+    overflow: visible;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Button text counter-skew */
+.submit-btn span {
+    display: inline-block;
+    transform: skewX(calc(var(--trapezoid-skew-x) * -1));
+}
+
+/* Button hover effect with lift and color change */
+.submit-btn:hover {
+    background-color: var(--color-primary-dark);
+    transform: skewX(var(--trapezoid-skew-x)) translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Button active/pressed state */
+.submit-btn:active {
+    transform: skewX(var(--trapezoid-skew-x)) translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Required fields note */
+.required-fields-note {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* ===== FLASH MESSAGES ===== */
+.flash-container {
+    position: fixed;
+    top: calc(var(--header-height) + 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.flash-message {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    
+    /* Trapezoid shape using clip-path */
+    clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+    
+    /* Animation for appearance */
+    animation: slideDown 0.3s ease-out forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.flash-success {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.flash-error {
+    background-color: var(--color-error);
+    color: white;
+}
+
+/* Flash message animation */
+@keyframes slideDown {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Form validation error styles */
+.error-field {
+    border-color: var(--color-error) !important;
+    background-color: rgba(239, 68, 68, 0.05) !important;
+}
+
+.field-error {
+    color: var(--color-error);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    transform: skewX(-5deg);
+    display: inline-block;
+    
+    /* Animation for appearance */
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-10px) skewX(-5deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0) skewX(-5deg);
+        opacity: 1;
+    }
+}
+
+/* ===== FOOTER ===== */
+.contact-page-footer {
+    background-color: var(--color-background);
+    color: var(--color-text-secondary);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.875rem;
+    position: relative;
+}
+
+/* Triangle decoration for footer */
+.contact-page-footer::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background-color: var(--color-background);
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}

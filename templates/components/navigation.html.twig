@@ -11,7 +11,7 @@
                     <a href="{{ language == 'fr' ? '/' : '/en' }}" class="nav-link interactive {% if current_path == '/' or current_path == '/en' %}active{% endif %}">
                         {{ translations.translate('nav.projects') }}
                     </a>
-                    <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                    <a href="{{ language == 'fr' ? '/contact-standalone' : '/contact-en-standalone' }}" class="nav-link interactive {% if current_path == '/contact-standalone' or current_path == '/contact-en-standalone' %}active{% endif %}">
                         {{ translations.translate('nav.contact') }}
                     </a>
                 {% else %}
@@ -34,7 +34,7 @@
                     </a>
                 {% else %}
                     {# If not authenticated, only Contact link goes on the right #}
-                    <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="nav-link interactive {% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+                    <a href="{{ language == 'fr' ? '/contact-standalone' : '/contact-en-standalone' }}" class="nav-link interactive {% if current_path == '/contact-standalone' or current_path == '/contact-en-standalone' %}active{% endif %}">
                         {{ translations.translate('nav.contact') }}
                     </a>
                 {% endif %}
@@ -58,7 +58,7 @@
             <a href="{{ language == 'fr' ? '/' : '/en' }}" class="{% if current_path == '/' or current_path == '/en' %}active{% endif %}">
                 {{ translations.translate('nav.projects') }}
             </a>
-            <a href="{{ language == 'fr' ? '/contact' : '/contact-en' }}" class="{% if current_path == '/contact' or current_path == '/contact-en' %}active{% endif %}">
+            <a href="{{ language == 'fr' ? '/contact-standalone' : '/contact-en-standalone' }}" class="{% if current_path == '/contact-standalone' or current_path == '/contact-en-standalone' %}active{% endif %}">
                 {{ translations.translate('nav.contact') }}
             </a>
             
