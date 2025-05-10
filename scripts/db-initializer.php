@@ -485,6 +485,22 @@ SQL;
                 'en' => 'Send',
                 'fr' => 'Envoyer'
             ],
+            'contact.success' => [
+                'en' => 'Your message has been sent successfully.',
+                'fr' => 'Votre message a été envoyé avec succès.'
+            ],
+            'contact.error' => [
+                'en' => 'An error occurred while sending your message. Please try again later.',
+                'fr' => 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.'
+            ],
+            'contact.academic_email' => [
+                'en' => 'Academic email',
+                'fr' => 'Email académique'
+            ],
+            'contact.email' => [
+                'en' => 'Email address',
+                'fr' => 'Email personnel'
+            ],
             'login.title' => [
                 'en' => 'Login',
                 'fr' => 'Connexion'

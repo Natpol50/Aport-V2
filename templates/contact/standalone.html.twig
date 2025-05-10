@@ -189,7 +189,7 @@
                         {{ translations.translate('contact.form_heading') }}
                     </h2>
                     
-                    <form action="/contact/submit-standalone" method="POST" class="contact-form">
+                    <form id="contactForm" class="contact-form">
                         <div class="form-group">
                             <label for="email" class="form-label">{{ translations.translate('contact.your_email') }}</label>
                             <input 
@@ -235,10 +235,91 @@
                         </div>
                     </form>
                     
-                    <!-- Move form submission info inside the form container -->
-                    <div class="form-submission-info">
-                        <p>{{ translations.translate('contact.form_info')|default('Your message will be securely sent to Nathan\'s inbox. He typically responds within 48 hours on business days.') }}</p>
-                    </div>
+                    <!-- Add JavaScript for mailto handling -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const contactForm = document.getElementById('contactForm');
+                            
+                            if (contactForm) {
+                                contactForm.addEventListener('submit', function(event) {
+                                    event.preventDefault();
+                                    
+                                    // Get form values
+                                    const subject = document.getElementById('subject').value.trim();
+                                    const message = document.getElementById('message').value.trim();
+                                    const email = document.getElementById('email').value.trim();
+                                    
+                                    // Basic validation
+                                    if (!subject || !message) {
+                                        // Show validation errors
+                                        if (!subject) {
+                                            document.getElementById('subject').classList.add('error-field');
+                                        }
+                                        if (!message) {
+                                            document.getElementById('message').classList.add('error-field');
+                                        }
+                                        return;
+                                    }
+                                    
+                                    // Email validation if provided
+                                    if (email && !isValidEmail(email)) {
+                                        document.getElementById('email').classList.add('error-field');
+                                        return;
+                                    }
+                                    
+                                    // Create mailto URL
+                                    const recipient = 'nathan.polette@gmail.com';
+                                    let mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+                                    
+                                    // Add sender's email to the body if provided
+                                    if (email) {
+                                        mailtoUrl += encodeURIComponent("\n\nFrom: " + email);
+                                    }
+                                    
+                                    // Open email client
+                                    window.location.href = mailtoUrl;
+                                    
+                                    // Show success message
+                                    showSuccessMessage();
+                                });
+                            }
+                            
+                            // Email validation function
+                            function isValidEmail(email) {
+                                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                return emailPattern.test(email);
+                            }
+                            
+                            // Function to show success message
+                            function showSuccessMessage() {
+                                const flashContainer = document.querySelector('.flash-container') || createFlashContainer();
+                                
+                                const successMessage = document.createElement('div');
+                                successMessage.className = 'flash-message flash-success';
+                                successMessage.innerHTML = '{{ translations.translate('contact.success') }}';
+                                
+                                flashContainer.appendChild(successMessage);
+                                
+                                // Auto-dismiss after 5 seconds
+                                setTimeout(() => {
+                                    successMessage.style.opacity = '0';
+                                    successMessage.style.transform = 'translateY(-20px)';
+                                    
+                                    setTimeout(() => {
+                                        successMessage.remove();
+                                    }, 300);
+                                }, 5000);
+                            }
+                            
+                            // Create flash container if it doesn't exist
+                            function createFlashContainer() {
+                                const container = document.createElement('div');
+                                container.className = 'flash-container';
+                                document.body.insertBefore(container, document.body.firstChild);
+                                return container;
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>

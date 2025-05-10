@@ -1,6 +1,9 @@
 # Enable rewrite engine
 RewriteEngine On
 
+# Redirect incorrect encontact-standalone to contact-en-standalone
+RewriteRule ^encontact-standalone$ /contact-en-standalone [R=301,L]
+
 # If the file or directory exists, serve it directly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -6,18 +6,16 @@ namespace App\Controllers;
 use App\Core\RequestObject;
 use App\Models\PersonalInfoModel;
 use App\Services\TranslationService;
-use App\Services\EmailService;
 
 /**
  * ContactController - Handles contact page display and form processing
  * 
  * This controller is responsible for rendering the standalone contact page
- * and processing contact form submissions with email notifications.
+ * and processing contact form submissions with mailto links.
  */
 class ContactController extends BaseController
 {
     private PersonalInfoModel $personalInfoModel;
-    private EmailService $emailService;
     
     /**
      * Create a new ContactController instance
@@ -25,7 +23,6 @@ class ContactController extends BaseController
     public function __construct()
     {
         $this->personalInfoModel = new PersonalInfoModel();
-        $this->emailService = new EmailService();
     }
     
     /**
@@ -140,55 +137,36 @@ class ContactController extends BaseController
             return;
         }
         
-        // Define recipients for the contact form
-        $recipients = [
-            'nathan.polette@gmail.com',
-            'nathan.polette@viacesi.fr',
-            'nathan.polette@koesio.com'
+        // Define recipient for the contact form
+        $recipient = 'nathan.polette@gmail.com';
+        
+        // Prepare the subject and body for mailto link
+        $encodedSubject = urlencode($subject);
+        $encodedMessage = urlencode($message);
+        $encodedEmail = urlencode($email);
+        
+        // Create a mailto URL with the form data
+        $mailtoUrl = "mailto:{$recipient}?subject={$encodedSubject}&body={$encodedMessage}";
+        
+        // Add sender's email in the body if provided
+        if (!empty($email)) {
+            $mailtoUrl .= urlencode("\n\nFrom: {$email}");
+        }
+        
+        // Set success notification
+        $_SESSION['notification'] = [
+            'type' => 'success',
+            'message' => $translationService->translate('contact.success'),
+            'icon' => 'check-circle',
+            'title' => $translationService->translate('contact.success_title'),
+            'timestamp' => time()
         ];
         
-        // Send the contact form email to all recipients
-        $emailResults = [];
-        $allSuccessful = true;
+        // Set cookie to redirect back after email client opens
+        setcookie('contact_redirect', '1', time() + 60, '/');
         
-        foreach ($recipients as $recipient) {
-            $result = $this->emailService->sendContactFormHtml($subject, $message, $email, $recipient);
-            $emailResults[$recipient] = $result;
-            if (!$result) {
-                $allSuccessful = false;
-            }
-        }
-        
-        // Set enhanced notification message based on email sending results
-        if ($allSuccessful) {
-            $_SESSION['notification'] = [
-                'type' => 'success',
-                'message' => $translationService->translate('contact.success'),
-                'icon' => 'check-circle',
-                'title' => $translationService->translate('contact.success_title'),
-                'timestamp' => time()
-            ];
-        } else {
-            // Create a more detailed error message for logging purposes
-            $failedRecipients = array_keys(array_filter($emailResults, function($result) {
-                return $result === false;
-            }));
-            
-            $errorDetails = count($failedRecipients) > 0 
-                ? sprintf(' (%s)', implode(', ', $failedRecipients)) 
-                : '';
-            
-            $_SESSION['notification'] = [
-                'type' => 'error',
-                'message' => $translationService->translate('contact.error') . $errorDetails,
-                'icon' => 'exclamation-triangle',
-                'title' => $translationService->translate('contact.error_title'),
-                'timestamp' => time()
-            ];
-        }
-        
-        // Redirect back to the contact page in the correct language
-        $contactUrl = ($langCode === 'en') ? '/contact-en-standalone' : '/contact-standalone';
-        $this->redirect($contactUrl);
+        // Redirect to the mailto URL to open client's email program
+        header("Location: {$mailtoUrl}");
+        exit;
     }
 }

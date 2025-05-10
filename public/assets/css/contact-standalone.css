@@ -72,12 +72,12 @@ body.contact-standalone {
 .contact-content::before {
     content: '';
     position: absolute;
-    top: -20px;
+    top: -10px;
     left: 0;
     right: 0;
     height: 40px;
     background-color: var(--color-primary);
-    transform: skewY(calc(var(--trapezoid-skew-y)/3));
+    transform: skewY(calc(var(--trapezoid-skew-y)/5));
     z-index: -1;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
 }
