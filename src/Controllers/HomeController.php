@@ -5,22 +5,17 @@ namespace App\Controllers;
 use App\Core\RequestObject;
 use App\Models\ProjectModel;
 use App\Models\PersonalInfoModel;
+use App\Models\CompetencyModel; // Add this line
 use App\Services\TranslationService;
 
 /**
  * HomeController - Handles main site pages with enhanced language support
- * 
- * This controller manages the main pages of the website with proper
- * language handling for English and French versions. The implementation
- * uses the MVC pattern to separate data access, business logic, and presentation.
- * 
- * The key mathematical concept here is the separation of concerns, which
- * results in more maintainable code with high cohesion and low coupling.
  */
 class HomeController extends BaseController
 {
     private ProjectModel $projectModel;
     private PersonalInfoModel $personalInfoModel;
+    private CompetencyModel $competencyModel; // Add this line
     
     /**
      * Create a new HomeController instance
@@ -30,7 +25,9 @@ class HomeController extends BaseController
     {
         $this->projectModel = new ProjectModel();
         $this->personalInfoModel = new PersonalInfoModel();
+        $this->competencyModel = new CompetencyModel(); // Add this line
     }
+
     
     /**
      * Display the home page (default language - French)
@@ -66,7 +63,6 @@ class HomeController extends BaseController
     
     /**
      * Common method to render the home page with the specified language
-     * This avoids code duplication and ensures consistent behavior
      * 
      * @param RequestObject $request Current request information
      * @param string $langCode Language code (en/fr)
@@ -86,12 +82,16 @@ class HomeController extends BaseController
         // Get personal info for the specified language
         $personalInfo = $this->personalInfoModel->getPersonalInfo($langCode);
         
+        // Get competency categories with their competencies
+        $competencyCategories = $this->competencyModel->getAllCategoriesWithCompetencies($langCode);
+        
         // Render the home page with all necessary data
         echo $this->render('home/index', [
             'request' => $request,
             'currentProjects' => $currentProjects,
             'pastProjects' => $pastProjects,
             'personalInfo' => $personalInfo,
+            'competencyCategories' => $competencyCategories, // Add this line
             'translations' => $translationService,
             'language' => $langCode,
             'current_year' => date('Y')

@@ -1,0 +1,29 @@
+<section class="competencies-section">
+    <div class="container">
+        <h2 class="section-heading">{{ translations.translate('competencies.heading') }}</h2>
+
+        <div class="competencies-container">
+            {% if categories|length > 0 %}
+                <div class="competencies-grid">
+                    {% for category in categories %}
+                        <div class="competency-category">
+                            <h3 class="category-name">
+                                {{ category.name }}
+                            </h3>
+                            
+                            <div class="competency-badges">
+                                {% for competency in category.competencies %}
+                                    <span class="competency-badge" style="background-color: {{ competency.color }}">
+                                        {{ competency.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-competencies">{{ translations.translate('competencies.none_defined') }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>

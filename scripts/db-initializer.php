@@ -58,7 +58,8 @@ try {
     // Check for essential tables
     $requiredTables = [
         'users', 'languages', 'projects', 'project_translations', 
-        'personal_info', 'personal_info_translations', 'ui_texts', 'ui_text_translations'
+        'personal_info', 'personal_info_translations', 'ui_texts', 'ui_text_translations',
+        'competency_categories', 'competency_category_translations', 'competencies', 'competency_translations'
     ];
     
     echo "Checking database tables...\n";
@@ -165,6 +166,45 @@ CREATE TABLE IF NOT EXISTS ui_text_translations (
     FOREIGN KEY (ui_text_id) REFERENCES ui_texts(id) ON DELETE CASCADE,
     FOREIGN KEY (language_id) REFERENCES languages(id),
     UNIQUE KEY (ui_text_id, language_id)
+);
+
+-- Competency categories table
+CREATE TABLE IF NOT EXISTS competency_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(50) NOT NULL UNIQUE COMMENT 'Unique identifier for the category',
+    icon VARCHAR(100) NULL COMMENT 'Icon or symbol for this category'
+);
+
+-- Competency category translations
+CREATE TABLE IF NOT EXISTS competency_category_translations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    language_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL COMMENT 'Translated category name',
+    FOREIGN KEY (category_id) REFERENCES competency_categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES languages(id),
+    UNIQUE KEY (category_id, language_id)
+);
+
+-- Competencies table
+CREATE TABLE IF NOT EXISTS competencies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    slug VARCHAR(50) NOT NULL UNIQUE,
+    color VARCHAR(20) NOT NULL COMMENT 'HEX color code for the badge',
+    display_order INT NOT NULL DEFAULT 0 COMMENT 'Order to display within category',
+    FOREIGN KEY (category_id) REFERENCES competency_categories(id)
+);
+
+-- Competency translations
+CREATE TABLE IF NOT EXISTS competency_translations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    competency_id INT NOT NULL,
+    language_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (competency_id) REFERENCES competencies(id) ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES languages(id),
+    UNIQUE KEY (competency_id, language_id)
 );
 SQL;
         
@@ -725,6 +765,26 @@ SQL;
                 'en' => 'Don\'t care',
                 'fr' => 'M\'en fous'
             ],
+            'competencies.heading' => [
+                'en' => 'Skills',
+                'fr' => 'Compétences'
+            ],
+            'competencies.none_defined' => [
+                'en' => 'No skills defined yet.',
+                'fr' => 'Aucune compétence définie pour le moment.'
+            ],
+            'competencies.category.languages' => [
+                'en' => 'Languages',
+                'fr' => 'Langages'
+            ],
+            'competencies.category.software' => [
+                'en' => 'Software',
+                'fr' => 'Logiciels'
+            ],
+            'competencies.category.softskills' => [
+                'en' => 'Soft Skills',
+                'fr' => 'Compétences Personnelles'
+            ],
         ];
         
         $insertedCount = 0;
@@ -751,6 +811,131 @@ SQL;
         echo "Installed $insertedCount UI text translations.\n";
     } else {
         echo "UI texts already exist ($uiTextCount texts).\n";
+    }
+    
+    // Check if competency categories exist
+    $stmt = $pdo->query("SELECT COUNT(*) FROM competency_categories");
+    $categoryCount = $stmt->fetchColumn();
+    
+    if ($categoryCount == 0) {
+        echo "Initializing competency categories...\n";
+        
+        // Insert category: Languages
+        $pdo->exec("INSERT INTO competency_categories (slug, icon) VALUES ('languages', 'code')");
+        $languagesCategoryId = $pdo->lastInsertId();
+        
+        // Insert category: Software
+        $pdo->exec("INSERT INTO competency_categories (slug, icon) VALUES ('software', 'desktop')");
+        $softwareCategoryId = $pdo->lastInsertId();
+        
+        // Insert category: Soft Skills
+        $pdo->exec("INSERT INTO competency_categories (slug, icon) VALUES ('softskills', 'user')");
+        $softSkillsCategoryId = $pdo->lastInsertId();
+        
+        // Add category translations
+        if ($englishId) {
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($languagesCategoryId, $englishId, 'Languages')");
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($softwareCategoryId, $englishId, 'Software')");
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($softSkillsCategoryId, $englishId, 'Soft Skills')");
+        }
+        
+        if ($frenchId) {
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($languagesCategoryId, $frenchId, 'Langages')");
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($softwareCategoryId, $frenchId, 'Logiciels')");
+            $pdo->exec("INSERT INTO competency_category_translations (category_id, language_id, name) 
+                       VALUES ($softSkillsCategoryId, $frenchId, 'Compétences Personnelles')");
+        }
+        
+        // Add example competencies for each category
+        echo "Adding example competencies...\n";
+        
+        // Example programming languages
+        $programmingLanguages = [
+            ['PHP', 'php', '#8993be', 1, $englishId, $frenchId, 'PHP', 'PHP'],
+            ['JavaScript', 'javascript', '#f7df1e', 2, $englishId, $frenchId, 'JavaScript', 'JavaScript'],
+            ['Python', 'python', '#3776ab', 3, $englishId, $frenchId, 'Python', 'Python'],
+            ['Java', 'java', '#f89820', 4, $englishId, $frenchId, 'Java', 'Java'],
+            ['C#', 'csharp', '#68217a', 5, $englishId, $frenchId, 'C#', 'C#'],
+            ['SQL', 'sql', '#e38c00', 6, $englishId, $frenchId, 'SQL', 'SQL']
+        ];
+        
+        foreach ($programmingLanguages as $lang) {
+            $stmt = $pdo->prepare("INSERT INTO competencies (category_id, slug, color, display_order) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$languagesCategoryId, $lang[1], $lang[2], $lang[3]]);
+            $compId = $pdo->lastInsertId();
+            
+            // Add translations
+            if ($englishId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $englishId, $lang[5]]);
+            }
+            
+            if ($frenchId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $frenchId, $lang[6]]);
+            }
+        }
+        
+        // Example software
+        $software = [
+            ['Visual Studio Code', 'vscode', '#0078d7', 1, $englishId, $frenchId, 'Visual Studio Code', 'Visual Studio Code'],
+            ['Adobe Photoshop', 'photoshop', '#31a8ff', 2, $englishId, $frenchId, 'Adobe Photoshop', 'Adobe Photoshop'],
+            ['Docker', 'docker', '#2496ed', 3, $englishId, $frenchId, 'Docker', 'Docker'],
+            ['Git', 'git', '#f05032', 4, $englishId, $frenchId, 'Git', 'Git'],
+            ['JIRA', 'jira', '#0052cc', 5, $englishId, $frenchId, 'JIRA', 'JIRA']
+        ];
+        
+        foreach ($software as $sw) {
+            $stmt = $pdo->prepare("INSERT INTO competencies (category_id, slug, color, display_order) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$softwareCategoryId, $sw[1], $sw[2], $sw[3]]);
+            $compId = $pdo->lastInsertId();
+            
+            // Add translations
+            if ($englishId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $englishId, $sw[5]]);
+            }
+            
+            if ($frenchId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $frenchId, $sw[6]]);
+            }
+        }
+        
+        // Example soft skills
+        $softSkills = [
+            ['Problem Solving', 'problem-solving', '#7b68ee', 1, $englishId, $frenchId, 'Problem Solving', 'Résolution de problèmes'],
+            ['Teamwork', 'teamwork', '#20b2aa', 2, $englishId, $frenchId, 'Teamwork', 'Travail d\'équipe'],
+            ['Communication', 'communication', '#ff6347', 3, $englishId, $frenchId, 'Communication', 'Communication'],
+            ['Adaptability', 'adaptability', '#32cd32', 4, $englishId, $frenchId, 'Adaptability', 'Adaptabilité'],
+            ['Time Management', 'time-management', '#ffa500', 5, $englishId, $frenchId, 'Time Management', 'Gestion du temps']
+        ];
+        
+        foreach ($softSkills as $skill) {
+            $stmt = $pdo->prepare("INSERT INTO competencies (category_id, slug, color, display_order) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$softSkillsCategoryId, $skill[1], $skill[2], $skill[3]]);
+            $compId = $pdo->lastInsertId();
+            
+            // Add translations
+            if ($englishId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $englishId, $skill[5]]);
+            }
+            
+            if ($frenchId) {
+                $stmt = $pdo->prepare("INSERT INTO competency_translations (competency_id, language_id, name) VALUES (?, ?, ?)");
+                $stmt->execute([$compId, $frenchId, $skill[6]]);
+            }
+        }
+        
+        echo "Competency categories and example competencies added successfully.\n";
+    } else {
+        echo "Competency categories already exist.\n";
     }
     
     echo "\nDatabase initialization completed successfully!\n";

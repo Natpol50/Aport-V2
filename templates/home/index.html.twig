@@ -23,12 +23,15 @@
 </div>
 {% endblock %}
 
-
 {% block content %}
+
+    {# Competencies section #}
+    <br/>
+    {% include 'components/competencies.html.twig' %}
+    
     {# Projects section #}
     <section class="content-section">
         <div class="container">
-            <br/>
             <h2 class="section-heading">{{ translations.translate('home.current_projects') }}</h2>
             
             <div class="projects-container">
@@ -47,13 +50,9 @@
         </div>
     </section>
     
-    {# Diagonal divider #}
-    <div class="diagonal-divider"></div>
-    
     {# Past projects section #}
     <section class="content-section">
         <div class="container">
-            <br/>
             <h2 class="section-heading">{{ translations.translate('home.past_projects') }}</h2>
             
             <div class="projects-container">
@@ -71,10 +70,4 @@
             </div>
         </div>
     </section>
-{% endblock %}
-
-{% block javascripts %}
-        <script src="/assets/js/project-3D.js"></script>
-        <script src="/assets/js/css-override-fix.js"></script>
-
 {% endblock %}

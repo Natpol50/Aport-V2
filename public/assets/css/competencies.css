@@ -1,0 +1,162 @@
+/* public/assets/css/competencies.css */
+
+/**
+ * competencies.css - Styling for competency badges and tabs
+ *
+ * This file defines an aggressive visual style for competency badges
+ * with bold trapezoid shapes, dynamic coloring, and tab interactions.
+ */
+
+/* ===== COMPETENCIES SECTION ===== */
+.competencies-section {
+    background-color: var(--color-content-bg);
+    padding: var(--spacing-xl) 0;
+    position: relative;
+    z-index: var(--z-above);
+  }
+  
+  /* ===== COMPETENCY TABS ===== */
+  .competency-tabs {
+    margin-top: 2rem;
+    width: 100%;
+  }
+  
+  .competency-tabs-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--color-surface);
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  /* Tab button with trapezoid shape */
+  .competency-tab-button {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: var(--font-weight-bold);
+    font-size: 1.125rem;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: skewX(-15deg);
+    transform-origin: bottom left;
+    overflow: visible;
+    transition: background-color var(--transition-medium), transform var(--transition-medium);
+  }
+  
+  /* Ensure text inside button is straight */
+  .competency-tab-button .tab-name {
+    transform: skewX(15deg);
+    display: inline-block;
+  }
+  
+  /* Ensure icon inside button is straight */
+  .competency-tab-button .tab-icon {
+    transform: skewX(15deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Active tab state */
+  .competency-tab-button.active {
+    background-color: var(--color-primary);
+    transform: skewX(-15deg) translateY(-4px);
+    z-index: 2;
+  }
+  
+  /* Hover effect */
+  .competency-tab-button:hover:not(.active) {
+    background-color: var(--color-surface-hover);
+    transform: skewX(-15deg) translateY(-2px);
+  }
+  
+  /* Edge accent on tab */
+  .competency-tab-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    height: 100%;
+    width: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    transform: skewX(-15deg);
+    z-index: -1;
+  }
+  
+  /* ===== TAB PANELS ===== */
+  .competency-tab-panel {
+    display: none;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+  }
+  
+  .competency-tab-panel.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* ===== COMPETENCY BADGES ===== */
+  .competency-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  /* Dynamic colored badge with aggressive trapezoid shape */
+  .competency-badge {
+    --badge-color: var(--color-primary); /* Default color, can be overridden inline */
+    background-color: var(--badge-color);
+    color: white;
+    font-weight: var(--font-weight-bold);
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    position: relative;
+    display: inline-block;
+    transform: skewX(-20deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+    /* Ensure dark text on light badges for readability */
+    color: color-contrast(var(--badge-color) vs black, white);
+  }
+  
+  /* Text inside badge (counter-skew to make it straight) */
+  .competency-badge::before {
+    content: attr(data-name);
+    display: inline-block;
+    transform: skewX(20deg);
+  }
+  
+  /* Hover effect on badges */
+  .competency-badge:hover {
+    transform: skewX(-20deg) translateY(-3px);
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  /* ===== RESPONSIVE ADJUSTMENTS ===== */
+  @media (max-width: 768px) {
+    .competency-tabs-header {
+      justify-content: center;
+    }
+    
+    .competency-tab-button {
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
+    }
+    
+    .competency-badges {
+      justify-content: center;
+    }
+  }

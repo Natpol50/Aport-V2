@@ -78,7 +78,7 @@ class Database
      * @param string $sql SQL query
      * @param array $params Parameters for the query
      * @return \PDOStatement PDO statement
-     * @throws DatabaseException If query fails
+     * @throws \Exception If query fails
      */
     public function query(string $sql, array $params = []): \PDOStatement
     {
@@ -87,7 +87,14 @@ class Database
             $stmt->execute($params);
             return $stmt;
         } catch (\PDOException $e) {
-            throw new DatabaseException('Query error: ' . $e->getMessage(), $e->getCode(), $e);
+            // Convert SQL error code to integer - fixes the type error
+            $errorCode = is_numeric($e->getCode()) ? (int)$e->getCode() : 0;
+            
+            throw new \Exception(
+                "Query error: " . $e->getMessage() . " - SQL: $sql",
+                $errorCode,
+                $e
+            );
         }
     }
     
