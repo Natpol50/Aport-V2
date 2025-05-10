@@ -4,17 +4,16 @@
 
         <div class="competencies-container">
             {% if categories|length > 0 %}
-                <div class="competencies-grid">
+                <div class="competencies-table">
                     {% for category in categories %}
-                        <div class="competency-category">
-                            <h3 class="category-name">
-                                {{ category.name }}
-                            </h3>
-                            
-                            <div class="competency-badges">
+                        <div class="competency-row">
+                            <div class="category-cell">
+                                <h3 class="category-name">{{ category.name }}</h3>
+                            </div>
+                            <div class="skills-cell">
                                 {% for competency in category.competencies %}
                                     <span class="competency-badge" style="background-color: {{ competency.color }}">
-                                        {{ competency.name }}
+                                        <span class="trapezoid-text">{{ competency.name }}</span>
                                     </span>
                                 {% endfor %}
                             </div>

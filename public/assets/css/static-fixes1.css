@@ -1177,3 +1177,43 @@ html.no-scroll-animations-for-cards .project-card,
   pointer-events: auto !important;
 }
 
+/* ...existing code... */
+
+/* Force trapezoid fixes for competency elements */
+.competency-row {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+.category-cell {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.category-cell::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -15px !important;
+  height: 100% !important;
+  width: 30px !important;
+  background-color: var(--color-primary-dark) !important;
+  transform: skewX(-15deg) !important;
+  z-index: -1 !important;
+}
+
+.competency-badge {
+  transform: skewX(-20deg) !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.competency-badge .trapezoid-text {
+  display: inline-block !important;
+  transform: skewX(20deg) !important;
+}
+
+.competency-badge:hover {
+  transform: skewX(-20deg) translateY(-3px) !important;
+}
+

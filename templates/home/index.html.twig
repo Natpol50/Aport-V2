@@ -27,7 +27,7 @@
 
     {# Competencies section #}
     <br/>
-    {% include 'components/competencies.html.twig' %}
+    {% include 'components/competencies.html.twig' with {'categories': competencyCategories} %}
     
     {# Projects section #}
     <section class="content-section">

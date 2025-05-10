@@ -15,6 +15,76 @@
     z-index: var(--z-above);
   }
   
+  /* ===== TABLE-LIKE LAYOUT ===== */
+  .competencies-table {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: visible !important; /* Force visible overflow */
+    box-shadow: var(--shadow-sm);
+    position: relative; /* Ensure positioning context */
+  }
+  
+  .competency-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    overflow: visible !important; /* Force visible overflow */
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* Ensure positioning context */
+  }
+  
+  .competency-row:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .category-cell {
+    background-color: var(--color-primary-dark);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative; /* Ensure positioning context */
+    z-index: 1; /* Raise above other elements */
+  }
+  
+  /* Trapezoid shape for category cell - Fixed positioning */
+  .category-cell::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -15px;
+    height: 100%;
+    width: 30px;
+    background-color: var(--color-primary-dark);
+    transform: skewX(-15deg);
+    z-index: -1; /* Place behind content */
+  }
+  
+  .category-name {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    z-index: 2; /* Raise above pseudo-element */
+    margin: 0;
+  }
+  
+  .skills-cell {
+    padding: 1rem 1.5rem 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    background-color: var(--color-surface);
+    position: relative; /* Ensure positioning context */
+    z-index: 0; /* Lower than category-cell */
+  }
+  
   /* ===== COMPETENCY TABS ===== */
   .competency-tabs {
     margin-top: 2rem;
@@ -120,28 +190,31 @@
     --badge-color: var(--color-primary); /* Default color, can be overridden inline */
     background-color: var(--badge-color);
     color: white;
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
     font-size: 0.875rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.25rem;
     position: relative;
-    display: inline-block;
-    transform: skewX(-20deg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: skewX(-20deg) !important; /* Force skew transformation */
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
     transition: transform var(--transition-medium), box-shadow var(--transition-medium);
-    /* Ensure dark text on light badges for readability */
-    color: color-contrast(var(--badge-color) vs black, white);
+    z-index: 2; /* Ensure visibility */
+    overflow: visible !important; /* Force visible overflow */
   }
   
-  /* Text inside badge (counter-skew to make it straight) */
-  .competency-badge::before {
-    content: attr(data-name);
+  /* Ensure text is readable on any badge color */
+  .competency-badge .trapezoid-text {
     display: inline-block;
-    transform: skewX(20deg);
+    transform: skewX(20deg) !important; /* Force counter-skew */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    color: white;
   }
   
   /* Hover effect on badges */
   .competency-badge:hover {
-    transform: skewX(-20deg) translateY(-3px);
+    transform: skewX(-20deg) translateY(-3px) !important; /* Force transformation */
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
   }
   
@@ -158,5 +231,26 @@
     
     .competency-badges {
       justify-content: center;
+    }
+    
+    .competency-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .category-cell::after {
+      display: none;
+    }
+    
+    .category-cell {
+      padding: 0.75rem 1rem;
+    }
+    
+    .skills-cell {
+      padding: 1rem;
+    }
+    
+    .competency-badge {
+      font-size: 0.8rem;
+      padding: 0.4rem 1rem;
     }
   }
