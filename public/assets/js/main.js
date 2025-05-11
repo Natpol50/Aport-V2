@@ -95,7 +95,7 @@ function updateSpacers() {
     
     // Apply separate adjustment factors for hero and footer
     // Use a smaller factor for hero on mobile devices
-    const heroAdjustmentFactor = isMobile ? 0.9 : 1; // Smaller factor (0.9) for mobile
+    const heroAdjustmentFactor = isMobile ? 1 : 1; // Smaller factor (0.9) for mobile [cancelled]
     const footerAdjustmentFactor = 1;
     
     // Calculate adjusted heights with separate factors
