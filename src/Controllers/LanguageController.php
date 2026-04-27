@@ -58,6 +58,13 @@ class LanguageController extends BaseController
         
         // Determine redirect URL based on parameter or referer
         $redirectParam = $_GET['redirect'] ?? '';
+        
+        // Security: Validate the redirect parameter to prevent open redirect vulnerabilities
+        // We only allow intra-site redirects (starting with /)
+        if (!empty($redirectParam) && (strpos($redirectParam, '/') !== 0 || strpos($redirectParam, '//') === 0)) {
+            $redirectParam = '/';
+        }
+        
         $referer = $_SERVER['HTTP_REFERER'] ?? '/';
         $currentUrl = !empty($redirectParam) ? $redirectParam : $referer;
         
