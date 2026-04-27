@@ -1,0 +1,69 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Manage Competencies - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-content container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="admin-title-trap text-2xl font-bold uppercase tracking-tight">Skills & Competencies</h1>
+        <div class="flex gap-6">
+            <a href="/admin/competency-category/new" class="admin-trap bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 font-bold transition-all shadow-lg">
+                <span>+ Tag Category</span>
+            </a>
+            <a href="/admin/competency/new" class="admin-trap bg-primary hover:bg-primary-dark text-white px-6 py-2 font-bold transition-all shadow-lg">
+                <span>+ Add Skill</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-12">
+        {% for category in categories %}
+        <div class="bg-surface p-8 shadow-2xl border-l-4 border-gray-600">
+            <div class="flex flex-wrap justify-between items-start gap-4 mb-8">
+                <div class="flex items-center gap-6">
+                    <div class="text-4xl text-primary"><i class="fas {{ category.icon }}"></i></div>
+                    <div>
+                        <h2 class="text-2xl font-bold uppercase tracking-widest leading-none mb-2">{{ category.name }}</h2>
+                        <span class="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-bold opacity-40">SLUG:{{ category.slug }}</span>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <a href="/admin/competency-category/edit/{{ category.id }}" class="admin-trap bg-gray-700 hover:bg-gray-600 text-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest">
+                        <span>Edit Category</span>
+                    </a>
+                    <form action="/admin/competency-category/delete/{{ category.id }}" method="POST" onsubmit="return confirm('Delete category {{ category.name }}?')" class="inline">
+                        <button type="submit" class="admin-trap bg-red-800 hover:bg-red-700 text-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest">
+                            <span>Del</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-800">
+                {% for competency in category.competencies %}
+                <div class="group relative flex items-center bg-background border border-gray-700 pl-4 pr-2 py-2 hover:border-primary transition-all">
+                    <div class="w-4 h-4 mr-3 admin-trap" style="background-color: {{ competency.color }}"></div>
+                    <span class="text-gray-200 font-bold tracking-tight">{{ competency.name }}</span>
+                    
+                    <div class="flex items-center ml-4 gap-2 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
+                        <a href="/admin/competency/edit/{{ competency.id }}" class="admin-trap bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 text-[9px] font-bold uppercase">
+                            <span>Edit</span>
+                        </a>
+                        <form action="/admin/competency/delete/{{ competency.id }}" method="POST" onsubmit="return confirm('Delete {{ competency.name }}?')" class="inline">
+                            <button type="submit" class="admin-trap bg-red-600 hover:bg-red-500 text-white px-3 py-1 text-[9px] font-bold uppercase">
+                                <span>Del</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+                <a href="/admin/competency/new?category_id={{ category.id }}" class="admin-trap bg-background border border-dashed border-gray-600 px-6 py-2 text-gray-500 hover:text-primary hover:border-primary transition-all font-bold text-sm">
+                    <span>+ Add Skill</span>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,84 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ translations.translate('admin.projects') }} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-content container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="admin-title-trap text-2xl font-bold uppercase tracking-tight">Manage Projects</h1>
+        <a href="/admin/project/new" class="admin-trap bg-primary hover:bg-primary-dark px-6 py-2 font-bold transition-all shadow-lg hover:translate-y-[-2px]">
+            <span>+ New Project</span>
+        </a>
+    </div>
+
+    <div class="bg-surface p-6 mb-12 border-l-4 border-gray-600 shadow-xl">
+        <form method="GET" class="flex flex-wrap gap-4 items-center">
+            <div class="flex-grow min-w-[200px]">
+                <input type="text" name="search" value="{{ request.getQuery('search') }}" placeholder="Search projects..." class="w-full bg-background border border-gray-600 px-4 py-2 focus:border-primary outline-none transition-colors">
+            </div>
+            <div class="w-48">
+                <select name="status" class="w-full bg-background border border-gray-600 px-4 py-2 focus:border-primary outline-none transition-colors">
+                    <option value="">All Statuses</option>
+                    <option value="current" {{ request.getQuery('status') == 'current' ? 'selected' : '' }}>Current</option>
+                    <option value="past" {{ request.getQuery('status') == 'past' ? 'selected' : '' }}>Past</option>
+                </select>
+            </div>
+            <button type="submit" class="admin-trap bg-gray-700 hover:bg-gray-600 px-8 py-2 font-bold transition-all">
+                <span>Filter</span>
+            </button>
+        </form>
+    </div>
+
+    <div class="bg-surface shadow-2xl overflow-hidden border border-gray-700">
+        <table class="w-full text-left">
+            <thead class="bg-gray-800/80 text-gray-400 text-xs uppercase tracking-[0.2em] font-bold">
+                <tr>
+                    <th class="px-8 py-5">Title</th>
+                    <th class="px-8 py-5">Type</th>
+                    <th class="px-8 py-5">Status</th>
+                    <th class="px-8 py-5">Date</th>
+                    <th class="px-8 py-5">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800">
+                {% for project in projects %}
+                <tr class="hover:bg-primary/5 transition-colors group">
+                    <td class="px-8 py-5">
+                        <div class="font-bold text-lg group-hover:text-primary transition-colors">{{ project.title }}</div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="admin-trap bg-gray-800 border border-gray-700 px-3 py-1 text-[10px] uppercase font-bold tracking-widest">
+                            <span>{{ project.type }}</span>
+                        </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        {% if project.status == 'current' %}
+                            <span class="admin-trap bg-green-900/30 border border-green-700 text-green-400 px-3 py-1 text-[10px] uppercase font-bold tracking-widest">
+                                <span>{{ project.status }}</span>
+                            </span>
+                        {% else %}
+                            <span class="admin-trap bg-blue-900/30 border border-blue-700 text-blue-400 px-3 py-1 text-[10px] uppercase font-bold tracking-widest">
+                                <span>{{ project.status }}</span>
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-8 py-5 text-sm font-mono text-gray-500 uppercase">{{ project.start_date|date('M Y') }}</td>
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-4">
+                            <a href="/admin/project/edit/{{ project.id }}" class="admin-trap bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 text-xs font-bold uppercase tracking-tighter">
+                                <span>Edit</span>
+                            </a>
+                            <form action="/admin/project/delete/{{ project.id }}" method="POST" onsubmit="return confirm('Delete this project?')" class="inline">
+                                <button type="submit" class="admin-trap bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 text-xs font-bold uppercase tracking-tighter">
+                                    <span>Del</span>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

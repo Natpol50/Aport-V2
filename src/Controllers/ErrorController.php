@@ -114,6 +114,7 @@ class ErrorController extends BaseController
         
         // Render 500 page
         echo $this->render('errors/500', [
+            'app' => ['debug' => ($_ENV['APP_DEBUG'] === 'true')],
             'request' => $request,
             'translations' => $translationService,
             'language' => $langCode,
@@ -152,6 +153,7 @@ class ErrorController extends BaseController
         
         // Render fatal error page
         echo $this->render('errors/fatal', [
+            'app' => ['debug' => ($_ENV['APP_DEBUG'] === 'true')],
             'request' => $request,
             'translations' => $translationService,
             'language' => $langCode,
@@ -232,7 +234,6 @@ class ErrorController extends BaseController
             E_USER_ERROR => 'User Error',
             E_USER_WARNING => 'User Warning',
             E_USER_NOTICE => 'User Notice',
-            E_STRICT => 'Strict Standards',
             E_RECOVERABLE_ERROR => 'Recoverable Error',
             E_DEPRECATED => 'Deprecated',
             E_USER_DEPRECATED => 'User Deprecated'

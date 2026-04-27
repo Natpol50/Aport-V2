@@ -219,4 +219,93 @@ class CompetencyModel
             throw $e;
         }
     }
+
+    /**
+     * Update a competency category
+     */
+    public function updateCategory(int $id, string $slug, string $icon, array $translations): void
+    {
+        try {
+            $this->database->beginTransaction();
+            
+            $this->database->query('UPDATE competency_categories SET slug = :slug, icon = :icon WHERE id = :id', [
+                'slug' => $slug,
+                'icon' => $icon,
+                'id' => $id
+            ]);
+            
+            $languageModel = new LanguageModel($this->database);
+            foreach ($translations as $langCode => $name) {
+                $language = $languageModel->getLanguageByCode($langCode);
+                if (!$language) continue;
+                
+                $sql = 'INSERT INTO competency_category_translations (category_id, language_id, name) 
+                        VALUES (:cat_id, :lang_id, :name) 
+                        ON DUPLICATE KEY UPDATE name = VALUES(name)';
+                $this->database->query($sql, [
+                    'cat_id' => $id,
+                    'lang_id' => $language->id,
+                    'name' => $name
+                ]);
+            }
+            
+            $this->database->commit();
+        } catch (\Exception $e) {
+            $this->database->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Update a competency
+     */
+    public function updateCompetency(int $id, int $categoryId, string $slug, string $color, array $translations): void
+    {
+        try {
+            $this->database->beginTransaction();
+            
+            $this->database->query('UPDATE competencies SET category_id = :cat_id, slug = :slug, color = :color WHERE id = :id', [
+                'cat_id' => $categoryId,
+                'slug' => $slug,
+                'color' => $color,
+                'id' => $id
+            ]);
+            
+            $languageModel = new LanguageModel($this->database);
+            foreach ($translations as $langCode => $name) {
+                $language = $languageModel->getLanguageByCode($langCode);
+                if (!$language) continue;
+                
+                $sql = 'INSERT INTO competency_translations (competency_id, language_id, name) 
+                        VALUES (:comp_id, :lang_id, :name) 
+                        ON DUPLICATE KEY UPDATE name = VALUES(name)';
+                $this->database->query($sql, [
+                    'comp_id' => $id,
+                    'lang_id' => $language->id,
+                    'name' => $name
+                ]);
+            }
+            
+            $this->database->commit();
+        } catch (\Exception $e) {
+            $this->database->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete a competency
+     */
+    public function deleteCompetency(int $id): void
+    {
+        $this->database->query('DELETE FROM competencies WHERE id = :id', ['id' => $id]);
+    }
+
+    /**
+     * Delete a competency category (and its competencies)
+     */
+    public function deleteCategory(int $id): void
+    {
+        $this->database->query('DELETE FROM competency_categories WHERE id = :id', ['id' => $id]);
+    }
 }

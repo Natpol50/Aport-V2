@@ -29,14 +29,12 @@ class LanguageController extends BaseController
         'en' => [
             '/' => '/en',
             '/contact' => '/contact-en',
-            '/projects' => '/projects-en',
-            '/project/' => '/project-en/'
+            '/projects' => '/projects'
         ],
         'fr' => [
             '/en' => '/',
             '/contact-en' => '/contact',
-            '/projects-en' => '/projects',
-            '/project-en/' => '/project/'
+            '/contact' => '/contact'
         ]
     ];
     
@@ -58,9 +56,12 @@ class LanguageController extends BaseController
         // Store language preference in session
         $_SESSION['language'] = $lang;
         
-        // Determine redirect URL based on referer
+        // Determine redirect URL based on parameter or referer
+        $redirectParam = $_GET['redirect'] ?? '';
         $referer = $_SERVER['HTTP_REFERER'] ?? '/';
-        $redirectUrl = $this->getTranslatedUrl($referer, $lang);
+        $currentUrl = !empty($redirectParam) ? $redirectParam : $referer;
+        
+        $redirectUrl = $this->getTranslatedUrl($currentUrl, $lang);
         
         // Redirect to the equivalent page in the new language
         $this->redirect($redirectUrl);
@@ -79,9 +80,9 @@ class LanguageController extends BaseController
         $parsedUrl = parse_url($currentUrl);
         $currentPath = $parsedUrl['path'] ?? '/';
         
-        // Determine source language based on the path (assuming default is French)
+        // Determine source language based on the path
         $currentLang = 'fr';
-        if (preg_match('/\/en($|\/)/', $currentPath)) {
+        if (strpos($currentPath, '-en') !== false || strpos($currentPath, '/en') === 0 || $currentPath === '/en') {
             $currentLang = 'en';
         }
         

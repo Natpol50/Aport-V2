@@ -1,0 +1,10 @@
+{% extends 'errors/layout.html.twig' %}
+
+{% set error_code = 'FATAL' %}
+{% set error_title = 'System Halt' %}
+{% set error_heading = 'Critical System Error' %}
+{% set error_color_hex = '#658C79' %}
+{% set error_icon = 'fa-skull-crossbones' %}
+{% set error_message = 'The application encountered a fatal condition and cannot proceed.' %}
+
+{% block title %}FATAL ERROR{% endblock %}

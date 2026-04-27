@@ -1,0 +1,60 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ isNew ? 'Add Skill' : 'Edit Skill' }} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-content container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">{{ isNew ? 'Add Skill/Competency' : 'Edit Skill: ' ~ competency.name }}</h1>
+        <a href="/admin/competencies" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 font-bold">Cancel</a>
+    </div>
+
+    <form action="{{ isNew ? '/admin/competency/create' : '/admin/competency/update/' ~ competency.id }}" method="POST" class="space-y-8">
+        <div class="bg-surface p-6 shadow-md border-l-4 border-primary">
+            <h2 class="text-xl font-bold mb-4">Base Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-2">
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Category</label>
+                    <select name="category_id" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" required>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {{ (competency.category_id|default(cat_id|default(0))) == cat.id ? 'selected' : '' }}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Slug</label>
+                    <input type="text" name="slug" value="{{ competency.slug|default('') }}" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" placeholder="php">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Color (Hex)</label>
+                    <div class="flex">
+                        <input type="color" name="color_picker" value="{{ competency.color|default('#658C79') }}" class="h-10 w-12 bg-background border border-gray-600 p-1 cursor-pointer" oninput="this.nextElementSibling.value = this.value">
+                        <input type="text" name="color" value="{{ competency.color|default('#658C79') }}" class="flex-grow bg-background border border-gray-600 p-2 focus:border-primary outline-none" placeholder="#FFFFFF">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% for lang in languages %}
+            <div class="bg-surface p-6 shadow-md border-t-2 border-gray-700">
+                <h2 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="mr-2 text-2xl">{{ lang.code == 'fr' ? '🇫🇷' : '🇬🇧' }}</span>
+                    {{ lang.name }} Translation
+                </h2>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Skill Name</label>
+                    <input type="text" name="name_{{ lang.code }}" value="{{ (translationsByLang[lang.code].name)|default('') }}" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" required>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="admin-trap bg-primary hover:bg-primary-dark text-white px-8 py-3 font-bold">
+                <span>{{ isNew ? 'Create Skill' : 'Save Changes' }}</span>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

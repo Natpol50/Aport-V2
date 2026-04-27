@@ -84,6 +84,9 @@ class Application
             // Setup language middleware
             $languageMiddleware = new LanguageMiddleware($this->request, $cacheService);
             $this->request = $languageMiddleware->handle();
+
+            // Security check: Ensure only one user exists in the system
+            $this->enforceSingleUserPolicy();
             
             // Register routes
             $this->registerRoutes();
@@ -176,21 +179,14 @@ class Application
         $this->router->get('/en', 'HomeController@indexEn');
         
         // Contact routes
-        $this->router->get('/contact', 'HomeController@contact');
-        $this->router->get('/contact-en', 'HomeController@contactEn');
-        $this->router->post('/contact/submit', 'HomeController@submitContact');
+        $this->router->get('/contact', 'ContactController@contactPage');
+        $this->router->get('/contact-en', 'ContactController@contactPageEn');
+        $this->router->post('/contact/submit', 'ContactController@submitContact');
         
         // Auth routes (simplified - registration removed)
         $this->router->get('/login', 'AuthController@loginForm');
         $this->router->post('/login', 'AuthController@login');
         $this->router->get('/logout', 'AuthController@logout');
-        
-        // Password reset routes (kept for admin use)
-        $this->router->get('/forgot-password', 'AuthController@forgotPasswordForm');
-        $this->router->post('/forgot-password', 'AuthController@forgotPassword');
-        $this->router->post('/reset-code', 'AuthController@verifyResetCode');
-        $this->router->get('/reset-password', 'AuthController@resetPasswordForm');
-        $this->router->post('/reset-password', 'AuthController@resetPassword');
         
         // Project routes
         $this->router->get('/projects', 'ProjectController@index');
@@ -208,8 +204,22 @@ class Application
         $this->router->get('/admin/project/edit/{id}', 'AdminController@editProject');
         $this->router->post('/admin/project/update/{id}', 'AdminController@updateProject');
         $this->router->post('/admin/project/delete/{id}', 'AdminController@deleteProject');
+        $this->router->get('/admin/competencies', 'AdminController@competencies');
         $this->router->get('/admin/personal-info', 'AdminController@personalInfo');
         $this->router->post('/admin/personal-info/update', 'AdminController@updatePersonalInfo');
+        
+        // Competency Admin Routes
+        $this->router->get('/admin/competency-category/new', 'AdminController@newCompetencyCategory');
+        $this->router->get('/admin/competency-category/edit/{id}', 'AdminController@editCompetencyCategory');
+        $this->router->post('/admin/competency-category/create', 'AdminController@updateCompetencyCategory');
+        $this->router->post('/admin/competency-category/update/{id}', 'AdminController@updateCompetencyCategory');
+        $this->router->post('/admin/competency-category/delete/{id}', 'AdminController@deleteCompetencyCategory');
+        
+        $this->router->get('/admin/competency/new', 'AdminController@newCompetency');
+        $this->router->get('/admin/competency/edit/{id}', 'AdminController@editCompetency');
+        $this->router->post('/admin/competency/create', 'AdminController@updateCompetency');
+        $this->router->post('/admin/competency/update/{id}', 'AdminController@updateCompetency');
+        $this->router->post('/admin/competency/delete/{id}', 'AdminController@deleteCompetency');
         
         // Language routes
         $this->router->get('/language/switch/{lang}', 'LanguageController@switchLanguage');
@@ -219,10 +229,6 @@ class Application
         $this->router->get('/403', 'ErrorController@forbidden');
         $this->router->get('/500', 'ErrorController@serverError');
         $this->router->get('/maintenance', 'ErrorController@maintenance');
-
-        $this->router->get('/contact-standalone', 'ContactController@contactPage');
-        $this->router->get('/contact-en-standalone', 'ContactController@contactPageEn');
-        $this->router->post('/contact/submit-standalone', 'ContactController@submitContact');
     }
     
     /**
@@ -252,6 +258,22 @@ class Application
         }
     }
     
+    /**
+     * Enforce that only one user exists in the database
+     * 
+     * @throws \Exception If multiple users are detected
+     */
+    private function enforceSingleUserPolicy(): void
+    {
+        $sql = "SELECT COUNT(*) as count FROM users";
+        $result = $this->database->fetchOne($sql);
+        
+        if ($result && $result->count > 1) {
+            $this->logger->critical("Security breach: Multiple users detected in a single-user application.");
+            throw new \Exception("Security Violation: Multiple administrative accounts detected. Access locked for safety.");
+        }
+    }
+
     /**
      * Check if the application is in maintenance mode
      * 

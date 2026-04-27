@@ -1,0 +1,83 @@
+{% extends 'errors/base_error.html.twig' %}
+
+{% set default_color = '#658C79' %}
+{% set accent_color = error_color_hex|default(default_color) %}
+
+{% block content %}
+<div class="flex items-center justify-center font-sans w-full py-20">
+    <div class="max-w-5xl w-full">
+        <!-- Main Error Container -->
+        <div class="relative bg-[#1a1a24] border-x-4 p-8 md:p-12 shadow-[0_0_50px_rgba(0,0,0,0.5)]" style="border-color: {{ accent_color }}66;">
+            
+            <!-- White/Gray background overlay for contrast -->
+            <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none"></div>
+
+            <!-- Trapezoid Header Label -->
+            <div class="absolute -top-10 left-0 px-8 py-2 clip-trapezoid-title shadow-lg z-20" style="background-color: {{ accent_color }};">
+                <span class="text-white font-bold tracking-widest uppercase text-xl leading-relaxed">{{ error_title|default('System Error') }}</span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row items-center lg:items-start gap-12 relative z-10">
+                <!-- Massive Error Code / Icon -->
+                <div class="text-9xl md:text-[12rem] font-bold leading-none text-white/5 select-none relative shrink-0">
+                    {{ error_code|default('ERR') }}
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas {{ error_icon|default('fa-radiation') }} text-6xl animate-pulse" style="color: {{ accent_color }};"></i>
+                    </div>
+                </div>
+
+                <div class="flex-1 space-y-6 text-left w-full">
+                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter border-b-2 pb-4 flex justify-between items-end" style="border-color: {{ accent_color }};">
+                        <span>{{ error_heading|default('Emergency Alert') }}</span>
+                        <span class="text-sm font-mono opacity-50 hidden md:block">LVL: CRITICAL</span>
+                    </h2>
+                    
+                    <!-- Apache Style Console Terminal -->
+                    <div class="bg-black/90 p-6 border-l-4 font-mono text-sm shadow-inner" style="border-color: {{ accent_color }};">
+                        <p class="mb-2 font-bold" style="color: {{ accent_color }};"># HTTP/1.1 {{ error_code|default('500') }} {{ error_heading|default('Internal Server Error') }}</p>
+                        <p class="mb-4 text-white/40"># TRACE_ID: {{ "now"|date("Ymd-His") }}-{{ random(1000, 9999) }}</p>
+                        <p class="mt-4 text-white leading-relaxed font-bold tracking-tight text-lg underline" style="text-decoration-color: {{ accent_color }}4D;">> {{ error_message|default('A critical failure occurred in the system core.') }}</p>
+                    </div>
+
+                    <!-- Debug Section (Conditional) -->
+                    {% if app.debug and exception %}
+                    <div class="mt-8 space-y-2">
+                        <h3 class="font-bold uppercase text-xs tracking-widest" style="color: {{ accent_color }};">Diagnostic Trace</h3>
+                        <div class="bg-slate-950 p-4 border border-slate-800 rounded text-xs font-mono text-slate-400 overflow-x-auto whitespace-pre leading-relaxed max-h-64 scrollbar-thin">
+{{ exception.message }}
+File: {{ exception.file }}
+Line: {{ exception.line }}
+
+{{ exception.traceAsString }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="pt-8 flex flex-wrap gap-4">
+                        <a href="/" class="group relative px-10 py-4 text-white font-bold uppercase tracking-widest hover:brightness-110 transition-all clip-trapezoid-button shadow-lg" style="background-color: {{ accent_color }};">
+                            <span class="relative z-10 flex items-center">
+                                <i class="fas fa-home mr-3"></i> RETURN TO BASE
+                            </span>
+                        </a>
+                        <button onclick="window.location.reload()" class="px-8 py-4 border-2 border-slate-700 text-slate-400 font-bold uppercase tracking-widest hover:text-white transition-all hover-border-custom" data-accent="{{ accent_color }}">
+                            RETRY SYSTEM
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apache Footer Mimic -->
+        <div class="mt-8 text-center">
+            <address class="text-slate-600 font-mono text-xs italic tracking-wide">
+                Apache/2.4.41 (Ubuntu) Server at {{ request.getHost()|default('localhost') }} Port 443
+            </address>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-border-custom:hover { border-color: {{ accent_color }} !important; }
+</style>
+{% endblock %}

@@ -34,42 +34,26 @@ document.addEventListener('DOMContentLoaded', function() {
       card.addEventListener('mousemove', (e) => {
         if (!card.classList.contains('hover-active')) return;
         
+        // Refresh dimensions in case of resize or late loading
+        const currentHeight = card.clientHeight;
+        const currentWidth = card.clientWidth;
+        
         // Calculate mouse position relative to card center
-        // This creates the coordinate system for our 3D effect
         const rect = card.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         
-        // Calculate position as a percentage of card dimensions
-        // This normalizes our values to a range of -0.5 to 0.5
-        // where (0,0) is the center of the card
-        const xRotation = ((mouseY / height) - 0.5) * -1;
-        const yRotation = (mouseX / width) - 0.5;
+        const xRotation = ((mouseY / currentHeight) - 0.5) * -1;
+        const yRotation = (mouseX / currentWidth) - 0.5;
         
-        // Calculate rotation angles with proper strength
-        // The 20 factor controls the maximum tilt angle (degrees)
-        const xAngle = xRotation * 20;
-        const yAngle = yRotation * 20;
+        const xAngle = xRotation * 5;
+        const yAngle = yRotation * 5;
         
-        // Apply the 3D transform
-        // We use matrix mathematics internally via these CSS transforms
-        card.style.transform = `
-          perspective(1000px) 
-          rotateX(${xAngle}deg) 
-          rotateY(${yAngle}deg) 
-          translateZ(10px)
-        `;
+        card.style.setProperty('transform', `perspective(1000px) rotateX(${xAngle}deg) rotateY(${yAngle}deg) scale3d(1.02, 1.02, 1.02)`, 'important');
         
-        // Calculate shadow position to match tilt
-        // This enhances the 3D effect by moving the shadow opposite to the tilt
-        const shadowX = yRotation * 20;
-        const shadowY = xRotation * 20 * -1;
-        const shadowBlur = 30 - Math.abs(xAngle) - Math.abs(yAngle);
-        
-        // Apply dynamic shadow based on tilt angle
-        card.style.boxShadow = `
-          ${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.2)
-        `;
+        const shadowX = yRotation * 15;
+        const shadowY = xRotation * 15 * -1;
+        card.style.setProperty('box-shadow', `${shadowX}px ${shadowY}px 25px rgba(0, 0, 0, 0.25)`, 'important');
       });
       
       // Reset card on mouse leave
@@ -78,13 +62,13 @@ document.addEventListener('DOMContentLoaded', function() {
         card.classList.remove('hover-active');
         
         // Animate back to default state with easing
-        card.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-        card.style.boxShadow = '';
+        card.style.setProperty('transition', 'transform 0.5s ease, box-shadow 0.5s ease', 'important');
+        card.style.setProperty('transform', 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)', 'important');
+        card.style.setProperty('box-shadow', '', 'important');
         
         // Clear transition after animation completes
         setTimeout(() => {
-          card.style.transition = '';
+          card.style.setProperty('transition', '', 'important');
         }, 500);
       });
     });

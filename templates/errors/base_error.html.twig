@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ language|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ translations.translate('site.title') }}{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Force sharp visual style */
+        * { border-radius: 0 !important; }
+        
+        .industrial-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .clip-trapezoid-title {
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+        }
+        .clip-trapezoid-button {
+            clip-path: polygon(0 0, 92% 0, 100% 100%, 8% 100%);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] text-white min-h-screen flex flex-col">
+    <!-- Clean Nav -->
+    {% include 'components/navigation.html.twig' %}
+
+    <!-- Error Content Center -->
+    <main class="flex-grow flex items-center justify-center relative overflow-hidden py-20">
+        <!-- Industrial background -->
+        <div class="absolute inset-0 z-0 opacity-10 pointer-events-none">
+            <div class="industrial-grid h-full w-full"></div>
+        </div>
+
+        <div class="container mx-auto px-4 z-10">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Simple Footer (Optional) -->
+    <footer class="py-6 border-t border-white/5 text-center text-xs text-white/20 font-mono tracking-widest uppercase">
+        System Status: Error Detected // Sector 7G
+    </footer>
+</body>
+</html>

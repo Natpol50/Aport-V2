@@ -537,6 +537,7 @@
  */
 
 /* Global override to ensure cards are always visible */
+/* Project cards visibility fixes */
 .project-card,
 .project-card.fade-in,
 .projects-container .project-card,
@@ -546,10 +547,8 @@ main .project-card,
 .project-card.fade-in:not(.visible),
 body .project-card {
   opacity: 1 !important;
-  transform: none !important;
   visibility: visible !important;
   animation: none !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
 
 /* Ensure immediate visibility for all project content */
@@ -564,17 +563,16 @@ body .project-card {
   visibility: visible !important;
 }
 
-/* Preserve hover effects */
 .project-card:hover {
-  transform: translateY(-5px) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  transform: none;
+  box-shadow: none;
 }
 
-/* Disable scroll-based animations for cards */
+/* Remove CSS transition to avoid conflict with smooth JS movement */
 html.no-scroll-animations-for-cards .project-card,
 .no-scroll-animations-for-cards .project-card,
 .main-content .project-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  transition: none !important;
   animation: none !important;
 }
 
@@ -812,10 +810,10 @@ html.no-scroll-animations-for-cards .project-card,
   transform: translateZ(0.1px); /* Slight raise in 3D space */
 }
 
-/* Enhanced hover effects */
+/* Enhanced hover effects - Handled via JS */
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* Light reflection effect */
@@ -953,9 +951,10 @@ html.no-scroll-animations-for-cards .project-card,
   transform: perspective(1000px) rotateY(0deg) rotateX(0deg); /* Initial state with perspective */
 }
 
-/* Project card on hover */
+/* Project card on hover - Handled via JS */
 .project-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Light reflection effect */
@@ -1018,16 +1017,13 @@ html.no-scroll-animations-for-cards .project-card,
 
 
 
-/* Project card basic styles with !important flags */
+/* Project card basic styles - Reduced !important to allow JS 3D parallax */
 .project-card {
   transform-style: preserve-3d !important;
   perspective: 1000px !important;
   will-change: transform !important;
-  transition: transform 0.3s ease !important;
-  box-shadow: 0.3s ease !important;
   position: relative !important;
   z-index: 1 !important;
-  transform: perspective(1000px) rotateY(0deg) rotateX(0deg) !important;
 }
 
 /* Project badge with trapezoid shape */

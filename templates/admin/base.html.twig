@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="{{ language|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ translations.translate('admin.panel') }}{% endblock %}</title>
+    
+    <!-- Admin Specific CSS -->
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Shared Sharp Aesthetic */
+        * { border-radius: 0 !important; }
+        
+        /* Consistent Admin Trapezoid Utility */
+        .admin-trap {
+            transform: skewX(-15deg);
+            display: inline-block;
+            position: relative;
+        }
+        .admin-trap > * {
+            transform: skewX(15deg);
+            display: inline-block;
+        }
+
+        /* Titles / Dashboards specifically */
+        .admin-title-trap {
+            display: inline-block;
+            background: #658C79;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            padding: 0.5rem 2.5rem;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+        }
+
+        .admin-stat-trap {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        }
+
+        .admin-header-trap {
+            clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 20px 100%);
+            background: #262732;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1A1B23; }
+        ::-webkit-scrollbar-thumb { background: #3E3E53; }
+        ::-webkit-scrollbar-thumb:hover { background: #658C79; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#658C79',
+                        surface: '#262732',
+                        background: '#1A1B23',
+                    }
+                }
+            }
+        }
+    </script>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="bg-[#1A1B23] text-white pt-20">
+    <div class="min-h-screen flex flex-col">
+        <!-- Admin Header -->
+        {% if request.isAuthenticated() %}
+        <header class="bg-[#262732] border-b border-gray-700 p-4 fixed top-0 left-0 right-0 z-50 shadow-2xl">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="/assets/img/AshaLogo.png" alt="Logo" class="h-8">
+                    <span class="font-bold text-xl">Admin Panel</span>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/admin" class="hover:text-primary transition-colors">Dashboard</a>
+                    <a href="/admin/projects" class="hover:text-primary transition-colors">Projects</a>
+                    <a href="/admin/competencies" class="hover:text-primary transition-colors">Skills</a>
+                    <a href="/admin/personal-info" class="hover:text-primary transition-colors">Bio</a>
+                    <a href="/admin/profile" class="hover:text-primary transition-colors">Settings</a>
+                    <a href="/" class="hover:text-primary transition-colors">View Site</a>
+                    <a href="/logout" class="bg-red-600 hover:bg-red-700 px-4 py-1 rounded transition-colors">Logout</a>
+                </nav>
+            </div>
+        </header>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-6">
+            {% include 'components/flash-messages.html.twig' %}
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Admin Footer -->
+        <footer class="bg-[#262732] border-t border-gray-700 p-4 text-center text-sm text-gray-400">
+            &copy; {{ "now"|date("Y") }} Aport Admin Panel
+        </footer>
+    </div>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

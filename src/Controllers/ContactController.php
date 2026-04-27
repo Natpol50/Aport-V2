@@ -162,11 +162,8 @@ class ContactController extends BaseController
             'timestamp' => time()
         ];
         
-        // Set cookie to redirect back after email client opens
-        setcookie('contact_redirect', '1', time() + 60, '/');
-        
-        // Redirect to the mailto URL to open client's email program
-        header("Location: {$mailtoUrl}");
+        // Redirect back directly - opening mailto via JS to avoid double redirect
+        echo "<html><head><script>window.location.href='{$mailtoUrl}';setTimeout(function(){ window.location.href='/contact'; }, 500);</script></head><body>Redirecting...</body></html>";
         exit;
     }
 }

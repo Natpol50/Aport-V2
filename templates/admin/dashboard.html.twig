@@ -1,92 +1,96 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}{{ translations.translate('admin.dashboard') }} - {{ translations.translate('site.title') }}{% endblock %}
 
 {% block content %}
 <div class="admin-content container mx-auto px-4 py-8">
-    <h1 class="text-3xl md:text-4xl font-bold mb-8">{{ translations.translate('admin.dashboard') }}</h1>
+    <div class="mb-12">
+        <h1 class="admin-title-trap text-2xl md:text-3xl font-bold uppercase tracking-tight">
+            {{ translations.translate('admin.dashboard') }}
+        </h1>
+    </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         {# Projects stats #}
-        <div class="bg-[var(--color-surface)] p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4">{{ translations.translate('admin.projects') }}</h2>
-            <div class="flex justify-between items-center">
+        <div class="bg-surface p-6 shadow-xl border-l-4 border-primary">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <span class="w-2 h-6 bg-primary mr-3"></span>
+                {{ translations.translate('admin.projects') }}
+            </h2>
+            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <p class="text-4xl font-bold">{{ currentProjectCount + pastProjectCount }}</p>
-                    <p class="text-sm opacity-70">{{ translations.translate('admin.total_projects') }}</p>
+                    <p class="text-5xl font-bold text-primary">{{ currentProjectCount + pastProjectCount }}</p>
+                    <p class="text-xs uppercase tracking-widest opacity-50">{{ translations.translate('admin.total_projects') }}</p>
                 </div>
                 <div>
-                    <a href="/admin/projects" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] transition-colors px-4 py-2 rounded text-white font-medium">
-                        {{ translations.translate('admin.manage') }}
+                    <a href="/admin/projects" class="admin-trap bg-primary hover:bg-primary-dark transition-all px-6 py-2 text-white font-bold">
+                        <span>{{ translations.translate('admin.manage') }}</span>
                     </a>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="bg-[var(--color-background)] p-4 rounded">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="admin-stat-trap bg-background p-4 border border-gray-700">
                     <p class="text-2xl font-bold">{{ currentProjectCount }}</p>
-                    <p class="text-sm opacity-70">{{ translations.translate('admin.current_projects') }}</p>
+                    <p class="text-[10px] uppercase opacity-50">{{ translations.translate('admin.current_projects') }}</p>
                 </div>
-                <div class="bg-[var(--color-background)] p-4 rounded">
+                <div class="admin-stat-trap bg-background p-4 border border-gray-700">
                     <p class="text-2xl font-bold">{{ pastProjectCount }}</p>
-                    <p class="text-sm opacity-70">{{ translations.translate('admin.past_projects') }}</p>
+                    <p class="text-[10px] uppercase opacity-50">{{ translations.translate('admin.past_projects') }}</p>
                 </div>
             </div>
         </div>
         
         {# Personal Info #}
-        <div class="bg-[var(--color-surface)] p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4">{{ translations.translate('admin.personal_info') }}</h2>
-            <p class="mb-4 opacity-70">{{ translations.translate('admin.personal_info_desc') }}</p>
-            <div class="mt-4">
-                <a href="/admin/personal-info" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] transition-colors px-4 py-2 rounded text-white font-medium">
-                    {{ translations.translate('admin.edit_personal_info') }}
+        <div class="admin-stat-trap bg-surface p-6 shadow-xl border-l-4 border-gray-500 flex flex-col">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <span class="w-2 h-6 bg-gray-500 mr-3"></span>
+                {{ translations.translate('admin.personal_info') }}
+            </h2>
+            <p class="mb-8 text-sm opacity-70 leading-relaxed">{{ translations.translate('admin.personal_info_desc') }}</p>
+            <div class="mt-auto">
+                <a href="/admin/personal-info" class="admin-trap bg-gray-700 hover:bg-gray-600 transition-all px-6 py-2 text-white font-bold w-full text-center">
+                    <span>{{ translations.translate('admin.edit_personal_info') }}</span>
                 </a>
             </div>
         </div>
         
         {# User profile #}
-        <div class="bg-[var(--color-surface)] p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4">{{ translations.translate('admin.user_profile') }}</h2>
-            <div class="flex items-center mb-4">
-                <div class="w-16 h-16 rounded-full bg-[var(--color-primary)] flex items-center justify-center mr-4">
-                    <span class="text-2xl font-bold">{{ request.getUserFullName()|slice(0, 1) }}</span>
+        <div class="admin-stat-trap bg-surface p-6 shadow-xl border-l-4 border-blue-600">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <span class="w-2 h-6 bg-blue-600 mr-3"></span>
+                {{ translations.translate('admin.user_profile') }}
+            </h2>
+            <div class="flex items-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 flex items-center justify-center mr-4 admin-trap">
+                    <span class="text-2xl font-bold"><span>{{ request.getUserFullName()|slice(0, 1) }}</span></span>
                 </div>
                 <div>
-                    <p class="font-bold text-lg">{{ request.getUserFullName() }}</p>
-                    <p class="opacity-70">{{ request.getUserInfo().userEmail }}</p>
+                    <p class="font-bold text-lg leading-none mb-1">{{ request.getUserFullName() }}</p>
+                    <p class="text-xs opacity-50 uppercase tracking-tighter">{{ request.getUserInfo().userEmail }}</p>
                 </div>
             </div>
-            <div class="mt-4">
-                <a href="/admin/profile" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] transition-colors px-4 py-2 rounded text-white font-medium">
-                    {{ translations.translate('admin.edit_profile') }}
+            <div>
+                <a href="/admin/profile" class="admin-trap bg-blue-700 hover:bg-blue-600 transition-all px-6 py-2 text-white font-bold w-full text-center">
+                    <span>{{ translations.translate('admin.edit_profile') }}</span>
                 </a>
             </div>
         </div>
     </div>
     
-    <div class="bg-[var(--color-surface)] p-6 rounded-lg shadow-md mb-8">
-        <h2 class="text-xl font-bold mb-4">{{ translations.translate('admin.quick_actions') }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="/admin/project/new" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] transition-colors px-6 py-4 rounded text-white font-medium flex items-center justify-center">
-                <span class="mr-2">+</span> {{ translations.translate('admin.add_project') }}
+    <div class="bg-surface p-8 shadow-2xl mb-12 border-t-2 border-primary">
+        <h2 class="text-xl font-bold mb-8 uppercase tracking-widest text-primary">{{ translations.translate('admin.quick_actions') }}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a href="/admin/project/new" class="admin-trap bg-primary hover:bg-primary-dark transition-all px-6 py-4 text-white font-bold flex items-center justify-center">
+                <span>+ {{ translations.translate('admin.add_project') }}</span>
             </a>
-            <a href="/" class="bg-[var(--color-background)] hover:bg-[rgba(38,39,50,0.8)] transition-colors px-6 py-4 rounded text-white font-medium flex items-center justify-center">
-                {{ translations.translate('admin.view_site') }}
+            <a href="/admin/competencies" class="admin-trap bg-background border border-primary hover:bg-primary/10 transition-all px-6 py-4 text-white font-bold flex items-center justify-center">
+                <span>{{ translations.translate('admin.manage_skills') }}</span>
             </a>
-            <a href="/logout" class="bg-red-700 hover:bg-red-800 transition-colors px-6 py-4 rounded text-white font-medium flex items-center justify-center">
-                {{ translations.translate('admin.logout') }}
+            <a href="/" class="admin-trap bg-background border border-gray-600 hover:bg-gray-800 transition-all px-6 py-4 text-white font-bold flex items-center justify-center">
+                <span>{{ translations.translate('admin.view_site') }}</span>
             </a>
-        </div>
-    </div>
-    
-    <div class="bg-[var(--color-surface)] p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-4">{{ translations.translate('admin.language_settings') }}</h2>
-        <p class="mb-4 opacity-70">{{ translations.translate('admin.language_settings_desc') }}</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="{{ language == 'fr' ? '/en' : '/' }}" class="bg-[var(--color-background)] hover:bg-[rgba(38,39,50,0.8)] transition-colors px-6 py-4 rounded text-white font-medium flex items-center justify-center">
-                <span class="mr-2">{{ language == 'fr' ? '🇬🇧' : '🇫🇷' }}</span>
-                {{ language == 'fr' ? translations.translate('admin.view_english') : translations.translate('admin.view_french') }}
+            <a href="/logout" class="admin-trap bg-red-900/50 hover:bg-red-800 border border-red-700 transition-all px-6 py-4 text-white font-bold flex items-center justify-center">
+                <span>{{ translations.translate('admin.logout') }}</span>
             </a>
         </div>
     </div>

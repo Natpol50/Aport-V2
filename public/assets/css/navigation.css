@@ -113,13 +113,13 @@
   top: 2.5rem;
   right: 2rem;
   transform: translateY(-50%);
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 0.75rem;
   background-color: rgba(62, 62, 83, 0.85);
   backdrop-filter: blur(4px);
   padding: 0.5rem 0.75rem;
-  border-radius: 2rem;
+  border-radius: 2rem !important;
   z-index: var(--z-nav);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -136,8 +136,8 @@
 .lang-icon {
   width: 24px;
   height: 16px;
-  border-radius: 2px;
-  object-fit: cover;
+  border-radius: 4px;
+  object-fit: contain;
 }
 
 /* Inactive language styling */

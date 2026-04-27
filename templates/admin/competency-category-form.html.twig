@@ -1,0 +1,49 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ isNew ? 'Add Category' : 'Edit Category' }} - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-content container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">{{ isNew ? 'Add Competency Category' : 'Edit Category: ' ~ category.name }}</h1>
+        <a href="/admin/competencies" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 font-bold">Cancel</a>
+    </div>
+
+    <form action="{{ isNew ? '/admin/competency-category/create' : '/admin/competency-category/update/' ~ category.id }}" method="POST" class="space-y-8">
+        <div class="bg-surface p-6 shadow-md border-l-4 border-primary">
+            <h2 class="text-xl font-bold mb-4">Base Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Slug (URL friendly)</label>
+                    <input type="text" name="slug" value="{{ category.slug|default('') }}" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" placeholder="e.g. backend-development" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Icon Class (FontAwesome)</label>
+                    <input type="text" name="icon" value="{{ category.icon|default('') }}" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" placeholder="e.g. fa-code">
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% for lang in languages %}
+            <div class="bg-surface p-6 shadow-md border-t-2 border-gray-700">
+                <h2 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="mr-2 text-2xl">{{ lang.code == 'fr' ? '🇫🇷' : '🇬🇧' }}</span>
+                    {{ lang.name }} Translation
+                </h2>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-400">Category Name</label>
+                    <input type="text" name="name_{{ lang.code }}" value="{{ (translationsByLang[lang.code].name)|default('') }}" class="w-full bg-background border border-gray-600 p-2 focus:border-primary outline-none" required>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="admin-trap bg-primary hover:bg-primary-dark text-white px-8 py-3 font-bold">
+                <span>{{ isNew ? 'Create Category' : 'Save Changes' }}</span>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
