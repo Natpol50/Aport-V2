@@ -238,8 +238,8 @@ class Application
     {
         try {
             // Get the current request method and URI
-            $method = $_SERVER['REQUEST_METHOD'];
-            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+            $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
             
             // Check for maintenance mode
             if ($this->isMaintenanceMode() && !$this->isMaintenanceExempt($uri)) {
